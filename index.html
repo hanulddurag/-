@@ -91,7 +91,7 @@
             { word: '에구', answer: '감탄사' }, { word: '를', answer: '조사' }, { word: '서다', answer: '동사' }, { word: '험난하다', answer: '형용사' }, { word: '평등', answer: '명사' }
         ];
 
-        // 3. 심화 학습 문제장 (기존 유지)
+        // 3. 심화 학습 문제장
         const ADVANCED_QUESTIONS = [
             {
                 q: '품사에 대한 설명으로 적절하지 않은 것은?',
@@ -243,7 +243,7 @@
                     '우리가 너를 좋아해.',
                     '내 동생은 운동도 잘한다.',
                     '이 줄까지 입장할 수 있습니다.',
-                    '빨리 뛰어가서 자리를 잡아라.'
+                    '매우 빨리 달려서 잡았다.' // 기존 '빨리 뛰어가서 자리를 잡아라.' 에서 진짜 조사가 없는 문장으로 변경 수정
                 ],
                 answerIndex: 4 
             },
@@ -339,7 +339,6 @@
 
         // 7. 일반 퀴즈 함수들
         window.startQuiz = function(setIndex) {
-            // 인덱스를 기준으로 10개 추출
             const startIndex = setIndex * 10;
             const setWords = ALL_QUIZ_WORDS.slice(startIndex, startIndex + 10);
             state.quizQueue = [...setWords].sort(() => 0.5 - Math.random());
