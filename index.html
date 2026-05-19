@@ -91,7 +91,7 @@
             { word: '에구', answer: '감탄사' }, { word: '를', answer: '조사' }, { word: '서다', answer: '동사' }, { word: '험난하다', answer: '형용사' }, { word: '평등', answer: '명사' }
         ];
 
-        // 3. 심화 학습 문제장
+        // 3. 심화 학습 문제장 (보기의 시각 포인트 보강)
         const ADVANCED_QUESTIONS = [
             {
                 q: '품사에 대한 설명으로 적절하지 않은 것은?',
@@ -107,16 +107,16 @@
             {
                 q: '다음 문장 중 형태가 변하지 않는 단어(불변어)에 밑줄이 쳐진 것은?',
                 options: [
-                    '겨울이 지나가면 봄이 <u class="font-bold text-indigo-600">온다</u>.',
-                    '<u class="font-bold text-indigo-600">제발</u> 우리 백성들을 구해 줘.',
-                    '친구를 두루 넓게 <u class="font-bold text-indigo-600">사귀어야</u> 한다.',
-                    '동생이 바닥에 구슬을 <u class="font-bold text-indigo-600">떨어뜨렸다</u>.',
-                    '이곳에서는 마법사들을 품사라고 <u class="font-bold text-indigo-600">부르네</u>.'
+                    '겨울이 지나가면 봄이 <span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">온다</span>.',
+                    '<span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">제발</span> 우리 백성들을 구해 줘.',
+                    '친구를 두루 넓게 <span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">사귀어야</span> 한다.',
+                    '동생이 바닥에 구슬을 <span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">떨어뜨렸다</span>.',
+                    '이곳에서는 마법사들을 품사라고 <span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">부르네</span>.'
                 ],
                 answerIndex: 1 
             },
             {
-                q: '다음 단어들의 공통점으로 적절하지 않은 것은?<br/><br/><div class="bg-slate-100 p-3 rounded text-center">뛰다, 작다, 당기다, 맑다</div>',
+                q: '다음 단어들의 공통점으로 적절하지 않은 것은?<br/><br/><div class="bg-slate-100 p-3 rounded text-center font-bold text-slate-800">뛰다, 작다, 당기다, 맑다</div>',
                 options: [
                     '어간과 어미로 구분할 수 있다.',
                     '문장에서 서술어의 역할을 한다.',
@@ -129,33 +129,33 @@
             {
                 q: '밑줄 친 단어의 품사가 나머지와 다른 것은?',
                 options: [
-                    '어제는 햇살이 <u class="font-bold text-indigo-600">따뜻했다</u>.',
-                    '기온이 낮아서 강물이 <u class="font-bold text-indigo-600">얼었다</u>.',
-                    '산에 오르니 기분이 <u class="font-bold text-indigo-600">상쾌했다</u>.',
-                    '주방장이 면을 가늘게 <u class="font-bold text-indigo-600">뽑았다</u>.',
-                    '친구들과 재미있게 <u class="font-bold text-indigo-600">뛰어놀았다</u>.'
+                    '어제는 햇살이 <span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">따뜻했다</span>.',
+                    '기온이 낮아서 강물이 <span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">얼었다</span>.',
+                    '산에 오르니 기분이 <span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">상쾌했다</span>.',
+                    '주방장이 면을 가늘게 <span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">뽑았다</span>.',
+                    '친구들과 재미있게 <span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">뛰어놀았다</span>.'
                 ],
                 answerIndex: 0 
             },
             {
                 q: '동사와 형용사가 모두 포함된 문장에 해당하지 않는 것은?',
                 options: [
-                    '우리는 즐겁게(형) 춤을 춘다(동).',
-                    '사과가 아주 달콤하고(형) 맛있다(형).',
-                    '나무가 건강하게(형) 쑥쑥 자란다(동).',
-                    '비가 많이 와서(동) 길이 미끄럽다(형).',
-                    '작은(형) 고양이가 책상 아래에 엎드렸다(동).'
+                    '우리는 즐겁게 춤을 춘다.',
+                    '사과가 아주 달콤하고 맛있다.',
+                    '나무가 건강하게 쑥쑥 자란다.',
+                    '비가 많이 와서 길이 미끄럽다.',
+                    '작은 고양이가 책상 아래에 엎드렸다.'
                 ],
                 answerIndex: 1 
             },
             {
                 q: '밑줄 친 단어가 조사가 아닌 것은?',
                 options: [
-                    '나<u class="font-bold text-indigo-600">는</u> 밥을 먹었다.',
-                    '진호<u class="font-bold text-indigo-600">야</u>, 너 숙제는 했니?',
-                    '동생이 얇<u class="font-bold text-indigo-600">은</u> 옷을 입고 나왔다.',
-                    '문제를 풀<u class="font-bold text-indigo-600">고</u> 이곳의 백성을 구해라.',
-                    '형은 고등학생이<u class="font-bold text-indigo-600">고</u>, 나는 중학생이다.'
+                    '나<span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">는</span> 밥을 먹었다.',
+                    '진호<span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">야</span>, 너 숙제는 했니?',
+                    '동생이 얇<span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">은</span> 옷을 입고 나왔다.',
+                    '문제를 풀<span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">고</span> 이곳의 백성을 구해라.',
+                    '형은 고등학생이<span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">고</span>, 나는 중학생이다.'
                 ],
                 answerIndex: 2 
             },
@@ -173,22 +173,22 @@
             {
                 q: '밑줄 친 단어의 품사로 적절하지 않은 것은?',
                 options: [
-                    '강아지가 꼬리를 <u class="font-bold text-indigo-600">살랑살랑</u> 흔든다. → 부사',
-                    '너는 <u class="font-bold text-indigo-600">어떤</u> 날씨를 가장 좋아하니? → 관형사',
-                    '우리는 밥을 아주 <u class="font-bold text-indigo-600">천천히</u> 먹고 돌아왔다. → 부사',
-                    '<u class="font-bold text-indigo-600">모든</u> 사람들이 집 밖에 나와서 눈을 치웠다. → 관형사',
-                    '천천히 호흡을 가다듬으면서 발표를 <u class="font-bold text-indigo-600">기다렸다</u>. → 관형사'
+                    '강아지가 꼬리를 <span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">살랑살랑</span> 흔든다. → 부사',
+                    '너는 <span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">어떤</span> 날씨를 가장 좋아하니? → 관형사',
+                    '우리는 밥을 아주 <span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">천천히</span> 먹고 돌아왔다. → 부사',
+                    '<span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">모든</span> 사람들이 집 밖에 나와서 눈을 치웠다. → 관형사',
+                    '천천히 호흡을 가다듬으면서 발표를 <span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">기다렸다</span>. → 관형사'
                 ],
                 answerIndex: 4 
             },
             {
                 q: '밑줄 친 단어가 감탄사에 해당하지 않는 것은?',
                 options: [
-                    '<u class="font-bold text-indigo-600">이봐</u>, 이제 그만 일어나야지?',
-                    '<u class="font-bold text-indigo-600">그래</u>, 월요일에 함께 축구하자.',
-                    '<u class="font-bold text-indigo-600">민형아</u>, 오늘 점심 식단이 뭐야?',
-                    '<u class="font-bold text-indigo-600">여보세요</u>, 거기 준호네 집인가요?',
-                    '<u class="font-bold text-indigo-600">아</u>, 나는 정말 행복한 사람이구나.'
+                    '<span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">이봐</span>, 이제 그만 일어나야지?',
+                    '<span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">그래</span>, 월요일에 함께 축구하자.',
+                    '<span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">민형아</span>, 오늘 점심 식단이 뭐야?',
+                    '<span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">여보세요</span>, 거기 준호네 집인가요?',
+                    '<span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">아</span>, 나는 정말 행복한 사람이구나.'
                 ],
                 answerIndex: 2 
             },
@@ -204,7 +204,7 @@
                 answerIndex: 2 
             },
             {
-                q: '다음 문장에 포함된 품사가 아닌 것은?<br/><br/><div class="bg-slate-100 p-3 rounded text-center">얼마 전까지 나는 행복이 아주 특별하고 거창한 것에서 온다고 생각했다.</div>',
+                q: '다음 문장에 포함된 품사가 아닌 것은?<br/><br/><div class="bg-slate-100 p-3 rounded text-center font-bold text-slate-800">얼마 전까지 나는 행복이 아주 특별하고 거창한 것에서 온다고 생각했다.</div>',
                 options: [
                     '명사',
                     '부사',
@@ -226,7 +226,7 @@
                 answerIndex: 4 
             },
             {
-                q: '<보기>의 문장에 대한 설명으로 적절하지 않은 것은?<br/><br/><div class="bg-slate-100 p-3 rounded text-center">우리는 새 옷을 무척 좋아한다.</div>',
+                q: '<보기>의 문장에 대한 설명으로 적절하지 않은 것은?<br/><br/><div class="bg-slate-100 p-3 rounded text-center font-bold text-slate-800">우리는 새 옷을 무척 좋아한다.</div>',
                 options: [
                     '‘우리’는 대명사로, 문장에서 주어의 역할을 한다.',
                     '‘새’는 뒤에 오는 ‘옷’을 꾸며 주는 말이다.',
@@ -243,12 +243,12 @@
                     '우리가 너를 좋아해.',
                     '내 동생은 운동도 잘한다.',
                     '이 줄까지 입장할 수 있습니다.',
-                    '매우 빨리 달려서 잡았다.' // 기존 '빨리 뛰어가서 자리를 잡아라.' 에서 진짜 조사가 없는 문장으로 변경 수정
+                    '매우 빨리 달린다.'
                 ],
                 answerIndex: 4 
             },
             {
-                q: '다음 빈칸에 들어갈 조사로 적절한 것은?<br/><br/><div class="bg-slate-100 p-3 rounded text-center">나는 우유는 다 싫어하지만 바나나 우유(   ) 좋아한다.</div>',
+                q: '다음 빈칸에 들어갈 조사로 적절한 것은?<br/><br/><div class="bg-slate-100 p-3 rounded text-center font-bold text-slate-800">나는 우유는 다 싫어하지만 바나나 우유(   ) 좋아한다.</div>',
                 options: [
                     '도',
                     '가',
@@ -514,7 +514,7 @@
             `;
         }
 
-        // 심화 학습(Advanced) 탭 렌더링
+        // 심화 학습(Advanced) 탭 렌더링 (더 짙고 명확한 색감 적용)
         function renderAdvancedTab() {
             if (state.advState === 'selecting_set') {
                 const setButtons = Array.from({length: 5}, (_, i) => `
@@ -564,16 +564,22 @@
                 const isSelected = state.advSelectedAnswer === idx;
                 const isCorrectAns = currentQ.answerIndex === idx;
                 
-                let btnStyle = "bg-white text-slate-700 border-slate-200 hover:bg-purple-50 hover:border-purple-300";
+                // 기본 상태: 더 어두운 텍스트(text-slate-900)와 뚜렷한 경계선 부여
+                let btnStyle = "bg-white text-slate-900 border-slate-300 hover:bg-purple-50 hover:border-purple-400 font-medium";
                 
                 if (state.advState !== 'playing') {
-                    if (isCorrectAns) btnStyle = "bg-green-100 text-green-800 border-green-400 font-bold";
-                    else if (isSelected && !isCorrectAns) btnStyle = "bg-red-100 text-red-800 border-red-300";
-                    else btnStyle = "bg-slate-50 text-slate-400 border-slate-100 opacity-60";
+                    if (isCorrectAns) {
+                        btnStyle = "bg-green-100 text-green-950 border-green-500 font-bold shadow-sm";
+                    } else if (isSelected && !isCorrectAns) {
+                        btnStyle = "bg-red-100 text-red-950 border-red-400 font-bold";
+                    } else {
+                        // 비활성화 상태에서도 글씨가 눈에 잘 띄도록 text-slate-500 및 회색 음영 강화 (흐림 필터 제거)
+                        btnStyle = "bg-slate-100 text-slate-500 border-slate-200 cursor-not-allowed";
+                    }
                 }
 
                 return `<button onclick="handleAdvAnswer(${idx})" ${state.advState !== 'playing' ? 'disabled' : ''} class="w-full text-left p-4 rounded-xl border-2 transition-all ${btnStyle}">
-                    <span class="mr-2 font-bold">${idx + 1}.</span> ${opt}
+                    <span class="mr-2 font-extrabold text-indigo-600">${idx + 1}.</span> ${opt}
                 </button>`;
             }).join('');
 
@@ -599,8 +605,8 @@
                         
                         ${state.advState !== 'playing' ? `
                         <div class="p-6 bg-slate-50 border-t border-slate-100 flex justify-between items-center">
-                            <div class="font-bold text-lg ${state.advState === 'correct' ? 'text-green-600' : 'text-red-600'}">
-                                ${state.advState === 'correct' ? '정답입니다!' : '오답입니다.'}
+                            <div class="font-extrabold text-lg ${state.advState === 'correct' ? 'text-green-700' : 'text-red-700'}">
+                                ${state.advState === 'correct' ? '정답입니다! 🎉' : '아쉽네요, 다시 분석해 볼까요?'}
                             </div>
                             <button onclick="nextAdvQuestion()" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-bold flex items-center transition-colors">
                                 다음 문제 <i data-lucide="arrow-right" class="w-5 h-5 ml-2"></i>
