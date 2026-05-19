@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>국어 품사 마스터</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800 font-sans p-4 md:p-8">
+    
+    <div id="app" class="max-w-5xl mx-auto">
+        <!-- 렌더링될 메인 컨테이너 -->
+    </div>
+
+    <script>
+        // 1. 품사 데이터 정의
+        const POS_DATA = {
+            체언: {
+                form: '불변어',
+                desc: '문장에서 주로 주어의 역할을 하며, 형태가 변하지 않는 단어들입니다.',
+                items: [
+                    { id: '명사', name: '명사', desc: '사람이나 사물, 장소, 보이지 않는 것의 이름을 나타냅니다.', examples: ['하늘', '바다', '사랑', '학교'] },
+                    { id: '대명사', name: '대명사', desc: '명사를 대신하여 사람, 사물, 장소를 가리킵니다.', examples: ['나', '너', '우리', '이것', '저기'] },
+                    { id: '수사', name: '수사', desc: '사물의 수량이나 순서를 나타냅니다.', examples: ['하나', '둘', '첫째', '둘째'] },
+                ]
+            },
+            수식언: {
+                form: '불변어',
+                desc: '다른 단어를 꾸며주는 역할을 하며, 형태가 변하지 않습니다.',
+                items: [
+                    { id: '관형사', name: '관형사', desc: '주로 체언(명사, 대명사, 수사) 앞에 놓여 그 뜻을 자세하게 꾸며줍니다.', examples: ['새', '헌', '모든', '온갖', '이', '그'] },
+                    { id: '부사', name: '부사', desc: '주로 용언(동사, 형용사)이나 다른 부사, 문장 전체를 꾸며줍니다.', examples: ['매우', '빨리', '가장', '살짝', '과연'] },
+                ]
+            },
+            독립언: {
+                form: '불변어',
+                desc: '문장의 다른 성분과 직접적인 관계를 맺지 않고 독립적으로 쓰입니다.',
+                items: [
+                    { id: '감탄사', name: '감탄사', desc: '말하는 이의 놀람, 느낌, 부름, 대답 등을 나타냅니다.', examples: ['앗', '어머나', '야호', '네', '아니오'] },
+                ]
+            },
+            관계언: {
+                form: '불변어 (예외: 서술격 조사 \'이다\')',
+                desc: '단어들의 문법적 관계를 나타내거나 특별한 뜻을 더해줍니다.',
+                items: [
+                    { id: '조사', name: '조사', desc: '주로 체언 뒤에 붙어서 문법적 관계를 나타내거나 의미를 더합니다.', examples: ['이/가', '은/는', '을/를', '의', '에서'] },
+                ]
+            },
+            용언: {
+                form: '가변어',
+                desc: '문장에서 주로 서술어 역할을 하며, 형태가 변하는(활용하는) 단어들입니다.',
+                items: [
+                    { id: '동사', name: '동사', desc: '사람이나 사물의 움직임이나 작용을 나타냅니다.', examples: ['먹다', '달리다', '만들다', '생각하다'] },
+                    { id: '형용사', name: '형용사', desc: '사람이나 사물의 상태나 성질을 나타냅니다.', examples: ['예쁘다', '높다', '차갑다', '조용하다'] },
+                ]
+            }
+        };
+
+        // 2. 퀴즈 단어장
+        const QUIZ_WORDS = [
+            { word: '사과', answer: '명사' }, { word: '우정', answer: '명사' },
+            { word: '우리', answer: '대명사' }, { word: '거기', answer: '대명사' },
+            { word: '셋', answer: '수사' }, { word: '첫째', answer: '수사' },
+            { word: '새', answer: '관형사' }, { word: '모든', answer: '관형사' },
+            { word: '빨리', answer: '부사' }, { word: '아주', answer: '부사' },
+            { word: '야호', answer: '감탄사' }, { word: '앗', answer: '감탄사' },
+            { word: '에서', answer: '조사' }, { word: '부터', answer: '조사' },
+            { word: '달리다', answer: '동사' }, { word: '읽다', answer: '동사' },
+            { word: '아름답다', answer: '형용사' }, { word: '푸르다', answer: '형용사' }
+        ];
+
+        const ALL_9_POS = ['명사', '대명사', '수사', '관형사', '부사', '감탄사', '조사', '동사', '형용사'];
+
+        // 3. 상태(State) 관리
+        let state = {
+            activeTab: 'learn',
+            selectedFunction: '체언',
+            quizQueue: [],
+            currentQuizIndex: 0,
+            score: 0,
+            quizState: 'playing', // playing, correct, incorrect, finished
+            selectedAnswer: ''
+        };
+
+        // 4. 상태 변경 함수
+        window.setActiveTab = function(tab) {
+            state.activeTab = tab;
+            if (tab === 'quiz') {
+                window.startQuiz();
+            } else {
+                render();
+            }
+        };
+
+        window.setSelectedFunction = function(func) {
+            state.selectedFunction = func;
+            render();
+        };
+
+        window.startQuiz = function() {
+            // 10문제 랜덤 추출 (셔플링)
+            const shuffled = [...QUIZ_WORDS].sort(() => 0.5 - Math.random()).slice(0, 10);
+            state.quizQueue = shuffled;
+            state.currentQuizIndex = 0;
+            state.score = 0;
+            state.quizState = 'playing';
+            state.selectedAnswer = '';
+            render();
+        };
+
+        window.handleAnswer = function(pos) {
+            if (state.quizState !== 'playing') return;
+            
+            state.selectedAnswer = pos;
+            const isCorrect = pos === state.quizQueue[state.currentQuizIndex].answer;
+            
+            if (isCorrect) {
+                state.score += 1;
+                state.quizState = 'correct';
+            } else {
+                state.quizState = 'incorrect';
+            }
+            render();
+        };
+
+        window.nextQuestion = function() {
+            if (state.currentQuizIndex < state.quizQueue.length - 1) {
+                state.currentQuizIndex += 1;
+                state.quizState = 'playing';
+                state.selectedAnswer = '';
+            } else {
+                state.quizState = 'finished';
+            }
+            render();
+        };
+
+        // 5. 렌더링 로직
+        function renderLearnTab() {
+            const sidebarHtml = Object.keys(POS_DATA).map(func => {
+                const isSelected = state.selectedFunction === func;
+                return `
+                    <button
+                        onclick="setSelectedFunction('${func}')"
+                        class="w-full text-left px-5 py-4 rounded-xl font-medium transition-all border ${isSelected ? 'bg-indigo-600 text-white shadow-md border-transparent' : 'bg-white text-slate-700 hover:bg-indigo-100 border-slate-200'}"
+                    >
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg">${func}</span>
+                            <span class="text-xs px-2 py-1 rounded-full ${isSelected ? 'bg-indigo-500 text-white' : 'bg-slate-100 text-slate-500'}">
+                                ${POS_DATA[func].form}
+                            </span>
+                        </div>
+                    </button>
+                `;
+            }).join('');
+
+            const itemsHtml = POS_DATA[state.selectedFunction].items.map(item => `
+                <div class="bg-indigo-50/50 rounded-2xl p-6 border border-indigo-100 hover:shadow-md transition-shadow">
+                    <div class="flex items-center mb-3">
+                        <h3 class="text-2xl font-bold text-indigo-700">${item.name}</h3>
+                    </div>
+                    <p class="text-slate-700 mb-4 text-lg">${item.desc}</p>
+                    <div class="bg-white rounded-xl p-4 border border-indigo-50">
+                        <span class="text-sm font-bold text-indigo-400 block mb-2">대표적인 예시</span>
+                        <div class="flex flex-wrap gap-2">
+                            ${item.examples.map(ex => `<span class="bg-slate-100 text-slate-800 px-3 py-1.5 rounded-lg text-sm font-medium">${ex}</span>`).join('')}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            return `
+                <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
+                    <div class="bg-indigo-50 p-6 border-b border-indigo-100 grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                        <div class="bg-white p-4 rounded-xl shadow-sm">
+                            <h3 class="font-bold text-indigo-800 mb-2">1. 형태 (모양)</h3>
+                            <p class="text-sm text-slate-600">단어의 형태가 변하는가?<br/>(불변어, 가변어)</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl shadow-sm">
+                            <h3 class="font-bold text-indigo-800 mb-2">2. 기능 (역할)</h3>
+                            <p class="text-sm text-slate-600">문장에서 어떤 역할을 하는가?<br/>(체언, 수식언, 독립언, 관계언, 용언)</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl shadow-sm">
+                            <h3 class="font-bold text-indigo-800 mb-2">3. 의미 (뜻)</h3>
+                            <p class="text-sm text-slate-600">어떤 의미를 가지고 있는가?<br/>(명사, 대명사 등 9품사)</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col md:flex-row">
+                        <div class="md:w-1/3 bg-slate-50 p-6 border-r border-slate-100">
+                            <h2 class="text-lg font-bold text-slate-700 mb-4 flex items-center">
+                                <i data-lucide="info" class="w-5 h-5 mr-2 text-indigo-500"></i>
+                                기능에 따른 분류
+                            </h2>
+                            <div class="space-y-3">
+                                ${sidebarHtml}
+                            </div>
+                        </div>
+                        <div class="md:w-2/3 p-6 md:p-8">
+                            <div class="mb-6 pb-4 border-b border-slate-100">
+                                <h2 class="text-3xl font-extrabold text-indigo-900 mb-2">${state.selectedFunction}</h2>
+                                <p class="text-slate-600 text-lg">${POS_DATA[state.selectedFunction].desc}</p>
+                            </div>
+                            <div class="space-y-6">
+                                ${itemsHtml}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderQuizTab() {
+            if (state.quizQueue.length === 0) return '';
+
+            if (state.quizState === 'finished') {
+                return `
+                    <div class="max-w-2xl mx-auto">
+                        <div class="bg-white rounded-2xl shadow-xl p-10 text-center border border-slate-100">
+                            <h2 class="text-3xl font-bold text-indigo-900 mb-4">퀴즈 완료! 🎉</h2>
+                            <p class="text-xl text-slate-600 mb-8">10문제 중 <span class="font-extrabold text-indigo-600 text-2xl">${state.score}</span>문제를 맞혔습니다.</p>
+                            <div class="w-full bg-slate-100 rounded-full h-4 mb-8 overflow-hidden">
+                                <div class="bg-indigo-500 h-4 rounded-full transition-all duration-1000" style="width: ${(state.score / 10) * 100}%"></div>
+                            </div>
+                            <button 
+                                onclick="startQuiz()"
+                                class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-xl font-bold text-lg transition-colors"
+                            >
+                                다시 도전하기
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            const currentWord = state.quizQueue[state.currentQuizIndex];
+            
+            const buttonsHtml = ALL_9_POS.map(pos => {
+                const isSelected = state.selectedAnswer === pos;
+                const isCorrectAnswer = currentWord.answer === pos;
+                
+                let btnStyle = "bg-slate-50 text-slate-700 border-slate-200 hover:bg-indigo-50 hover:border-indigo-200";
+                
+                if (state.quizState !== 'playing') {
+                    if (isCorrectAnswer) {
+                        btnStyle = "bg-green-100 text-green-800 border-green-300 shadow-inner";
+                    } else if (isSelected && !isCorrectAnswer) {
+                        btnStyle = "bg-red-100 text-red-800 border-red-300";
+                    } else {
+                        btnStyle = "bg-slate-50 text-slate-400 border-slate-100 opacity-50 cursor-not-allowed";
+                    }
+                }
+
+                return `
+                    <button
+                        onclick="handleAnswer('${pos}')"
+                        ${state.quizState !== 'playing' ? 'disabled' : ''}
+                        class="py-4 rounded-xl border-2 font-bold text-lg transition-all ${btnStyle}"
+                    >
+                        ${pos}
+                    </button>
+                `;
+            }).join('');
+
+            let feedbackHtml = '';
+            if (state.quizState !== 'playing') {
+                const isCorrect = state.quizState === 'correct';
+                feedbackHtml = `
+                    <div class="p-6 rounded-xl flex items-center justify-between ${isCorrect ? 'bg-green-50' : 'bg-red-50'}">
+                        <div class="flex items-center">
+                            <i data-lucide="${isCorrect ? 'check-circle-2' : 'x-circle'}" class="w-8 h-8 ${isCorrect ? 'text-green-500' : 'text-red-500'} mr-3"></i>
+                            <div>
+                                <p class="font-bold text-lg ${isCorrect ? 'text-green-800' : 'text-red-800'}">
+                                    ${isCorrect ? '정답입니다!' : '틀렸습니다!'}
+                                </p>
+                                ${!isCorrect ? `<p class="text-slate-600 mt-1">정답은 <span class="font-bold text-red-600">${currentWord.answer}</span> 입니다.</p>` : ''}
+                            </div>
+                        </div>
+                        <button 
+                            onclick="nextQuestion()"
+                            class="flex items-center px-6 py-3 rounded-xl font-bold text-white transition-colors ${isCorrect ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-700'}"
+                        >
+                            다음 문제 <i data-lucide="arrow-right" class="w-5 h-5 ml-2"></i>
+                        </button>
+                    </div>
+                `;
+            }
+
+            return `
+                <div class="max-w-2xl mx-auto">
+                    <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
+                        <div class="bg-indigo-600 p-6 text-white text-center relative">
+                            <div class="absolute top-4 left-6 text-indigo-200 font-medium">
+                                문제 ${state.currentQuizIndex + 1} / 10
+                            </div>
+                            <div class="absolute top-4 right-6 text-indigo-200 font-medium">
+                                점수: ${state.score}
+                            </div>
+                            <h2 class="text-xl font-medium text-indigo-100 mt-6 mb-2">다음 단어의 품사는 무엇일까요?</h2>
+                            <div class="text-5xl font-extrabold py-8 tracking-wider">
+                                "${currentWord.word}"
+                            </div>
+                        </div>
+                        
+                        <div class="p-8">
+                            <div class="grid grid-cols-3 gap-3 md:gap-4 mb-8">
+                                ${buttonsHtml}
+                            </div>
+                            ${feedbackHtml}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 전체 화면 렌더링 함수
+        function render() {
+            const app = document.getElementById('app');
+            
+            app.innerHTML = `
+                <!-- 헤더 -->
+                <header class="text-center mb-10">
+                    <h1 class="text-3xl md:text-4xl font-extrabold text-indigo-700 mb-3 tracking-tight">국어 품사 마스터</h1>
+                    <p class="text-slate-600">형태, 기능, 의미로 알아보는 9품사 학습 & 퀴즈</p>
+                </header>
+
+                <!-- 탭 내비게이션 -->
+                <div class="flex justify-center space-x-4 mb-8">
+                    <button 
+                        onclick="setActiveTab('learn')"
+                        class="flex items-center px-6 py-3 rounded-full font-semibold transition-all shadow-sm ${state.activeTab === 'learn' ? 'bg-indigo-600 text-white shadow-indigo-200' : 'bg-white text-slate-600 hover:bg-indigo-50'}"
+                    >
+                        <i data-lucide="book-open" class="w-5 h-5 mr-2"></i>
+                        학습하기
+                    </button>
+                    <button 
+                        onclick="setActiveTab('quiz')"
+                        class="flex items-center px-6 py-3 rounded-full font-semibold transition-all shadow-sm ${state.activeTab === 'quiz' ? 'bg-indigo-600 text-white shadow-indigo-200' : 'bg-white text-slate-600 hover:bg-indigo-50'}"
+                    >
+                        <i data-lucide="gamepad-2" class="w-5 h-5 mr-2"></i>
+                        퀴즈 풀기
+                    </button>
+                </div>
+
+                <!-- 탭 내용 -->
+                ${state.activeTab === 'learn' ? renderLearnTab() : renderQuizTab()}
+            `;
+
+            // 아이콘 렌더링 갱신
+            lucide.createIcons();
+        }
+
+        // 초기 렌더링 실행
+        render();
+
+    </script>
+</body>
+</html>
