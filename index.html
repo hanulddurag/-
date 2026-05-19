@@ -10,10 +10,11 @@
 <body class="min-h-screen bg-slate-50 text-slate-800 font-sans p-4 md:p-8">
     
     <div id="app" class="max-w-5xl mx-auto">
-        </div>
+        <!-- 렌더링될 메인 컨테이너 -->
+    </div>
 
     <script>
-        // 1. 품사 데이터 정의 (생략 없이 포함)
+        // 1. 품사 데이터 정의
         const POS_DATA = {
             체언: {
                 form: '불변어',
@@ -56,15 +57,41 @@
             }
         };
 
-        // 2. 퀴즈 단어장 (기존 기능)
+        // 2. 단어 퀴즈용 100단어 데이터 (10개씩 10세트 분량)
         const ALL_QUIZ_WORDS = [
-            { word: '평화', answer: '명사' }, { word: '스스로', answer: '대명사' }, { word: '하나', answer: '수사' }, { word: '새', answer: '관형사' }, { word: '과연', answer: '부사' },
-            { word: '앗', answer: '감탄사' }, { word: '부터', answer: '조사' }, { word: '실천하다', answer: '동사' }, { word: '다채롭다', answer: '형용사' }, { word: '갈등', answer: '명사' },
-            { word: '환경', answer: '명사' }, { word: '저희', answer: '대명사' }, { word: '둘째', answer: '수사' }, { word: '헌', answer: '관형사' }, { word: '무척', answer: '부사' },
-            { word: '어머나', answer: '감탄사' }, { word: '까지', answer: '조사' }, { word: '탐구하다', answer: '동사' }, { word: '올바르다', answer: '형용사' }, { word: '정보', answer: '명사' }
+            // Set 1
+            { word: '우주', answer: '명사' }, { word: '너희', answer: '대명사' }, { word: '하나', answer: '수사' }, { word: '새', answer: '관형사' }, { word: '과연', answer: '부사' },
+            { word: '앗', answer: '감탄사' }, { word: '에서', answer: '조사' }, { word: '달리다', answer: '동사' }, { word: '예쁘다', answer: '형용사' }, { word: '평화', answer: '명사' },
+            // Set 2
+            { word: '사회', answer: '명사' }, { word: '누구', answer: '대명사' }, { word: '둘', answer: '수사' }, { word: '헌', answer: '관형사' }, { word: '매우', answer: '부사' },
+            { word: '어머나', answer: '감탄사' }, { word: '까지', answer: '조사' }, { word: '먹다', answer: '동사' }, { word: '높다', answer: '형용사' }, { word: '역사', answer: '명사' },
+            // Set 3
+            { word: '문화', answer: '명사' }, { word: '우리', answer: '대명사' }, { word: '셋', answer: '수사' }, { word: '첫', answer: '관형사' }, { word: '빨리', answer: '부사' },
+            { word: '야호', answer: '감탄사' }, { word: '부터', answer: '조사' }, { word: '읽다', answer: '동사' }, { word: '차갑다', answer: '형용사' }, { word: '과학', answer: '명사' },
+            // Set 4
+            { word: '환경', answer: '명사' }, { word: '자기', answer: '대명사' }, { word: '넷', answer: '수사' }, { word: '옛', answer: '관형사' }, { word: '가장', answer: '부사' },
+            { word: '네', answer: '감탄사' }, { word: '마저', answer: '조사' }, { word: '쓰다', answer: '동사' }, { word: '조용하다', answer: '형용사' }, { word: '생명', answer: '명사' },
+            // Set 5
+            { word: '경제', answer: '명사' }, { word: '무엇', answer: '대명사' }, { word: '다섯', answer: '수사' }, { word: '모든', answer: '관형사' }, { word: '살짝', answer: '부사' },
+            { word: '아니오', answer: '감탄사' }, { word: '조차', answer: '조사' }, { word: '듣다', answer: '동사' }, { word: '아름답다', answer: '형용사' }, { word: '정보', answer: '명사' },
+            // Set 6
+            { word: '정치', answer: '명사' }, { word: '어디', answer: '대명사' }, { word: '여섯', answer: '수사' }, { word: '온갖', answer: '관형사' }, { word: '무척', answer: '부사' },
+            { word: '자', answer: '감탄사' }, { word: '밖에', answer: '조사' }, { word: '보다', answer: '동사' }, { word: '둥글다', answer: '형용사' }, { word: '인권', answer: '명사' },
+            // Set 7
+            { word: '예술', answer: '명사' }, { word: '거기', answer: '대명사' }, { word: '일곱', answer: '수사' }, { word: '이', answer: '관형사' }, { word: '일찍', answer: '부사' },
+            { word: '참', answer: '감탄사' }, { word: '만', answer: '조사' }, { word: '걷다', answer: '동사' }, { word: '파랗다', answer: '형용사' }, { word: '미래', answer: '명사' },
+            // Set 8
+            { word: '가치', answer: '명사' }, { word: '저기', answer: '대명사' }, { word: '여덟', answer: '수사' }, { word: '그', answer: '관형사' }, { word: '가득', answer: '부사' },
+            { word: '허허', answer: '감탄사' }, { word: '는', answer: '조사' }, { word: '웃다', answer: '동사' }, { word: '맑다', answer: '형용사' }, { word: '갈등', answer: '명사' },
+            // Set 9
+            { word: '책임', answer: '명사' }, { word: '여기', answer: '대명사' }, { word: '아홉', answer: '수사' }, { word: '저', answer: '관형사' }, { word: '안', answer: '부사' },
+            { word: '아이구', answer: '감탄사' }, { word: '가', answer: '조사' }, { word: '울다', answer: '동사' }, { word: '깊다', answer: '형용사' }, { word: '윤리', answer: '명사' },
+            // Set 10
+            { word: '자유', answer: '명사' }, { word: '당신', answer: '대명사' }, { word: '열', answer: '수사' }, { word: '무슨', answer: '관형사' }, { word: '못', answer: '부사' },
+            { word: '에구', answer: '감탄사' }, { word: '를', answer: '조사' }, { word: '서다', answer: '동사' }, { word: '험난하다', answer: '형용사' }, { word: '평등', answer: '명사' }
         ];
 
-        // 3. 심화 학습 문제장 (사용자가 제공한 문제 기반)
+        // 3. 심화 학습 문제장 (기존 유지)
         const ADVANCED_QUESTIONS = [
             {
                 q: '품사에 대한 설명으로 적절하지 않은 것은?',
@@ -75,7 +102,7 @@
                     '문장에서 쓰일 때 형태가 변하는 말과 변하지 않는 말로 구분할 수 있다.',
                     '문장에서 같은 기능을 하는 단어라도 나타내는 의미는 다를 수 있다.'
                 ],
-                answerIndex: 2 // 국어는 9품사임
+                answerIndex: 2 
             },
             {
                 q: '다음 문장 중 형태가 변하지 않는 단어(불변어)에 밑줄이 쳐진 것은?',
@@ -86,7 +113,7 @@
                     '동생이 바닥에 구슬을 <u class="font-bold text-indigo-600">떨어뜨렸다</u>.',
                     '이곳에서는 마법사들을 품사라고 <u class="font-bold text-indigo-600">부르네</u>.'
                 ],
-                answerIndex: 1 // 제발(부사)
+                answerIndex: 1 
             },
             {
                 q: '다음 단어들의 공통점으로 적절하지 않은 것은?<br/><br/><div class="bg-slate-100 p-3 rounded text-center">뛰다, 작다, 당기다, 맑다</div>',
@@ -97,7 +124,7 @@
                     '사람이나 사물의 움직임이나 작용을 나타낸다.',
                     '국어사전에서 찾을 때 기본형으로 검색해야 한다.'
                 ],
-                answerIndex: 3 // '작다', '맑다'는 상태/성질(형용사)이므로 움직임/작용이 아님
+                answerIndex: 3 
             },
             {
                 q: '밑줄 친 단어의 품사가 나머지와 다른 것은?',
@@ -108,7 +135,7 @@
                     '주방장이 면을 가늘게 <u class="font-bold text-indigo-600">뽑았다</u>.',
                     '친구들과 재미있게 <u class="font-bold text-indigo-600">뛰어놀았다</u>.'
                 ],
-                answerIndex: 0 // 따뜻했다(형용사), 나머지(동사)
+                answerIndex: 0 
             },
             {
                 q: '동사와 형용사가 모두 포함된 문장에 해당하지 않는 것은?',
@@ -119,7 +146,7 @@
                     '비가 많이 와서(동) 길이 미끄럽다(형).',
                     '작은(형) 고양이가 책상 아래에 엎드렸다(동).'
                 ],
-                answerIndex: 1 // 달콤하다, 맛있다 둘 다 형용사
+                answerIndex: 1 
             },
             {
                 q: '밑줄 친 단어가 조사가 아닌 것은?',
@@ -130,7 +157,7 @@
                     '문제를 풀<u class="font-bold text-indigo-600">고</u> 이곳의 백성을 구해라.',
                     '형은 고등학생이<u class="font-bold text-indigo-600">고</u>, 나는 중학생이다.'
                 ],
-                answerIndex: 2 // 얇은 (형용사의 어미 활용)
+                answerIndex: 2 
             },
             {
                 q: '수식언에 대한 설명으로 적절하지 않은 것은?',
@@ -141,7 +168,7 @@
                     '부사보다 관형사가 수식하는 대상의 범위가 더 넓다.',
                     '문장의 의미를 더욱 정확하고 구체적으로 표현할 수 있게 돕는다.'
                 ],
-                answerIndex: 3 // 부사가 관형사보다 수식 범위가 넓음
+                answerIndex: 3 
             },
             {
                 q: '밑줄 친 단어의 품사로 적절하지 않은 것은?',
@@ -152,7 +179,7 @@
                     '<u class="font-bold text-indigo-600">모든</u> 사람들이 집 밖에 나와서 눈을 치웠다. → 관형사',
                     '천천히 호흡을 가다듬으면서 발표를 <u class="font-bold text-indigo-600">기다렸다</u>. → 관형사'
                 ],
-                answerIndex: 4 // 기다렸다 → 동사
+                answerIndex: 4 
             },
             {
                 q: '밑줄 친 단어가 감탄사에 해당하지 않는 것은?',
@@ -163,7 +190,7 @@
                     '<u class="font-bold text-indigo-600">여보세요</u>, 거기 준호네 집인가요?',
                     '<u class="font-bold text-indigo-600">아</u>, 나는 정말 행복한 사람이구나.'
                 ],
-                answerIndex: 2 // 민형아 (명사+호격조사)
+                answerIndex: 2 
             },
             {
                 q: '품사에 대한 설명으로 적절하지 않은 것은?',
@@ -174,7 +201,7 @@
                     '문장에서 쓰일 때의 형태, 기능, 의미를 기준으로 분류할 수 있다.',
                     '관형사와 부사는 문장에서 하는 역할은 같으나 나타내는 의미가 서로 다르다.'
                 ],
-                answerIndex: 2 // 역할(기능)에 따라 5언으로 나뉨 (9개는 의미 기준)
+                answerIndex: 2 
             },
             {
                 q: '다음 문장에 포함된 품사가 아닌 것은?<br/><br/><div class="bg-slate-100 p-3 rounded text-center">얼마 전까지 나는 행복이 아주 특별하고 거창한 것에서 온다고 생각했다.</div>',
@@ -185,7 +212,7 @@
                     '형용사',
                     '대명사'
                 ],
-                answerIndex: 2 // 수사는 없음
+                answerIndex: 2 
             },
             {
                 q: '용언에 대한 설명으로 적절하지 않은 것은?',
@@ -196,7 +223,7 @@
                     '문장에서 주체의 움직임이나 상태, 성질을 나타낸다.',
                     '뒤에 조사를 붙여 다른 말과의 관계를 표현할 수 있다.'
                 ],
-                answerIndex: 4 // 조사는 주로 체언 뒤에 붙음
+                answerIndex: 4 
             },
             {
                 q: '<보기>의 문장에 대한 설명으로 적절하지 않은 것은?<br/><br/><div class="bg-slate-100 p-3 rounded text-center">우리는 새 옷을 무척 좋아한다.</div>',
@@ -207,7 +234,7 @@
                     '‘무척’은 뒤에 오는 ‘좋아한다’를 꾸며 주는 말이다.',
                     '이 문장에서 형태가 변하는 말은 ‘좋아한다’뿐이다.'
                 ],
-                answerIndex: 2 // 부사는 비교적 위치가 자유로울 수 있음
+                answerIndex: 2 
             },
             {
                 q: '다음 중 조사가 사용되지 않은 문장은?',
@@ -218,7 +245,7 @@
                     '이 줄까지 입장할 수 있습니다.',
                     '빨리 뛰어가서 자리를 잡아라.'
                 ],
-                answerIndex: 4 // 조사 없음
+                answerIndex: 4 
             },
             {
                 q: '다음 빈칸에 들어갈 조사로 적절한 것은?<br/><br/><div class="bg-slate-100 p-3 rounded text-center">나는 우유는 다 싫어하지만 바나나 우유(   ) 좋아한다.</div>',
@@ -229,7 +256,7 @@
                     '까지',
                     '부터'
                 ],
-                answerIndex: 2 // 만
+                answerIndex: 2 
             }
         ];
 
@@ -252,7 +279,7 @@
             advQueue: [],
             currentAdvIndex: 0,
             advScore: 0,
-            advState: 'selecting_set', // selecting_set, playing, finished
+            advState: 'selecting_set', 
             advSelectedAnswer: null
         };
 
@@ -272,9 +299,8 @@
         window.showSetSelection = function() { state.quizState = 'selecting_set'; render(); };
         window.showAdvSetSelection = function() { state.advState = 'selecting_set'; render(); };
 
-        // 6. 심화 학습 시작 로직 (랜덤 10개 추출)
+        // 6. 심화 학습 로직
         window.startAdvancedQuiz = function(setIndex) {
-            // 원본 문제 배열에서 랜덤하게 10개(문제가 부족하면 전체)를 섞어서 추출합니다.
             const shuffled = [...ADVANCED_QUESTIONS].sort(() => 0.5 - Math.random()).slice(0, 10);
             
             state.advQueue = shuffled;
@@ -311,9 +337,11 @@
             render();
         };
 
-        // 일반 퀴즈 함수들 (생략하지 않음)
+        // 7. 일반 퀴즈 함수들
         window.startQuiz = function(setIndex) {
-            const setWords = ALL_QUIZ_WORDS.slice(0, 10);
+            // 인덱스를 기준으로 10개 추출
+            const startIndex = setIndex * 10;
+            const setWords = ALL_QUIZ_WORDS.slice(startIndex, startIndex + 10);
             state.quizQueue = [...setWords].sort(() => 0.5 - Math.random());
             state.currentSet = setIndex;
             state.currentQuizIndex = 0;
@@ -346,7 +374,7 @@
             render();
         };
 
-        // 7. 렌더링 영역
+        // 8. 렌더링 영역
         function renderLearnTab() {
             const sidebarHtml = Object.keys(POS_DATA).map(func => {
                 const isSelected = state.selectedFunction === func;
@@ -359,6 +387,132 @@
                             ${POS_DATA[state.selectedFunction].items.map(item => `<div class="bg-indigo-50/50 rounded-2xl p-6 border border-indigo-100 mb-4"><h3 class="text-2xl font-bold text-indigo-700 mb-3">${item.name}</h3><p class="text-slate-700 mb-4">${item.desc}</p></div>`).join('')}
                         </div>
                     </div>`;
+        }
+
+        function renderQuizTab() {
+            if (state.quizState === 'selecting_set') {
+                const setButtons = Array.from({length: 10}, (_, i) => `
+                    <button onclick="startQuiz(${i})" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-indigo-400 hover:shadow-md transition-all flex flex-col items-center justify-center group">
+                        <div class="bg-indigo-100 text-indigo-600 w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl mb-3 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                            ${i + 1}
+                        </div>
+                        <span class="font-bold text-slate-700">세트 ${i + 1}</span>
+                    </button>
+                `).join('');
+
+                return `
+                    <div class="max-w-4xl mx-auto">
+                        <div class="bg-indigo-50 rounded-2xl p-8 text-center mb-8 border border-indigo-100">
+                            <h2 class="text-2xl font-bold text-indigo-900 mb-2">도전할 단어 문제 세트를 선택하세요!</h2>
+                            <p class="text-slate-600">중학생 필수 어휘 100개가 10문제씩 10개의 세트로 준비되어 있습니다.</p>
+                        </div>
+                        <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                            ${setButtons}
+                        </div>
+                    </div>
+                `;
+            }
+
+            if (state.quizState === 'finished') {
+                return `
+                    <div class="max-w-2xl mx-auto">
+                        <div class="bg-white rounded-2xl shadow-xl p-10 text-center border border-slate-100">
+                            <h2 class="text-3xl font-bold text-indigo-900 mb-4">세트 ${state.currentSet + 1} 완료! 🎉</h2>
+                            <p class="text-xl text-slate-600 mb-8">10문제 중 <span class="font-extrabold text-indigo-600 text-2xl">${state.score}</span>문제를 맞혔습니다.</p>
+                            <div class="w-full bg-slate-100 rounded-full h-4 mb-8 overflow-hidden">
+                                <div class="bg-indigo-500 h-4 rounded-full transition-all duration-1000" style="width: ${(state.score / 10) * 100}%"></div>
+                            </div>
+                            <div class="flex justify-center space-x-4">
+                                <button onclick="startQuiz(${state.currentSet})" class="bg-white border-2 border-indigo-600 text-indigo-600 hover:bg-indigo-50 px-6 py-3 rounded-xl font-bold transition-colors">
+                                    다시 풀기
+                                </button>
+                                <button onclick="showSetSelection()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-bold transition-colors">
+                                    다른 세트 선택
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            if (state.quizQueue.length === 0) return '';
+
+            const currentWord = state.quizQueue[state.currentQuizIndex];
+            
+            const buttonsHtml = ALL_9_POS.map(pos => {
+                const isSelected = state.selectedAnswer === pos;
+                const isCorrectAnswer = currentWord.answer === pos;
+                
+                let btnStyle = "bg-slate-50 text-slate-700 border-slate-200 hover:bg-indigo-50 hover:border-indigo-200";
+                
+                if (state.quizState !== 'playing') {
+                    if (isCorrectAnswer) btnStyle = "bg-green-100 text-green-800 border-green-300 shadow-inner";
+                    else if (isSelected && !isCorrectAnswer) btnStyle = "bg-red-100 text-red-800 border-red-300";
+                    else btnStyle = "bg-slate-50 text-slate-400 border-slate-100 opacity-50 cursor-not-allowed";
+                }
+
+                return `
+                    <button
+                        onclick="handleAnswer('${pos}')"
+                        ${state.quizState !== 'playing' ? 'disabled' : ''}
+                        class="py-4 rounded-xl border-2 font-bold text-lg transition-all ${btnStyle}"
+                    >
+                        ${pos}
+                    </button>
+                `;
+            }).join('');
+
+            let feedbackHtml = '';
+            if (state.quizState !== 'playing') {
+                const isCorrect = state.quizState === 'correct';
+                feedbackHtml = `
+                    <div class="p-6 rounded-xl flex items-center justify-between ${isCorrect ? 'bg-green-50' : 'bg-red-50'}">
+                        <div class="flex items-center">
+                            <i data-lucide="${isCorrect ? 'check-circle-2' : 'x-circle'}" class="w-8 h-8 ${isCorrect ? 'text-green-500' : 'text-red-500'} mr-3"></i>
+                            <div>
+                                <p class="font-bold text-lg ${isCorrect ? 'text-green-800' : 'text-red-800'}">
+                                    ${isCorrect ? '정답입니다!' : '틀렸습니다!'}
+                                </p>
+                                ${!isCorrect ? `<p class="text-slate-600 mt-1">정답은 <span class="font-bold text-red-600">${currentWord.answer}</span> 입니다.</p>` : ''}
+                            </div>
+                        </div>
+                        <button onclick="nextQuestion()" class="flex items-center px-6 py-3 rounded-xl font-bold text-white transition-colors ${isCorrect ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-700'}">
+                            다음 문제 <i data-lucide="arrow-right" class="w-5 h-5 ml-2"></i>
+                        </button>
+                    </div>
+                `;
+            }
+
+            return `
+                <div class="max-w-2xl mx-auto">
+                    <div class="mb-4">
+                        <button onclick="showSetSelection()" class="text-slate-500 hover:text-indigo-600 flex items-center font-medium transition-colors">
+                            <i data-lucide="arrow-left" class="w-4 h-4 mr-1"></i> 세트 목록으로
+                        </button>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
+                        <div class="bg-indigo-600 p-6 text-white text-center relative">
+                            <div class="absolute top-4 left-6 text-indigo-200 font-medium">
+                                문제 ${state.currentQuizIndex + 1} / 10
+                            </div>
+                            <div class="absolute top-4 right-6 text-indigo-200 font-medium">
+                                점수: ${state.score}
+                            </div>
+                            <h2 class="text-xl font-medium text-indigo-100 mt-6 mb-2">[세트 ${state.currentSet + 1}] 다음 단어의 품사는 무엇일까요?</h2>
+                            <div class="text-5xl font-extrabold py-8 tracking-wider">
+                                "${currentWord.word}"
+                            </div>
+                        </div>
+                        
+                        <div class="p-8">
+                            <div class="grid grid-cols-3 gap-3 md:gap-4 mb-8">
+                                ${buttonsHtml}
+                            </div>
+                            ${feedbackHtml}
+                        </div>
+                    </div>
+                </div>
+            `;
         }
 
         // 심화 학습(Advanced) 탭 렌더링
@@ -464,8 +618,8 @@
             let content = '';
             
             if(state.activeTab === 'learn') content = renderLearnTab();
+            else if(state.activeTab === 'quiz') content = renderQuizTab();
             else if(state.activeTab === 'advanced') content = renderAdvancedTab();
-            // quiz 렌더링부는 위 일반 퀴즈와 동일 (생략)
             else content = renderAdvancedTab(); // 폴백
 
             app.innerHTML = `
