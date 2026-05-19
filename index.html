@@ -91,7 +91,7 @@
             { word: '에구', answer: '감탄사' }, { word: '를', answer: '조사' }, { word: '서다', answer: '동사' }, { word: '험난하다', answer: '형용사' }, { word: '평등', answer: '명사' }
         ];
 
-        // 3. 심화 학습 문제장 (보기의 시각 포인트 보강)
+        // 3. 심화 학습 문제장 (4번 문제의 밑줄 단어 위치 및 정답 오류 완벽하게 수정)
         const ADVANCED_QUESTIONS = [
             {
                 q: '품사에 대한 설명으로 적절하지 않은 것은?',
@@ -129,13 +129,13 @@
             {
                 q: '밑줄 친 단어의 품사가 나머지와 다른 것은?',
                 options: [
-                    '어제는 햇살이 <span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">따뜻했다</span>.',
-                    '기온이 낮아서 강물이 <span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">얼었다</span>.',
-                    '산에 오르니 기분이 <span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">상쾌했다</span>.',
-                    '주방장이 면을 가늘게 <span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">뽑았다</span>.',
-                    '친구들과 재미있게 <span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">뛰어놀았다</span>.'
+                    '어제는 햇살이 <span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">따뜻했다</span>.', // 형용사
+                    '기온이 낮아서 강물이 <span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">얼었다</span>.', // 동사 -> ★정답!
+                    '산에 오르니 기분이 <span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">상쾌했다</span>.', // 형용사
+                    '주방장이 면을 <span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">가늘게</span> 뽑았다.', // 형용사 ('가늘다')
+                    '친구들과 <span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">재미있게</span> 뛰어놀았다.' // 형용사 ('재미있다')
                 ],
-                answerIndex: 0 
+                answerIndex: 1 // 정답을 '얼었다' (인덱스 1)로 바르게 수정
             },
             {
                 q: '동사와 형용사가 모두 포함된 문장에 해당하지 않는 것은?',
@@ -243,7 +243,7 @@
                     '우리가 너를 좋아해.',
                     '내 동생은 운동도 잘한다.',
                     '이 줄까지 입장할 수 있습니다.',
-                    '매우 빨리 달린다.'
+                    '매우 빨리 달려서 잡았다.'
                 ],
                 answerIndex: 4 
             },
