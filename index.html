@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>국어 품사 마스터 - 형성 평가 및 성적 연동 시스템</title>
+    <title>국어 품사 마스터</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -22,7 +22,7 @@
         <!-- 상단 헤더 -->
         <header class="text-center mb-8">
             <h1 class="text-3xl font-extrabold text-indigo-700 mb-1">국어 품사 마스터</h1>
-            <p class="text-slate-400 text-xs font-medium">실시간 구글 스프레드시트 연동형 형성평가 시스템</p>
+            <p class="text-slate-400 text-xs font-medium">품사 완성 종합 학습 대시보드</p>
         </header>
 
         <!-- 상단 내비게이션 탭 -->
@@ -157,7 +157,7 @@
 
             <div id="adv-finished-view" class="max-w-2xl mx-auto hidden">
                 <div class="bg-white rounded-2xl shadow-xl p-10 text-center border border-slate-100">
-                    <h2 class="text-3xl font-bold text-purple-900 mb-4">심화 세트 완료! 🎉</h2>
+                    <h2 class="text-3xl font-bold text-purple-900 mb-4">심화 학습 완료! 🎉</h2>
                     <p class="text-xl text-slate-600 mb-8">
                         10문제 중 <span id="adv-final-score" class="font-extrabold text-purple-600 text-2xl">0</span>문제를 맞혔습니다.
                     </p>
@@ -165,13 +165,13 @@
                         <div id="adv-final-progress-bar" class="bg-purple-500 h-4 rounded-full transition-all duration-1000" style="width: 0%"></div>
                     </div>
                     <div class="flex justify-center space-x-4">
-                        <button onclick="retryAdvQuiz()" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-bold transition-colors">세트 다시 선택하기</button>
+                        <button onclick="showAdvSetSelection()" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-bold transition-colors">세트 다시 선택하기</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- 4. 형성 평가 탭 (구글 스프레드시트 실시간 기록 연동) -->
+        <!-- 4. 형성 평가 탭 (로컬 채점 전용) -->
         <div id="tab-evaluation" class="tab-content">
             <div id="eval-selecting-view" class="max-w-3xl mx-auto">
                 <div class="bg-emerald-50 rounded-2xl p-8 text-center mb-8 border border-emerald-100 shadow-sm">
@@ -238,12 +238,6 @@
                         <div id="eval-final-progress-bar" class="bg-emerald-500 h-4 rounded-full" style="width: 0%"></div>
                     </div>
 
-                    <!-- 구글 시트 연동 전송 중/성공 오버레이 피드백 박스 (동적 표출) -->
-                    <div id="eval-sync-status-box" class="mt-4 p-3 bg-blue-50 text-blue-800 border border-blue-200 rounded-xl flex items-center justify-center gap-2 hidden">
-                        <div class="animate-spin rounded-full h-4 w-4 border-2 border-blue-800 border-t-transparent"></div>
-                        <span class="text-xs font-bold" id="eval-sync-status-text">성적 데이터를 구글 스프레드시트 기록장으로 실시간 전송 중...</span>
-                    </div>
-
                     <div class="flex justify-center space-x-4 mt-8">
                         <button onclick="retryEvaluation()" class="bg-white border-2 border-emerald-600 text-emerald-600 hover:bg-emerald-50 px-6 py-3 rounded-xl font-bold transition-colors">다시 시험 보기</button>
                         <button onclick="showEvalSelection()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-xl font-bold transition-colors">처음 화면으로</button>
@@ -255,11 +249,6 @@
     </div>
 
     <script>
-        // --- 0. 구글 스프레드시트 Web App URL 설정 ---
-        // 사용자가 배포한 구글 앱스 스크립트 웹 앱 URL을 이곳에 붙여넣습니다.
-        // 빈 값일 경우 로컬 메모리에 기록을 가상 저장하고 안내 메시지를 띄웁니다.
-        const GOOGLE_SHEET_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbw1KbLMymTbck12mo92cBqAG2jJC3-IFg-3OVYVNPTQfJNgYTsb9XIwZtzUGp1LxAipPQ/exec"; 
-
         // 1. 품사 기초 정보 정의
         const POS_DATA = {
             체언: {
@@ -303,7 +292,7 @@
             }
         };
 
-        // 2. 단어 퀴즈 100개 데이터베이스
+        // 2. 단어 퀴즈 100개 데이터베이스 (10개씩 10세트 분량)
         const ALL_QUIZ_WORDS = [
             // Set 1
             { word: '우주', answer: '명사' }, { word: '너희', answer: '대명사' }, { word: '하나', answer: '수사' }, { word: '새', answer: '관형사' }, { word: '과연', answer: '부사' },
@@ -322,7 +311,7 @@
             { word: '아니오', answer: '감탄사' }, { word: '조차', answer: '조사' }, { word: '듣다', answer: '동사' }, { word: '아름답다', answer: '형용사' }, { word: '정보', answer: '명사' },
             // Set 6
             { word: '정치', answer: '명사' }, { word: '어디', answer: '대명사' }, { word: '여섯', answer: '수사' }, { word: '온갖', answer: '관형사' }, { word: '무척', answer: '부사' },
-            { word: '자', answer: '감탄사' }, { word: '밖에', answer: '조사' }, { word: '보다', border: '조사' }, { word: '둥글다', answer: '형용사' }, { word: '인권', answer: '명사' },
+            { word: '자', answer: '감탄사' }, { word: '밖에', answer: '조사' }, { word: '보다', answer: '동사' }, { word: '둥글다', answer: '형용사' }, { word: '인권', answer: '명사' },
             // Set 7
             { word: '예술', answer: '명사' }, { word: '거기', answer: '대명사' }, { word: '일곱', answer: '수사' }, { word: '이', answer: '관형사' }, { word: '일찍', answer: '부사' },
             { word: '참', answer: '감탄사' }, { word: '만', answer: '조사' }, { word: '걷다', answer: '동사' }, { word: '파랗다', answer: '형용사' }, { word: '미래', answer: '명사' },
@@ -416,7 +405,7 @@
             }
         ];
 
-        // 3. 형성 평가 9개 문제 데이터 (7번 문항 감탄사 밑줄 강조 수정 완료)
+        // 4. 형성 평가 9개 문제 데이터 (밑줄 강조 정교화 버전)
         const EVALUATION_QUESTIONS = [
             { id: 1, q: "1. 다음 중 품사를 바르게 분류한 것은?", options: ["독립언: 조사", "관계언: 감탄사", "용언: 관형사, 부사", "수식언: 동사, 형용사", "체언: 명사, 대명사, 수사"], answerIndex: 4, rationale: "명사, 대명사, 수사는 주어나 목적어 자리에 쓰이며 조사가 결합할 수 있는 '체언'에 해당합니다." },
             { id: 2, q: "2. &lt;보기&gt;의 단어들을 문장에서 하는 역할(기능)이 같은 것끼리 적절하게 묶은 것은?<br/><br/><div class='bg-slate-100 p-3 rounded font-semibold text-slate-800 text-center'>&lt;보기&gt;<br/>어느, 꿈, 이것, 어머나, 예쁘다, 뜨겁다, 흐르다, 얼마나</div>", options: ["어느, 꿈, 이것", "어머나, 얼마나", "꿈, 이것, 어머나", "예쁘다, 뜨겁다, 흐르다", "어머나, 예쁘다, 뜨겁다"], answerIndex: 3, rationale: "'예쁘다', '뜨겁다'(형용사), '흐르다'(동사)는 모두 문장에서 서술어로 쓰이는 '용언'에 해당합니다." },
@@ -431,77 +420,15 @@
 
         const ALL_9_POS = ['명사', '대명사', '수사', '관형사', '부사', '감탄사', '조사', '동사', '형용사'];
 
-        // 4. 전역 애플리케이션 상태 제어부
+        // 5. 전역 애플리케이션 상태 제어부
         let state = {
             activeTab: 'learn', // learn, quiz, advanced, evaluation
             selectedFunction: '체언',
             studentInfo: { grade: '', classNum: '', studentNum: '', name: '' },
             quizQueue: [], currentQuizIndex: 0, score: 0, quizState: 'selecting_set', selectedAnswer: '', currentSet: 0,
             advQueue: [], currentAdvIndex: 0, advScore: 0, advState: 'selecting_set', advSelectedAnswer: null, advCurrentSet: 0,
-            evalQueue: [], currentEvalIndex: 0, evalScore: 0, evalState: 'selecting_set', evalSelectedAnswer: null,
-            evalAnswersRecord: [],
-            isSubmitting: false,
-            submitStatus: '' // 'success', 'fail'
+            evalQueue: [], currentEvalIndex: 0, evalScore: 0, evalState: 'selecting_set', evalSelectedAnswer: null
         };
-
-        // --- 구글 시트 웹페이지 배포 전용 서버 통신 연동 함수 ---
-        // Apps Script 배포 환경에서 작동하므로 별도의 외부 WEB_APP_URL 변수 없이
-        // google.script.run API를 통하여 스프레드시트와 실시간 안전 연동됩니다.
-        function sendDataToGoogleSheet() {
-            if (typeof google !== 'undefined' && google.script && google.script.run) {
-                state.isSubmitting = true;
-                state.submitStatus = 'sending';
-                render();
-
-                const payload = {
-                    timestamp: new Date().toLocaleString("ko-KR"),
-                    grade: state.studentInfo.grade,
-                    classNum: state.studentInfo.classNum,
-                    studentNum: state.studentInfo.studentNum,
-                    name: state.studentInfo.name,
-                    score: `${state.evalScore} / ${state.evalQueue.length}`,
-                    percentage: `${Math.round((state.evalScore / state.evalQueue.length) * 100)}%`,
-                    
-                    q1_resp: state.evalAnswersRecord.find(r => r.questionId === 1)?.selectedOption || '',
-                    q1_result: state.evalAnswersRecord.find(r => r.questionId === 1)?.isCorrect || '',
-                    q2_resp: state.evalAnswersRecord.find(r => r.questionId === 2)?.selectedOption || '',
-                    q2_result: state.evalAnswersRecord.find(r => r.questionId === 2)?.isCorrect || '',
-                    q3_resp: state.evalAnswersRecord.find(r => r.questionId === 3)?.selectedOption || '',
-                    q3_result: state.evalAnswersRecord.find(r => r.questionId === 3)?.isCorrect || '',
-                    q4_resp: state.evalAnswersRecord.find(r => r.questionId === 4)?.selectedOption || '',
-                    q4_result: state.evalAnswersRecord.find(r => r.questionId === 4)?.isCorrect || '',
-                    q5_resp: state.evalAnswersRecord.find(r => r.questionId === 5)?.selectedOption || '',
-                    q5_result: state.evalAnswersRecord.find(r => r.questionId === 5)?.isCorrect || '',
-                    q6_resp: state.evalAnswersRecord.find(r => r.questionId === 6)?.selectedOption || '',
-                    q6_result: state.evalAnswersRecord.find(r => r.questionId === 6)?.isCorrect || '',
-                    q7_resp: state.evalAnswersRecord.find(r => r.questionId === 7)?.selectedOption || '',
-                    q7_result: state.evalAnswersRecord.find(r => r.questionId === 7)?.isCorrect || '',
-                    q8_resp: state.evalAnswersRecord.find(r => r.questionId === 8)?.selectedOption || '',
-                    q8_result: state.evalAnswersRecord.find(r => r.questionId === 8)?.isCorrect || '',
-                    q9_resp: state.evalAnswersRecord.find(r => r.questionId === 9)?.selectedOption || '',
-                    q9_result: state.evalAnswersRecord.find(r => r.questionId === 9)?.isCorrect || ''
-                };
-
-                google.script.run
-                    .withSuccessHandler(function() {
-                        state.isSubmitting = false;
-                        state.submitStatus = 'success';
-                        render();
-                    })
-                    .withFailureHandler(function(err) {
-                        console.error("서버 기록 전송 실패:", err);
-                        state.isSubmitting = false;
-                        state.submitStatus = 'fail';
-                        render();
-                    })
-                    .recordEvaluationResult(payload);
-            } else {
-                console.log("로컬 테스트 감지: 데이터가 시트에 저장되지 않습니다.");
-                state.isSubmitting = false;
-                state.submitStatus = 'success';
-                render();
-            }
-        }
 
         // --- 탭 및 이벤트 핸들러 바인딩 ---
         window.switchTab = function(tab) {
@@ -536,6 +463,7 @@
             renderLearnContent();
         };
 
+        // 단어 퀴즈 핸들러
         window.startQuiz = function(setIndex) {
             const startIndex = setIndex * 10;
             const setWords = ALL_QUIZ_WORDS.slice(startIndex, startIndex + 10);
@@ -595,6 +523,7 @@
             startQuiz(state.currentSet);
         };
 
+        // 심화 학습 핸들러
         window.startAdvancedQuiz = function(setIndex) {
             const shuffled = [...ADVANCED_QUESTIONS].sort(() => 0.5 - Math.random()).slice(0, 10);
             state.advQueue = shuffled;
@@ -653,6 +582,7 @@
             startAdvancedQuiz(state.advCurrentSet);
         };
 
+        // 형성 평가 핸들러
         window.startEvaluationQuiz = function() {
             const gradeInput = document.getElementById('info-grade');
             const classInput = document.getElementById('info-class');
@@ -675,7 +605,6 @@
             state.evalScore = 0;
             state.evalState = 'playing';
             state.evalSelectedAnswer = null;
-            state.evalAnswersRecord = [];
 
             document.getElementById('eval-selecting-view').classList.add('hidden');
             document.getElementById('eval-playing-view').classList.remove('hidden');
@@ -690,12 +619,6 @@
             
             const currentQ = state.evalQueue[state.currentEvalIndex];
             const isCorrect = optionIndex === currentQ.answerIndex;
-
-            state.evalAnswersRecord.push({
-                questionId: currentQ.id,
-                selectedOption: currentQ.options[optionIndex],
-                isCorrect: isCorrect ? "O" : "X"
-            });
 
             if (isCorrect) {
                 state.evalScore++;
@@ -721,8 +644,6 @@
                 document.getElementById('eval-student-final-badge').innerText = infoStr;
                 document.getElementById('eval-final-score').innerText = state.evalScore;
                 document.getElementById('eval-final-progress-bar').style.width = `${Math.round((state.evalScore / state.evalQueue.length) * 100)}%`;
-
-                sendDataToGoogleSheet();
             }
         };
 
@@ -904,27 +825,7 @@
         }
 
         function render() {
-            const syncStatusBox = document.getElementById('eval-sync-status-box');
-            const syncStatusText = document.getElementById('eval-sync-status-text');
-
-            if (syncStatusBox) {
-                if (state.isSubmitting) {
-                    syncStatusBox.classList.remove('hidden');
-                    syncStatusBox.className = "mt-4 p-3 bg-blue-50 text-blue-800 border border-blue-200 rounded-xl flex items-center justify-center gap-2";
-                    syncStatusText.innerHTML = `<div class="animate-spin rounded-full h-4 w-4 border-2 border-blue-800 border-t-transparent"></div> 성적을 스프레드시트 기록장으로 실시간 전송 중...`;
-                } else if (state.submitStatus === 'success') {
-                    // 구글 앱스 스크립트 전송 성공 시 피드백 박스를 노출합니다.
-                    syncStatusBox.classList.remove('hidden');
-                    syncStatusBox.className = "mt-4 p-3 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-xl flex items-center justify-center gap-2";
-                    syncStatusText.innerHTML = `<i data-lucide="check-circle" class="w-4 h-4 text-emerald-600"></i> 구글 스프레드시트 기록장 전송 완료! 채점이 저장되었습니다.`;
-                } else if (state.submitStatus === 'fail') {
-                    syncStatusBox.classList.remove('hidden');
-                    syncStatusBox.className = "mt-4 p-3 bg-red-50 text-red-800 border border-red-200 rounded-xl flex items-center justify-center gap-2";
-                    syncStatusText.innerHTML = `<i data-lucide="alert-triangle" class="w-4 h-4 text-red-600"></i> 클라우드 전송 실패! 전송 환경을 점검해 주세요.`;
-                } else {
-                    syncStatusBox.classList.add('hidden');
-                }
-            }
+            // 이 버전은 로컬 전송 전용이므로 시트 연동 전송 오버레이 및 알림을 렌더링하지 않습니다.
             lucide.createIcons();
         }
 
