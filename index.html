@@ -202,11 +202,6 @@
                             시험 시작하기
                         </button>
                     </div>
-                    
-                    <div class="mt-4 text-xs text-emerald-600 font-semibold flex items-center justify-center gap-1">
-                        <i data-lucide="cloud-lightning" class="w-4 h-4"></i>
-                        완료 시 구글 스프레드시트 교사용 성적 기록장에 실시간 자동 연동 및 누적 기록됩니다.
-                    </div>
                 </div>
             </div>
 
@@ -243,8 +238,8 @@
                         <div id="eval-final-progress-bar" class="bg-emerald-500 h-4 rounded-full" style="width: 0%"></div>
                     </div>
 
-                    <!-- 구글 시트 연동 전송 중/성공 오버레이 피드백 박스 -->
-                    <div id="eval-sync-status-box" class="mt-4 p-3 bg-blue-50 text-blue-800 border border-blue-200 rounded-xl flex items-center justify-center gap-2">
+                    <!-- 구글 시트 연동 전송 중/성공 오버레이 피드백 박스 (동적 표출) -->
+                    <div id="eval-sync-status-box" class="mt-4 p-3 bg-blue-50 text-blue-800 border border-blue-200 rounded-xl flex items-center justify-center gap-2 hidden">
                         <div class="animate-spin rounded-full h-4 w-4 border-2 border-blue-800 border-t-transparent"></div>
                         <span class="text-xs font-bold" id="eval-sync-status-text">성적 데이터를 구글 스프레드시트 기록장으로 실시간 전송 중...</span>
                     </div>
@@ -322,7 +317,7 @@
             { word: '아니오', answer: '감탄사' }, { word: '조차', answer: '조사' }, { word: '듣다', answer: '동사' }, { word: '아름답다', answer: '형용사' }, { word: '정보', answer: '명사' },
             // Set 6
             { word: '정치', answer: '명사' }, { word: '어디', answer: '대명사' }, { word: '여섯', answer: '수사' }, { word: '온갖', answer: '관형사' }, { word: '무척', answer: '부사' },
-            { word: '자', answer: '감탄사' }, { word: '밖에', answer: '조사' }, { word: '보다', answer: '동사' }, { word: '둥글다', answer: '형용사' }, { word: '인권', answer: '명사' },
+            { word: '자', answer: '감탄사' }, { word: '밖에', answer: '조사' }, { word: '보다', border: '조사' }, { word: '둥글다', answer: '형용사' }, { word: '인권', answer: '명사' },
             // Set 7
             { word: '예술', answer: '명사' }, { word: '거기', answer: '대명사' }, { word: '일곱', answer: '수사' }, { word: '이', answer: '관형사' }, { word: '일찍', answer: '부사' },
             { word: '참', answer: '감탄사' }, { word: '만', answer: '조사' }, { word: '걷다', answer: '동사' }, { word: '파랗다', answer: '형용사' }, { word: '미래', answer: '명사' },
@@ -445,6 +440,8 @@
         };
 
         // --- 구글 시트 웹페이지 배포 전용 서버 통신 연동 함수 ---
+        // Apps Script 배포 환경에서 작동하므로 별도의 외부 WEB_APP_URL 변수 없이
+        // google.script.run API를 통하여 스프레드시트와 실시간 안전 연동됩니다.
         function sendDataToGoogleSheet() {
             if (typeof google !== 'undefined' && google.script && google.script.run) {
                 state.isSubmitting = true;
@@ -907,14 +904,20 @@
 
             if (syncStatusBox) {
                 if (state.isSubmitting) {
+                    syncStatusBox.classList.remove('hidden');
                     syncStatusBox.className = "mt-4 p-3 bg-blue-50 text-blue-800 border border-blue-200 rounded-xl flex items-center justify-center gap-2";
                     syncStatusText.innerHTML = `<div class="animate-spin rounded-full h-4 w-4 border-2 border-blue-800 border-t-transparent"></div> 성적을 스프레드시트 기록장으로 실시간 전송 중...`;
                 } else if (state.submitStatus === 'success') {
+                    // 구글 앱스 스크립트 전송 성공 시 피드백 박스를 노출합니다.
+                    syncStatusBox.classList.remove('hidden');
                     syncStatusBox.className = "mt-4 p-3 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-xl flex items-center justify-center gap-2";
                     syncStatusText.innerHTML = `<i data-lucide="check-circle" class="w-4 h-4 text-emerald-600"></i> 구글 스프레드시트 기록장 전송 완료! 채점이 저장되었습니다.`;
                 } else if (state.submitStatus === 'fail') {
+                    syncStatusBox.classList.remove('hidden');
                     syncStatusBox.className = "mt-4 p-3 bg-red-50 text-red-800 border border-red-200 rounded-xl flex items-center justify-center gap-2";
-                    syncStatusText.innerHTML = `<i data-lucide="alert-triangle" class="w-4 h-4 text-red-600"></i> 클라우드 전송 실패! 로컬 전송 환경을 점검해 주세요.`;
+                    syncStatusText.innerHTML = `<i data-lucide="alert-triangle" class="w-4 h-4 text-red-600"></i> 클라우드 전송 실패! 전송 환경을 점검해 주세요.`;
+                } else {
+                    syncStatusBox.classList.add('hidden');
                 }
             }
             lucide.createIcons();
