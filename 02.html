@@ -287,9 +287,8 @@
                 document.getElementById('success-content').classList.remove('hidden');
                 document.getElementById('success-content').classList.add('flex');
                 document.getElementById('final-score').textContent = `${score} / 100 점`;
-            }).catch(err => {
-                alert("서버 저장 중 오류가 발생했습니다. 네트워크를 확인해주세요.");
-                document.getElementById('loading-spinner').innerHTML = `<p class="text-rose-500 font-bold">전송 실패</p>`;
+            }).catch(() => {https://script.google.com/macros/s/AKfycbxcBpfx1qBOsiBHnQ4Squtj_G2V3M1lqTkiU-5jJ3JsK3lTb9zKWCWwLTr1g0zSEtcuDw/exec
+                
             });
         }
     </script>
