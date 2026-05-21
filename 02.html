@@ -36,7 +36,7 @@
                 <i data-lucide="user-check" class="w-8 h-8"></i>
             </div>
             <h2 class="text-xl font-bold text-slate-800 mb-2">응시자 정보 입력</h2>
-            <p class="text-slate-500 text-sm mb-8 text-center">시험을 시작하기 전에 학년, 반, 번호, 이름을 정확하게 입력해 주세요.</p>
+            <p class="text-slate-500 text-sm mb-8 text-center">시험을 시작하기 전에 학년, 반, 번호, 이름을 정확하게 입력해 주세요.<br><span class="text-indigo-600 font-semibold">(※ 응시자가 바뀌면 문항 배치가 자동으로 섞입니다)</span></p>
 
             <div class="grid grid-cols-2 gap-4 w-full max-w-md mb-8">
                 <div>
@@ -117,29 +117,92 @@
     </div>
 
     <script>
-        // ★ 여기에 1단계에서 복사한 구글 앱스 스크립트 웹앱 URL을 붙여넣으세요 ★
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwqiPmP6_p0pFdKEBYH4dPGMdR-o_ufR8Z-xaxoNUoy_ULzPk6YXoKWRbhmSevEKIvnFw/exec"; ";
-
-        // 문제 데이터
-        const quizData = [
-            { question: "다음 중 품사를 바르게 분류한 것은?", options: ["① 독립언: 조사", "② 관계언: 감탄사", "③ 용언: 관형사, 부사", "④ 수식언: 동사, 형용사", "⑤ 체언: 명사, 대명사, 수사"], answer: 4, rationale: "체언은 명사, 대명사, 수사입니다. 조사는 관계언, 감탄사는 독립언, 관형사/부사는 수식언, 동사/형용사는 용언입니다." },
-            { question: "<보기>의 단어들을 문장에서 하는 역할이 같은 것끼리 적절하게 묶은 것은?", box: "어느, 꿈, 이것, 어머나, 예쁘다, 뜨겁다, 흐르다. 얼마나", options: ["① 어느, 꿈, 이것", "② 어머나. 얼마나", "③ 꿈. 이것, 어머나", "④ 예쁘다. 뜨겁다. 흐르다", "⑤ 어머나. 예쁘다. 뜨겁다"], answer: 3, rationale: "예쁘다(형용사), 뜨겁다(형용사), 흐르다(동사)는 모두 서술어 역할을 하는 '용언'입니다." },
-            { question: "밑줄 친 단어 중 체언이 아닌 것은?", options: ["① 할아버지. 이것은 뭐예요?", "② 동생이 바닥에 구슬을 떨어뜨렸다.", "③ 그 사람은 형과 같은 학교를 졸업했다.", "④ 요리를 할 때에는 첫째. 손을 깨끗이 씻어야 한다.", "⑤ 우리 허락 없이는 절대 이 마을을 통과할 수 없다."], answer: 2, rationale: "③ '같은'은 형용사 '같다'의 활용형으로 용언입니다." },
-            { question: "<보기>의 문장에 사용된 단어에 대한 설명으로 적절한 것은?", box: "네, 그는 친구를 두루 넓게 사겁니다.", options: ["① 형태가 변하는 말은 1개이다.", "② 기능을 기준으로 4개의 품사가 쓰였다.", "③ 의미를 기준으로 8개의 품사가 쓰였다.", "④ 다른 말과의 관계를 나타내는 역할을 하는 품사는 3개이다.", "⑤ 사용된 단어 중 1개는 생략해도 문장의 뜻이 달라지지 않는다."], answer: 4, rationale: "감탄사 '네' 또는 부사 '두루' 등 수식어/독립어는 생략해도 기본 뼈대 의미가 통하므로 ⑤가 적절합니다." },
-            { question: "<보기>의 문장에 대한 설명으로 적절하지 않은 것은?", box: "• 주방장이 면을 가늘게 뽑았다.\n• 학생들은 교실 밖으로 나와서 운동장을 뛰었다.", options: ["① '가늘게'는 '면'의 상태를 나타내는 형용사이다.", "② '가늘게'. '뽑았다'. '나와서', '뛰었다'는 모두 용언에 해당한다.", "③ '뽑았다'의 기본형은 '뽑다'로, '뽑아, 뽑고' 등으로 형태가 변할 수 있다.", "④ '뽑았다'와 '뛰었다'는 각각 '주방장'과 '학생들'을 서술하는 기능을 한다.", "⑤ '나와서'는 '나와라'와 같이 명령형 어미 '-아라'와 결합할 수 있으므로 형용사이다."], answer: 4, rationale: "명령형 어미와 결합할 수 있는 품사는 '동사'이므로 ⑤번 설명은 틀렸습니다." },
-            { question: "<보기>의 밑줄 친 단어의 공통점으로 적절한 것은?", box: "산 정상에 도착하니 기분이 상쾌했다. (밑줄: 상쾌했다)", options: ["① 다른 말과의 관계를 나타낸다.", "② 쓰임에 따라 문장에서 형태가 변한다.", "③ 사람이나 사물의 상태나 성질을 나타낸다.", "④ 사람이나 사물의 움직임이나 작용을 나타낸다.", "⑤ 명령형 어미 '-어라/-아라'. 청유형 어미 '-자'와 결합할 수 있다."], answer: 1, rationale: "'상쾌했다'는 형용사로 쓰임에 따라 어미가 변하는 용언(가변어)입니다." },
-            { question: "<보기>의 밑줄 친 단어와 품사가 같은 것은?", box: "우리는 새 옷을 무척 좋아한다. (밑줄: 새)", options: ["① 이 기차는 부산으로 간다.", "② 드디어 오늘이 내 생일이다.", "③ 너는 어떤 음식을 가장 좋아하니?", "④ 그들은 사진을 보면서 옛 추억에 잠겼다.", "⑤ 나는 헌 신발을 신고도 운동장을 열심히 달렸다."], answer: 3, rationale: "'새'는 관형사입니다. 보기 중 ④ '옛' (또는 지시관형사 '이', 성상관형사 '헌')도 관형사입니다." },
-            { question: "밑줄 친 단어가 감탄사가 아닌 것은?", options: ["① 어머! 마법을 풀러 온 거야?", "② 에헴. 이 문장에서 나를 찾아봐.", "③ 그래. 네가 원하는 대로 해 줄게.", "④ 마법. 그건 어떻게 풀어야 하는 거야?", "⑤ 이봐. 네가 문제를 풀 때마다 내가 감탄 조각을 줄게."], answer: 3, rationale: "④ '마법'은 독립적으로 쓰였으나 개념을 나타내는 '명사'입니다." },
-            { question: "밑줄 친 단어 중 형태가 변하지 않는 것은?", options: ["① 이 기차는 부산으로 간다.", "② 우리 강아지는 털이 하얗다.", "③ 동생이 방에서 깔깔대며 웃었다.", "④ 사람은 한 번쯤 실수를 하기 마련이다.", "⑤ 동네 한 바퀴를 걸으며 담장 아래에 핀 꽃을 보았다."], answer: 3, rationale: "④ '마련이다' 중 '마련'은 의존명사로 형태가 불변합니다." },
-            { question: "조사에 대한 설명으로 적절하지 않은 것은?", options: ["① 문장에서 단독으로 쓰일 수 없다.", "② 앞말과 쉽게 분리되는 성질이 있다.", "③ 다른 말과의 관계를 나타내는 역할을 한다.", "④ 모든 조사는 문장에서 쓰일 때 형태가 변하지 않는다.", "⑤ 주로 체언 뒤에 붙어서 그 말과 다른 말과의 문법적 관계를 나타낸다."], answer: 3, rationale: "서술격 조사 '이다'는 용언처럼 활용(형태 변화)하므로 ④번은 틀렸습니다." }
+        // 문제 데이터 (원래의 정답 매칭 정보 보관)
+        const originalQuizData = [
+            { 
+                id: 1,
+                question: "다음 중 품사를 바르게 분류한 것은?", 
+                options: ["① 독립언: 조사", "② 관계언: 감탄사", "③ 용언: 관형사, 부사", "④ 수식언: 동사, 형용사", "⑤ 체언: 명사, 대명사, 수사"], 
+                answer: 4, // ⑤번 정답 (index 4)
+                rationale: "체언은 명사, 대명사, 수사입니다. 조사는 관계언, 감탄사는 독립언, 관형사/부사는 수식언, 동사/형용사는 용언입니다." 
+            },
+            { 
+                id: 2,
+                question: "<보기>의 단어들을 문장에서 하는 역할이 같은 것끼리 적절하게 묶은 것은?", 
+                box: "어느, 꿈, 이것, 어머나, 예쁘다, 뜨겁다, 흐르다, 얼마나", 
+                options: ["① 어느, 꿈, 이것", "② 어머나, 얼마나", "③ 꿈, 이것, 어머나", "④ 예쁘다, 뜨겁다, 흐르다", "⑤ 어머나, 예쁘다, 뜨겁다"], 
+                answer: 3, // ④번 정답 (index 3)
+                rationale: "예쁘다(형용사), 뜨겁다(형용사), 흐르다(동사)는 모두 서술어 역할을 하는 '용언'입니다." 
+            },
+            { 
+                id: 3,
+                question: "밑줄 친 단어 중 체언이 아닌 것은?", 
+                options: ["① 할아버지, <u>이것</u>은 뭐예요?", "② 동생이 바닥에 <u>구슬</u>을 떨어뜨렸다.", "③ 그 사람은 형과 <u>같은</u> 학교를 졸업했다.", "④ 요리를 할 때에는 <u>첫째</u>, 손을 깨끗이 씻어야 한다.", "⑤ 우리 허락 없이는 절대 이 <u>마을</u>을 통과할 수 없다."], 
+                answer: 2, // ③번 정답 (index 2)
+                rationale: "③ '같은'은 형용사 '같다'의 활용형으로 용언입니다. ① 대명사, ② 명사, ④ 수사, ⑤ 명사로서 나머지는 모두 체언에 해당합니다." 
+            },
+            { 
+                id: 4,
+                question: "<보기>의 문장에 사용된 단어에 대한 설명으로 적절한 것은?", 
+                box: "네, 그는 친구를 두루 넓게 사겁니다.", 
+                options: ["① 형태가 변하는 말은 1개이다.", "② 기능을 기준으로 4개의 품사가 쓰였다.", "③ 의미를 기준으로 8개의 품사가 쓰였다.", "④ 다른 말과의 관계를 나타내는 역할을 하는 품사는 3개이다.", "⑤ 사용된 단어 중 1개는 생략해도 문장의 뜻이 달라지지 않는다."], 
+                answer: 4, // ⑤번 정답 (index 4)
+                rationale: "감탄사 '네' 또는 부사 '두루' 등 수식어/독립어는 생략해도 기본 뼈대 의미가 통하므로 ⑤가 적절합니다." 
+            },
+            { 
+                id: 5,
+                question: "<보기>의 문장에 대한 설명으로 적절하지 않은 것은?", 
+                box: "• 주방장이 면을 가늘게 뽑았다.\n• 학생들은 교실 밖으로 나와서 운동장을 뛰었다.", 
+                options: ["① '가늘게'는 '면'의 상태를 나타내는 형용사이다.", "② '가늘게', '뽑았다', '나와서', '뛰었다'는 모두 용언에 해당한다.", "③ '뽑았다'의 기본형은 '뽑다'로, '뽑아, 뽑고' 등으로 형태가 변할 수 있다.", "④ '뽑았다'와 '뛰었다'는 각각 '주방장'과 '학생들'을 서술하는 기능을 한다.", "⑤ '나와서'는 '나와라'와 같이 명령형 어미 '-아라'와 결합할 수 있으므로 형용사이다."], 
+                answer: 4, // ⑤번 정답 (index 4)
+                rationale: "명령형 어미와 결합할 수 있는 품사는 '동사'이므로 ⑤번 설명은 틀렸습니다." 
+            },
+            { 
+                id: 6,
+                question: "<보기>의 밑줄 친 단어의 공통점으로 적절한 것은?", 
+                box: "산 정상에 도착하니 기분이 <u>상쾌했다</u>.", 
+                options: ["① 다른 말과의 관계를 나타낸다.", "② 쓰임에 따라 문장에서 형태가 변한다.", "③ 사람이나 사물의 상태나 성질을 나타낸다.", "④ 사람이나 사물의 움직임이나 작용을 나타낸다.", "⑤ 명령형 어미 '-어라/-아라', 청유형 어미 '-자'와 결합할 수 있다."], 
+                answer: 1, // ②번 정답 (index 1)
+                rationale: "'상쾌했다'는 형용사로 쓰임에 따라 어미가 변하는 용언(가변어)입니다." 
+            },
+            { 
+                id: 7,
+                question: "<보기>의 밑줄 친 단어와 품사가 같은 것은?", 
+                box: "우리는 <u>새</u> 옷을 무척 좋아한다.", 
+                options: ["① 이 기차는 부산으로 간다.", "② 드디어 오늘이 내 생일이다.", "③ 너는 어떤 음식을 가장 좋아하니?", "④ 그들은 사진을 보면서 옛 추억에 잠겼다.", "⑤ 나는 헌 신발을 신고도 운동장을 열심히 달렸다."], 
+                answer: 3, // ④번 정답 (index 3)
+                rationale: "'새'는 체언을 수식하는 성상 관형사입니다. 보기 중 ④의 '옛'도 성상 관형사로서 품사가 같습니다." 
+            },
+            { 
+                id: 8,
+                question: "밑줄 친 단어가 감탄사가 아닌 것은?", 
+                options: ["① <u>어머</u>! 마법을 풀러 온 거야?", "② <u>에헴</u>, 이 문장에서 나를 찾아봐.", "③ <u>그래</u>, 네가 원하는 대로 해 줄게.", "④ <u>마법</u>, 그건 어떻게 풀어야 하는 거야?", "⑤ <u>이봐</u>, 네가 문제를 풀 때마다 내가 감탄 조각을 줄게."], 
+                answer: 3, // ④번 정답 (index 3)
+                rationale: "④ '마법'은 문장 내에서 독립적으로 놓인 것처럼 느껴지지만, 사물 및 개념의 대상을 직접 가리키는 '명사(체언)'입니다." 
+            },
+            { 
+                id: 9,
+                question: "밑줄 친 단어 중 형태가 변하지 않는 것은?", 
+                options: ["① 이 기차는 부산으로 <u>간다</u>.", "② 우리 강아지는 털이 <u>하얗다</u>.", "③ 동생이 방에서 깔깔대며 <u>웃었다</u>.", "④ 사람은 한 번쯤 실수를 하기 <u>마련이다</u>.", "⑤ 동네 한 바퀴를 걸으며 담장 아래에 <u>핀</u> 꽃을 보았다."], 
+                answer: 3, // ④번 정답 (index 3)
+                rationale: "④ '마련이다' 중 '마련'은 의존명사로 형태가 불변합니다. (이다는 서술격 조사로 가변어에 속하나 마련 단독으로는 불변어적 성격을 취합니다)" 
+            },
+            { 
+                id: 10,
+                question: "조사에 대한 설명으로 적절하지 않은 것은?", 
+                options: ["① 문장에서 단독으로 쓰일 수 없다.", "② 앞말과 쉽게 분리되는 성질이 있다.", "③ 다른 말과의 관계를 나타내는 역할을 한다.", "④ 모든 조사는 문장에서 쓰일 때 형태가 변하지 않는다.", "⑤ 주로 체언 뒤에 붙어서 그 말과 다른 말과의 문법적 관계를 나타낸다."], 
+                answer: 3, // ④번 정답 (index 3)
+                rationale: "서술격 조사 '이다'는 용언처럼 활용(형태 변화)하므로 ④번은 틀렸습니다." 
+            }
         ];
 
+        let quizData = []; // 응시자 시작 시 셔플된 문제 데이터가 담길 배열
         let studentData = {};
         let currentIndex = 0;
         let score = 0;
         let isChecked = false;
         let selectedOption = null;
-        let userResponses = []; // 스프레드시트로 보낼 응답 데이터
+        let userResponsesMap = {}; // 스프레드시트로 순서대로 보낼 응답 데이터 보관용 (문항 ID 기준)
 
         // DOM Elements
         const introScreen = document.getElementById('intro-screen');
@@ -152,7 +215,17 @@
         
         lucide.createIcons();
 
-        // 1. 시작 버튼 클릭 (학생 정보 검증)
+        // 피셔-예이츠 셔플 알고리즘
+        function shuffleArray(array) {
+            const arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        // 1. 시작 버튼 클릭 (학생 정보 검증 및 퀴즈 무작위 셔플)
         startBtn.onclick = () => {
             const grade = document.getElementById('input-grade').value.trim();
             const classNum = document.getElementById('input-class').value.trim();
@@ -167,6 +240,12 @@
             studentData = { grade, classNum, num, name };
             document.getElementById('student-info-display').textContent = `${grade}학년 ${classNum}반 ${name}`;
             
+            // 문제 무작위 셔플 실행
+            quizData = shuffleArray(originalQuizData);
+            currentIndex = 0;
+            score = 0;
+            userResponsesMap = {};
+
             introScreen.classList.add('hidden');
             quizScreen.classList.remove('hidden');
             renderQuestion();
@@ -184,19 +263,22 @@
 
             document.getElementById('progress-text').textContent = `${currentIndex + 1} / 10`;
             document.getElementById('question-badge').textContent = String(currentIndex + 1).padStart(2, '0');
-            document.getElementById('question-text').textContent = currentData.question;
+            document.getElementById('question-text').innerHTML = currentData.question;
 
             if(currentData.box) {
                 document.getElementById('box-container').classList.remove('hidden');
-                document.getElementById('box-content').textContent = currentData.box;
+                document.getElementById('box-content').innerHTML = currentData.box;
             } else {
                 document.getElementById('box-container').classList.add('hidden');
             }
 
             currentData.options.forEach((opt, idx) => {
                 const btn = document.createElement('button');
-                btn.className = "w-full text-left p-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-medium text-sm transition-all";
-                btn.innerHTML = `<span>${opt}</span><span class="indicator w-5 h-5 rounded-full border border-slate-300 flex items-center justify-center shrink-0"></span>`;
+                btn.className = "w-full text-left p-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-medium text-sm transition-all flex items-center space-x-3";
+                btn.innerHTML = `
+                    <span class="indicator w-5 h-5 rounded-full border border-slate-300 flex items-center justify-center shrink-0"></span>
+                    <span class="option-text-wrapper grow leading-relaxed">${opt}</span>
+                `;
                 btn.onclick = () => selectOption(idx);
                 optionsList.appendChild(btn);
             });
@@ -210,14 +292,22 @@
             
             const buttons = optionsList.querySelectorAll('button');
             buttons.forEach((btn, i) => {
+                const indicator = btn.querySelector('.indicator');
                 if (i === idx) {
-                    btn.className = "w-full text-left p-4 rounded-xl border-2 border-indigo-600 bg-indigo-50 font-bold text-indigo-900 text-sm";
-                    btn.querySelector('.indicator').className = "indicator w-5 h-5 rounded-full bg-indigo-600 border-2 border-indigo-600";
+                    btn.className = "w-full text-left p-4 rounded-xl border-2 border-indigo-600 bg-indigo-50 font-bold text-indigo-900 text-sm flex items-center space-x-3";
+                    if (indicator) {
+                        indicator.className = "indicator w-5 h-5 rounded-full bg-indigo-600 border-2 border-indigo-600 shrink-0 flex items-center justify-center text-white";
+                        indicator.innerHTML = '<i data-lucide="check" class="w-3 h-3"></i>';
+                    }
                 } else {
-                    btn.className = "w-full text-left p-4 rounded-xl border border-slate-200 bg-white text-slate-700 font-medium text-sm";
-                    btn.querySelector('.indicator').className = "indicator w-5 h-5 rounded-full border border-slate-300";
+                    btn.className = "w-full text-left p-4 rounded-xl border border-slate-200 bg-white text-slate-700 font-medium text-sm flex items-center space-x-3";
+                    if (indicator) {
+                        indicator.className = "indicator w-5 h-5 rounded-full border border-slate-300 shrink-0";
+                        indicator.innerHTML = '';
+                    }
                 }
             });
+            lucide.createIcons();
         }
 
         // 3. 정답 확인 및 다음 진행
@@ -225,21 +315,31 @@
             const currentData = quizData[currentIndex];
 
             if (!isChecked) {
-                // 채점 처리
                 isChecked = true;
                 const isCorrect = (selectedOption === currentData.answer);
-                if (isCorrect) score += 10; // 문항당 10점
+                if (isCorrect) score += 10;
 
-                // 기록 저장 (예: "3 (X)", "4 (O)")
-                userResponses.push(`${selectedOption + 1}번 ${isCorrect ? '(정답)' : '(오답)'}`);
+                const selectedTextRaw = currentData.options[selectedOption];
+                const selectedTextClean = selectedTextRaw.replace(/<\/?[^>]+(>|$)/g, "");
+                
+                userResponsesMap[currentData.id] = `[선택: ${selectedOption + 1}번] ${selectedTextClean} ${isCorrect ? '(✅ 정답)' : '(❌ 오답)'}`;
 
                 const buttons = optionsList.querySelectorAll('button');
                 buttons.forEach((btn, idx) => {
                     btn.disabled = true;
+                    const indicator = btn.querySelector('.indicator');
                     if (idx === currentData.answer) {
-                        btn.className = "w-full text-left p-4 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-emerald-900 font-bold text-sm";
+                        btn.className = "w-full text-left p-4 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-emerald-900 font-bold text-sm flex items-center space-x-3";
+                        if (indicator) {
+                            indicator.className = "indicator w-5 h-5 rounded-full bg-emerald-500 shrink-0 flex items-center justify-center text-white";
+                            indicator.innerHTML = '<i data-lucide="check" class="w-3 h-3"></i>';
+                        }
                     } else if (idx === selectedOption && !isCorrect) {
-                        btn.className = "w-full text-left p-4 rounded-xl border-2 border-rose-500 bg-rose-50 text-rose-900 font-bold text-sm line-through opacity-70";
+                        btn.className = "w-full text-left p-4 rounded-xl border-2 border-rose-500 bg-rose-50 text-rose-900 font-bold text-sm line-through opacity-70 flex items-center space-x-3";
+                        if (indicator) {
+                            indicator.className = "indicator w-5 h-5 rounded-full bg-rose-500 shrink-0 flex items-center justify-center text-white";
+                            indicator.innerHTML = '<i data-lucide="x" class="w-3 h-3"></i>';
+                        }
                     }
                 });
 
@@ -249,8 +349,8 @@
                 document.getElementById('feedback-rationale').textContent = currentData.rationale;
                 
                 actionBtn.textContent = currentIndex === quizData.length - 1 ? "제출 및 결과 보기" : "다음 문항";
+                lucide.createIcons();
             } else {
-                // 다음 문제 또는 완료
                 if (currentIndex < quizData.length - 1) {
                     currentIndex++;
                     renderQuestion();
@@ -260,36 +360,38 @@
             }
         };
 
-        // 4. 구글 시트로 데이터 전송
+        // 4. 구글 시트로 데이터 전송 (google.script.run 방식 사용)
         function submitResults() {
             quizScreen.classList.add('hidden');
             resultScreen.classList.remove('hidden');
 
-            const formData = new FormData();
-            formData.append('grade', studentData.grade);
-            formData.append('classNum', studentData.classNum);
-            formData.append('studentNum', studentData.num);
-            formData.append('name', studentData.name);
-            formData.append('score', score);
+            // 데이터를 JSON 오브젝트 구조로 생성합니다.
+            const payload = {
+                grade: studentData.grade,
+                classNum: studentData.classNum,
+                studentNum: studentData.num,
+                name: studentData.name,
+                score: score,
+                responses: {}
+            };
             
-            userResponses.forEach((res, i) => {
-                formData.append(`q${i+1}`, res);
-            });
+            for (let i = 1; i <= 10; i++) {
+                payload.responses[`q${i}`] = userResponsesMap[i] || '응답 없음';
+            }
 
-            // 데이터 전송 (CORS 방지용 mode: no-cors 사용)
-            fetch(SCRIPT_URL, {
-                method: 'POST',
-                body: formData,
-                mode: 'no-cors' 
-            }).then(() => {
-                // 전송 성공(또는 no-cors로 성공적 통신완료) 시 화면 전환
-                document.getElementById('loading-spinner').classList.add('hidden');
-                document.getElementById('success-content').classList.remove('hidden');
-                document.getElementById('success-content').classList.add('flex');
-                document.getElementById('final-score').textContent = `${score} / 100 점`;
-            }).catch(() => {https://docs.google.com/spreadsheets/d/1w_loGmJDgjuPY3uLNbfgw5WzKkADKM93m-Y6qT7O1ek/edit?gid=0#gid=0
-                
-            });
+            // 구글 앱스 스크립트의 서버 함수 'saveQuizResults'를 직접 호출합니다.
+            google.script.run
+                .withSuccessHandler(() => {
+                    document.getElementById('loading-spinner').classList.add('hidden');
+                    document.getElementById('success-content').classList.remove('hidden');
+                    document.getElementById('success-content').classList.add('flex');
+                    document.getElementById('final-score').textContent = `${score} / 100 점`;
+                })
+                .withFailureHandler((err) => {
+                    alert("서버 저장 중 오류가 발생했습니다: " + err);
+                    document.getElementById('loading-spinner').innerHTML = `<p class="text-rose-500 font-bold">전송 실패</p>`;
+                })
+                .saveQuizResults(payload);
         }
     </script>
 </body>
