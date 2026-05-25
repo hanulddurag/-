@@ -26,17 +26,17 @@
         </header>
 
         <!-- 상단 내비게이션 탭 -->
-        <div class="flex flex-wrap justify-center gap-2 md:gap-4 mb-8">
-            <button onclick="switchTab('learn')" id="tab-btn-learn" class="tab-btn px-5 py-2.5 rounded-full font-semibold transition-all bg-indigo-600 text-white shadow-md">
+        <div class="flex flex-wrap justify-center gap-2 md:gap-4 mb-8" id="tab-navigation-container">
+            <button id="tab-btn-learn" data-tab="learn" class="tab-nav-btn px-5 py-2.5 rounded-full font-semibold transition-all bg-indigo-600 text-white shadow-md">
                 학습하기
             </button>
-            <button onclick="switchTab('quiz')" id="tab-btn-quiz" class="tab-btn px-5 py-2.5 rounded-full font-semibold transition-all bg-white text-slate-600 hover:bg-indigo-50">
+            <button id="tab-btn-quiz" data-tab="quiz" class="tab-nav-btn px-5 py-2.5 rounded-full font-semibold transition-all bg-white text-slate-600 hover:bg-indigo-50">
                 단어 퀴즈
             </button>
-            <button onclick="switchTab('advanced')" id="tab-btn-advanced" class="tab-btn px-5 py-2.5 rounded-full font-semibold transition-all bg-white text-slate-600 hover:bg-indigo-50">
+            <button id="tab-btn-advanced" data-tab="advanced" class="tab-nav-btn px-5 py-2.5 rounded-full font-semibold transition-all bg-white text-slate-600 hover:bg-indigo-50">
                 심화 학습
             </button>
-            <button onclick="switchTab('evaluation')" id="tab-btn-evaluation" class="tab-btn flex items-center px-5 py-2.5 rounded-full font-bold border-2 bg-white border-emerald-500 text-emerald-700 hover:bg-emerald-50">
+            <button id="tab-btn-evaluation" data-tab="evaluation" class="tab-nav-btn flex items-center px-5 py-2.5 rounded-full font-bold border-2 bg-white border-emerald-500 text-emerald-700 hover:bg-emerald-50">
                 <i data-lucide="file-check" class="w-4 h-4 mr-1.5"></i>형성 평가
             </button>
         </div>
@@ -72,7 +72,7 @@
 
             <div id="quiz-playing-view" class="max-w-2xl mx-auto hidden">
                 <div class="mb-4">
-                    <button onclick="showSetSelection()" class="text-slate-500 hover:text-indigo-600 flex items-center font-medium transition-colors">
+                    <button id="btn-quiz-to-list" class="text-slate-500 hover:text-indigo-600 flex items-center font-medium transition-colors">
                         <i data-lucide="arrow-left" class="w-4 h-4 mr-1"></i> 세트 목록으로
                     </button>
                 </div>
@@ -110,8 +110,8 @@
                         <div id="quiz-final-progress-bar" class="bg-indigo-500 h-4 rounded-full transition-all duration-1000" style="width: 0%"></div>
                     </div>
                     <div class="flex justify-center space-x-4">
-                        <button onclick="retryQuiz()" class="bg-white border-2 border-indigo-600 text-indigo-600 hover:bg-indigo-50 px-6 py-3 rounded-xl font-bold transition-colors">다시 풀기</button>
-                        <button onclick="showSetSelection()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-bold transition-colors">다른 세트 선택</button>
+                        <button id="btn-retry-quiz" class="bg-white border-2 border-indigo-600 text-indigo-600 hover:bg-indigo-50 px-6 py-3 rounded-xl font-bold transition-colors">다시 풀기</button>
+                        <button id="btn-quiz-other-set" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-bold transition-colors">다른 세트 선택</button>
                     </div>
                 </div>
             </div>
@@ -131,7 +131,7 @@
 
             <div id="adv-playing-view" class="max-w-3xl mx-auto hidden">
                 <div class="mb-4">
-                    <button onclick="showAdvSetSelection()" class="text-slate-500 hover:text-purple-600 flex items-center font-medium transition-colors">
+                    <button id="btn-adv-to-list" class="text-slate-500 hover:text-purple-600 flex items-center font-medium transition-colors">
                         <i data-lucide="arrow-left" class="w-4 h-4 mr-1"></i> 세트 목록으로
                     </button>
                 </div>
@@ -148,7 +148,7 @@
                     </div>
                     <div id="adv-feedback-box" class="hidden p-6 bg-slate-50 border-t border-slate-100 flex justify-between items-center">
                         <div class="font-extrabold text-lg" id="adv-feedback-status">결과</div>
-                        <button onclick="nextAdvQuestion()" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-bold flex items-center transition-colors">
+                        <button id="btn-next-adv" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-bold flex items-center transition-colors">
                             다음 문제 <i data-lucide="arrow-right" class="w-5 h-5 ml-2"></i>
                         </button>
                     </div>
@@ -165,7 +165,7 @@
                         <div id="adv-final-progress-bar" class="bg-purple-500 h-4 rounded-full transition-all duration-1000" style="width: 0%"></div>
                     </div>
                     <div class="flex justify-center space-x-4">
-                        <button onclick="showAdvSetSelection()" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-bold transition-colors">세트 다시 선택하기</button>
+                        <button id="btn-retry-adv" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-bold transition-colors">세트 다시 선택하기</button>
                     </div>
                 </div>
             </div>
@@ -178,7 +178,7 @@
                     <div class="bg-emerald-100 text-emerald-700 w-16 h-16 rounded-full flex items-center justify-center font-bold text-2xl mx-auto mb-4">
                         <i data-lucide="file-text" class="w-8 h-8"></i>
                     </div>
-                    <h2 class="text-2xl font-extrabold text-emerald-900 mb-2">대단원 품사 형성 평가</h2>
+                    <h2 class="text-2xl font-extrabold text-emerald-900 mb-2">품사 형성 평가</h2>
                     <p class="text-slate-600 mb-6 text-sm">시험을 시작하기 전에 아래에 학년, 반, 번호, 이름을 올바르게 입력해 주세요.</p>
                     
                     <div class="flex flex-col sm:flex-row justify-center items-center gap-3 bg-white p-4 rounded-xl border border-emerald-200 shadow-inner max-w-2xl mx-auto mb-4">
@@ -198,7 +198,7 @@
                             <input type="text" id="info-name" placeholder="이름 입력(필수)" class="w-full sm:w-32 p-2 text-center border border-slate-300 rounded-lg focus:outline-none focus:border-emerald-500 font-bold text-sm bg-slate-50">
                         </div>
                         
-                        <button onclick="startEvaluationQuiz()" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2.5 rounded-lg font-bold text-sm transition-all shadow-md whitespace-nowrap">
+                        <button id="btn-start-eval" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2.5 rounded-lg font-bold text-sm transition-all shadow-md whitespace-nowrap">
                             시험 시작하기
                         </button>
                     </div>
@@ -220,7 +220,7 @@
                     <div id="eval-feedback-box" class="hidden p-6 bg-slate-50 border-t border-slate-100">
                         <div class="flex justify-between items-center mb-2">
                             <span class="font-bold text-sm" id="eval-feedback-status">정답 확인</span>
-                            <button onclick="nextEvalQuestion()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2 rounded-lg font-bold text-sm">다음 문항</button>
+                            <button id="btn-next-eval" class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2 rounded-lg font-bold text-sm">다음 문항</button>
                         </div>
                         <p class="text-xs text-slate-600 bg-emerald-50/50 p-3 rounded-lg border border-emerald-100" id="eval-rationale-text">문항 해설</p>
                     </div>
@@ -245,8 +245,8 @@
                     </div>
 
                     <div class="flex justify-center space-x-4 mt-8">
-                        <button onclick="retryEvaluation()" class="bg-white border-2 border-emerald-600 text-emerald-600 hover:bg-emerald-50 px-6 py-3 rounded-xl font-bold transition-colors">다시 시험 보기</button>
-                        <button onclick="showEvalSelection()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-xl font-bold transition-colors">처음 화면으로</button>
+                        <button id="btn-retry-eval" class="bg-white border-2 border-emerald-600 text-emerald-600 hover:bg-emerald-50 px-6 py-3 rounded-xl font-bold transition-colors">다시 시험 보기</button>
+                        <button id="btn-eval-to-start" class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-xl font-bold transition-colors">처음 화면으로</button>
                     </div>
                 </div>
             </div>
@@ -411,13 +411,13 @@
             }
         ];
 
-        // 3. 형성 평가 9개 문제 데이터 ( 밑줄 보정 완료 )
+        // 3. 형성 평가 9개 문제 데이터 (밑줄 강조 정밀 보정 버전)
         const EVALUATION_QUESTIONS = [
             { id: 1, q: "1. 다음 중 품사를 바르게 분류한 것은?", options: ["독립언: 조사", "관계언: 감탄사", "용언: 관형사, 부사", "수식언: 동사, 형용사", "체언: 명사, 대명사, 수사"], answerIndex: 4, rationale: "명사, 대명사, 수사는 주어나 목적어 자리에 쓰이며 조사가 결합할 수 있는 '체언'에 해당합니다." },
             { id: 2, q: "2. &lt;보기&gt;의 단어들을 문장에서 하는 역할(기능)이 같은 것끼리 적절하게 묶은 것은?<br/><br/><div class='bg-slate-100 p-3 rounded font-semibold text-slate-800 text-center'>&lt;보기&gt;<br/>어느, 꿈, 이것, 어머나, 예쁘다, 뜨겁다, 흐르다, 얼마나</div>", options: ["어느, 꿈, 이것", "어머나, 얼마나", "꿈, 이것, 어머나", "예쁘다, 뜨겁다, 흐르다", "어머나, 예쁘다, 뜨겁다"], answerIndex: 3, rationale: "'예쁘다', '뜨겁다'(형용사), '흐르다'(동사)는 모두 문장에서 서술어로 쓰이는 '용언'에 해당합니다." },
             { id: 3, q: "3. 밑줄 친 단어 중 '체언(명사, 대명사, 수사)'이 아닌 것은?", options: ["할아버지, <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded'>이것</span>은 뭐예요?", "동생이 바닥에 <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded'>구슬</span>을 떨어뜨렸다.", "<span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded'>그</span> 사람은 형과 같은 학교를 졸업했다.", "요리를 할 때에는 <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded'>첫째</span>, 손을 깨끗이 씻어야 한다.", "<span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded'>우리</span> 허락 없이는 절대 이 마을을 통과할 수 없다."], answerIndex: 2, rationale: "3번 보기의 '그'는 뒤의 명사 '사람'을 꾸며 주는 지시 관형사(수식언)이므로 체언이 아닙니다." },
             { id: 4, q: "4. &lt;보기&gt;의 문장에 사용된 단어에 대한 설명으로 가장 적절한 것은?<br/><br/><div class='bg-slate-100 p-3 rounded font-semibold text-slate-800 text-center'>&lt;보기&gt;<br/>네, 그는 친구를 두루 넓게 사귑니다.</div>", options: ["형태가 변하는 말은 1개이다.", "기능을 기준으로 4개의 품사가 쓰였다.", "의미를 기준으로 8개의 품사가 쓰였다.", "다른 말과의 관계를 나타내는 역할을 하는 품사는 3개이다.", "사용된 단어 중 1개는 생략해도 문장의 뜻이 달라지지 않는다."], answerIndex: 4, rationale: "감탄사 '네'는 독립언으로, 문장에서 생략해도 문장 전체의 기본적인 의미 전달에 큰 영향을 주지 않습니다." },
-            { id: 5, q: "5. &lt;보기&gt;의 밑줄 친 단어의 공통점으로 적절한 것은?<br/><br/><div class='bg-slate-100 p-3 rounded font-semibold text-slate-800 text-center'>&lt;보기&gt;<br/>산 정상에 <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded'>도착하니</span> 기분이 <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded'>상쾌했다</span>.</div>", options: ["다른 말과의 관계를 나타낸다.", "쓰임에 따라 문장에서 형태가 변한다.", "사람이나 사물의 상태나 성질을 나타낸다.", "사람이나 사물의 움직임이나 작용을 나타낸다.", "명령형 어미, 청유형 어미, 현재형 어미와 모두 결합할 수 있다."], answerIndex: 1, rationale: "'도착하다'(동사)와 '상쾌하다'(형용사)는 모두 가변어(용언)에 속하므로 쓰임에 따라 문장에서 형태가 어미 변화를 통해 유연하게 변합니다." },
+            { id: 5, q: "5. &lt;보기&gt;의 밑줄 친 단어의 공통점으로 적절한 것은?<br/><br/><div class='bg-slate-100 p-3 rounded font-semibold text-slate-800 text-center'>&lt;보기&gt;<br/>산 정상에 <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded'>도착하니</span> 기분이 <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded'>상쾌했다</span>.</div>", options: ["다른 말과의 관계를 나타낸다.", "쓰임에 따라 문장에서 형태가 변한다.", "사람이나 사물의 상태나 성질만 나타낸다.", "사람이나 사물의 움직임이나 작용만 나타낸다.", "명령형 어미, 청유형 어미, 현재형 어미와 모두 결합할 수 있다."], answerIndex: 1, rationale: "'도착하다'(동사)와 '상쾌하다'(형용사)는 모두 가변어(용언)에 속하므로 쓰임에 따라 문장에서 형태가 어미 변화를 통해 유연하게 변합니다." },
             { id: 6, q: "6. &lt;보기&gt;의 밑줄 친 단어와 품사가 같은 것은?<br/><br/><div class='bg-slate-100 p-3 rounded font-semibold text-slate-800 text-center'>&lt;보기&gt;<br/>우리는 <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded'>새</span> 옷을 무척 좋아한다.</div>", options: ["이 기차는 부산으로 간다.", "드디어 오늘이 내 생일이다.", "너는 어떤 음식을 가장 좋아하니?", "그들은 사진을 보면서 옛 추억에 잠겼다.", "나는 헌 신발을 신고도 운동장을 열심히 달렸다."], answerIndex: 3, rationale: "보기의 '새'는 명사 '옷'을 꾸며 주는 '관형사'입니다. 4번의 '옛'도 명사 '추억'을 꾸며 주는 '관형사'에 해당합니다." },
             { id: 7, q: "7. 밑줄 친 단어가 감탄사가 아닌 것은?", options: ["<span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded'>어머</span>! 마법을 풀러 온 거야?", "<span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded'>에헴</span>, 이 문장에서 나를 찾아봐.", "<span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded'>그래</span>, 네가 원하는 대로 해 줄게.", "<span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded'>마법</span>, 그건 어떻게 풀어야 하는 거야?", "<span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded'>이봐</span>, 네가 문제를 풀 때마다 내가 감탄 조각을 줄게."], answerIndex: 3, rationale: "4번의 '마법'은 대상의 이름을 가리키는 일반 '명사'입니다. 문장 앞머리에서 화제로 강조되었을 뿐 감탄사가 아닙니다." },
             { id: 8, q: "8. 밑줄 친 단어 중 문장에서 형태가 변하지 않는 단어(불변어)는?", options: ["이 기차는 부산으로 <span class='bg-indigo-100 text-indigo-950 font-extrabold px-1.5 rounded'>간다</span>.", "우리 강아지는 털이 <span class='bg-indigo-100 text-indigo-950 font-extrabold px-1.5 rounded'>하얗다</span>.", "동생이 방에서 깔깔대며 <span class='bg-indigo-100 text-indigo-950 font-extrabold px-1.5 rounded'>웃었다</span>.", "사람은 한 번쯤 <span class='bg-indigo-100 text-indigo-950 font-extrabold px-1.5 rounded'>실수</span>를 하기 마련이다.", "담장 아래에 <span class='bg-indigo-100 text-indigo-950 font-extrabold px-1.5 rounded'>핀</span> 꽃을 보았다."], answerIndex: 3, rationale: "'실수'는 명사(체언)에 속하므로 문장에서 형태가 절대 변하지 않는 불변어입니다." },
@@ -440,8 +440,7 @@
         };
 
         // --- 구글 시트 웹페이지 배포 전용 서버 통신 연동 함수 ---
-        // Apps Script 배포 환경에서 실행되므로 외부 WEB_APP_URL 변수 없이
-        // google.script.run API를 통하여 구글 서버 측 스프레드시트 기록장 함수를 다이렉트로 호출합니다.
+        // google.script.run API를 통하여 스프레드시트 기록장 함수를 다이렉트로 호출합니다.
         function sendDataToGoogleSheet() {
             if (typeof google !== 'undefined' && google.script && google.script.run) {
                 state.isSubmitting = true;
@@ -455,27 +454,27 @@
                     classNum: state.studentInfo.classNum,
                     studentNum: state.studentInfo.studentNum,
                     name: state.studentInfo.name,
-                    score: `${state.evalScore} / ${state.evalQueue.length}`,
-                    percentage: `${Math.round((state.evalScore / state.evalQueue.length) * 100)}%`,
+                    score: state.evalScore + " / " + state.evalQueue.length,
+                    percentage: Math.round((state.evalScore / state.evalQueue.length) * 100) + "%",
                     
-                    q1_resp: state.evalAnswersRecord.find(r => r.questionId === 1)?.selectedOption || '',
-                    q1_result: state.evalAnswersRecord.find(r => r.questionId === 1)?.isCorrect || '',
-                    q2_resp: state.evalAnswersRecord.find(r => r.questionId === 2)?.selectedOption || '',
-                    q2_result: state.evalAnswersRecord.find(r => r.questionId === 2)?.isCorrect || '',
-                    q3_resp: state.evalAnswersRecord.find(r => r.questionId === 3)?.selectedOption || '',
-                    q3_result: state.evalAnswersRecord.find(r => r.questionId === 3)?.isCorrect || '',
-                    q4_resp: state.evalAnswersRecord.find(r => r.questionId === 4)?.selectedOption || '',
-                    q4_result: state.evalAnswersRecord.find(r => r.questionId === 4)?.isCorrect || '',
-                    q5_resp: state.evalAnswersRecord.find(r => r.questionId === 5)?.selectedOption || '',
-                    q5_result: state.evalAnswersRecord.find(r => r.questionId === 5)?.isCorrect || '',
-                    q6_resp: state.evalAnswersRecord.find(r => r.questionId === 6)?.selectedOption || '',
-                    q6_result: state.evalAnswersRecord.find(r => r.questionId === 6)?.isCorrect || '',
-                    q7_resp: state.evalAnswersRecord.find(r => r.questionId === 7)?.selectedOption || '',
-                    q7_result: state.evalAnswersRecord.find(r => r.questionId === 7)?.isCorrect || '',
-                    q8_resp: state.evalAnswersRecord.find(r => r.questionId === 8)?.selectedOption || '',
-                    q8_result: state.evalAnswersRecord.find(r => r.questionId === 8)?.isCorrect || '',
-                    q9_resp: state.evalAnswersRecord.find(r => r.questionId === 9)?.selectedOption || '',
-                    q9_result: state.evalAnswersRecord.find(r => r.questionId === 9)?.isCorrect || ''
+                    q1_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 1; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 1; }).selectedOption : '',
+                    q1_result: state.evalAnswersRecord.find(function(r) { return r.questionId === 1; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 1; }).isCorrect : '',
+                    q2_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 2; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 2; }).selectedOption : '',
+                    q2_result: state.evalAnswersRecord.find(function(r) { return r.questionId === 2; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 2; }).isCorrect : '',
+                    q3_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 3; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 3; }).selectedOption : '',
+                    q3_result: state.evalAnswersRecord.find(function(r) { return r.questionId === 3; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 3; }).isCorrect : '',
+                    q4_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 4; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 4; }).selectedOption : '',
+                    q4_result: state.evalAnswersRecord.find(function(r) { return r.questionId === 4; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 4; }).isCorrect : '',
+                    q5_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 5; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 5; }).selectedOption : '',
+                    q5_result: state.evalAnswersRecord.find(function(r) { return r.questionId === 5; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 5; }).isCorrect : '',
+                    q6_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 6; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 6; }).selectedOption : '',
+                    q6_result: state.evalAnswersRecord.find(function(r) { return r.questionId === 6; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 6; }).isCorrect : '',
+                    q7_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 7; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 7; }).selectedOption : '',
+                    q7_result: state.evalAnswersRecord.find(function(r) { return r.questionId === 7; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 7; }).isCorrect : '',
+                    q8_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 8; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 8; }).selectedOption : '',
+                    q8_result: state.evalAnswersRecord.find(function(r) { return r.questionId === 8; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 8; }).isCorrect : '',
+                    q9_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 9; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 9; }).selectedOption : '',
+                    q9_result: state.evalAnswersRecord.find(function(r) { return r.questionId === 9; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 9; }).isCorrect : ''
                 };
 
                 // Apps Script 백엔드 함수 'recordEvaluationResult' 호출 연동 실행
@@ -500,43 +499,58 @@
             }
         }
 
-        // --- 탭 및 이벤트 핸들러 바인딩 ---
-        window.switchTab = function(tab) {
+        // --- 탭 및 이벤트 핸들러 바인딩 (이벤트 가로채기 방지) ---
+        function switchTab(tab) {
             state.activeTab = tab;
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.className = 'tab-btn px-5 py-2.5 rounded-full font-semibold transition-all bg-white text-slate-600 hover:bg-indigo-50';
+            
+            // 모든 내비게이션 버튼 리셋
+            document.querySelectorAll('.tab-nav-btn').forEach(function(btn) {
+                btn.className = 'tab-nav-btn px-5 py-2.5 rounded-full font-semibold transition-all bg-white text-slate-600 hover:bg-indigo-50';
             });
-            const activeBtn = document.getElementById(`tab-btn-${tab}`);
+            
+            // 클릭된 활성 버튼 하이라이트
+            const activeBtn = document.getElementById('tab-btn-' + tab);
             if (activeBtn) {
                 if (tab === 'evaluation') {
-                    activeBtn.className = 'tab-btn flex items-center px-5 py-2.5 rounded-full font-bold border-2 bg-emerald-600 border-emerald-600 text-white shadow-md';
+                    activeBtn.className = 'tab-nav-btn flex items-center px-5 py-2.5 rounded-full font-bold border-2 bg-emerald-600 border-emerald-600 text-white shadow-md';
                 } else {
-                    activeBtn.className = 'tab-btn px-5 py-2.5 rounded-full font-semibold transition-all bg-indigo-600 text-white shadow-md';
+                    activeBtn.className = 'tab-nav-btn px-5 py-2.5 rounded-full font-semibold transition-all bg-indigo-600 text-white shadow-md';
                 }
             }
             
-            document.querySelectorAll('.tab-content').forEach(content => {
+            // 모든 탭 영역 숨기기
+            document.querySelectorAll('.tab-content').forEach(function(content) {
                 content.classList.remove('active');
             });
-            const activeContent = document.getElementById(`tab-${tab}`);
+            
+            // 지정 탭 영역만 표출
+            const activeContent = document.getElementById('tab-' + tab);
             if (activeContent) activeContent.classList.add('active');
 
-            if (tab === 'quiz' && (state.quizState === 'finished' || state.quizQueue.length === 0)) state.quizState = 'selecting_set';
-            if (tab === 'advanced' && (state.advState === 'finished' || state.advQueue.length === 0)) state.advState = 'selecting_set';
-            if (tab === 'evaluation' && state.evalState === 'finished') state.evalState = 'selecting_set';
+            // 서브 상태 리셋
+            if (tab === 'quiz' && (state.quizState === 'finished' || state.quizQueue.length === 0)) {
+                showSetSelection();
+            }
+            if (tab === 'advanced' && (state.advState === 'finished' || state.advQueue.length === 0)) {
+                showAdvSetSelection();
+            }
+            if (tab === 'evaluation' && state.evalState === 'finished') {
+                showEvalSelection();
+            }
 
             render();
-        };
+        }
 
-        window.selectFunction = function(func) {
+        function selectFunction(func) {
             state.selectedFunction = func;
             renderLearnContent();
-        };
+        }
 
-        window.startQuiz = function(setIndex) {
+        // 단어 퀴즈 제어부
+        function startQuiz(setIndex) {
             const startIndex = setIndex * 10;
             const setWords = ALL_QUIZ_WORDS.slice(startIndex, startIndex + 10);
-            state.quizQueue = [...setWords].sort(() => 0.5 - Math.random());
+            state.quizQueue = [].concat(setWords).sort(function() { return 0.5 - Math.random(); });
             state.currentSet = setIndex;
             state.currentQuizIndex = 0;
             state.score = 0;
@@ -548,9 +562,9 @@
             document.getElementById('quiz-finished-view').classList.add('hidden');
             
             renderQuizQuestion();
-        };
+        }
 
-        window.handleAnswer = function(pos) {
+        function handleAnswer(pos) {
             if (state.quizState !== 'playing') return;
             state.selectedAnswer = pos;
             
@@ -564,9 +578,9 @@
                 state.quizState = 'incorrect';
             }
             renderQuizQuestion();
-        };
+        }
 
-        window.nextQuestion = function() {
+        function nextQuestion() {
             if (state.currentQuizIndex < state.quizQueue.length - 1) {
                 state.currentQuizIndex++;
                 state.quizState = 'playing';
@@ -577,23 +591,20 @@
                 document.getElementById('quiz-playing-view').classList.add('hidden');
                 document.getElementById('quiz-finished-view').classList.remove('hidden');
                 document.getElementById('quiz-final-score').innerText = state.score;
-                document.getElementById('quiz-final-progress-bar').style.width = `${state.score * 10}%`;
+                document.getElementById('quiz-final-progress-bar').style.width = (state.score * 10) + '%';
             }
-        };
+        }
 
-        window.showSetSelection = function() {
+        function showSetSelection() {
             state.quizState = 'selecting_set';
             document.getElementById('quiz-selecting-view').classList.remove('hidden');
             document.getElementById('quiz-playing-view').classList.add('hidden');
             document.getElementById('quiz-finished-view').classList.add('hidden');
-        };
+        }
 
-        window.retryQuiz = function() {
-            startQuiz(state.currentSet);
-        };
-
-        window.startAdvancedQuiz = function(setIndex) {
-            const shuffled = [...ADVANCED_QUESTIONS].sort(() => 0.5 - Math.random()).slice(0, 10);
+        // 심화 학습 제어부
+        function startAdvancedQuiz(setIndex) {
+            const shuffled = [].concat(ADVANCED_QUESTIONS).sort(function() { return 0.5 - Math.random(); }).slice(0, 10);
             state.advQueue = shuffled;
             state.advCurrentSet = setIndex;
             state.currentAdvIndex = 0;
@@ -606,9 +617,9 @@
             document.getElementById('adv-finished-view').classList.add('hidden');
 
             renderAdvQuestion();
-        };
+        }
 
-        window.handleAdvAnswer = function(optionIndex) {
+        function handleAdvAnswer(optionIndex) {
             if (state.advState !== 'playing') return;
             state.advSelectedAnswer = optionIndex;
             
@@ -622,9 +633,9 @@
                 state.advState = 'incorrect';
             }
             renderAdvQuestion();
-        };
+        }
 
-        window.nextAdvQuestion = function() {
+        function nextAdvQuestion() {
             if (state.currentAdvIndex < state.advQueue.length - 1) {
                 state.currentAdvIndex++;
                 state.advState = 'playing';
@@ -635,22 +646,19 @@
                 document.getElementById('adv-playing-view').classList.add('hidden');
                 document.getElementById('adv-finished-view').classList.remove('hidden');
                 document.getElementById('adv-final-score').innerText = state.advScore;
-                document.getElementById('adv-final-progress-bar').style.width = `${state.advScore * 10}%`;
+                document.getElementById('adv-final-progress-bar').style.width = (state.advScore * 10) + '%';
             }
-        };
+        }
 
-        window.showAdvSetSelection = function() {
+        function showAdvSetSelection() {
             state.advState = 'selecting_set';
             document.getElementById('adv-selecting-view').classList.remove('hidden');
             document.getElementById('adv-playing-view').classList.add('hidden');
             document.getElementById('adv-finished-view').classList.add('hidden');
-        };
+        }
 
-        window.retryAdvQuiz = function() {
-            startAdvancedQuiz(state.advCurrentSet);
-        };
-
-        window.startEvaluationQuiz = function() {
+        // 형성 평가 제어부
+        function startEvaluationQuiz() {
             const gradeInput = document.getElementById('info-grade');
             const classInput = document.getElementById('info-class');
             const numInput = document.getElementById('info-num');
@@ -666,7 +674,7 @@
                 return;
             }
 
-            const shuffled = [...EVALUATION_QUESTIONS].sort((a, b) => a.id - b.id);
+            const shuffled = [].concat(EVALUATION_QUESTIONS).sort(function(a, b) { return a.id - b.id; });
             state.evalQueue = shuffled;
             state.currentEvalIndex = 0;
             state.evalScore = 0;
@@ -679,9 +687,9 @@
             document.getElementById('eval-finished-view').classList.add('hidden');
 
             renderEvalQuestion();
-        };
+        }
 
-        window.handleEvalAnswer = function(optionIndex) {
+        function handleEvalAnswer(optionIndex) {
             if (state.evalState !== 'playing') return;
             state.evalSelectedAnswer = optionIndex;
             
@@ -701,9 +709,9 @@
                 state.evalState = 'incorrect';
             }
             renderEvalQuestion();
-        };
+        }
 
-        window.nextEvalQuestion = function() {
+        function nextEvalQuestion() {
             if (state.currentEvalIndex < state.evalQueue.length - 1) {
                 state.currentEvalIndex++;
                 state.evalState = 'playing';
@@ -714,34 +722,29 @@
                 document.getElementById('eval-playing-view').classList.add('hidden');
                 document.getElementById('eval-finished-view').classList.remove('hidden');
                 
-                const infoStr = `${state.studentInfo.grade || '_'}학년 ${state.studentInfo.classNum || '_'}반 ${state.studentInfo.studentNum || '_'}번 [${state.studentInfo.name}] 학생`;
+                const infoStr = (state.studentInfo.grade || '_') + "학년 " + (state.studentInfo.classNum || '_') + "반 " + (state.studentInfo.studentNum || '_') + "번 [" + state.studentInfo.name + "] 학생";
                 document.getElementById('eval-student-final-badge').innerText = infoStr;
                 document.getElementById('eval-final-score').innerText = state.evalScore;
-                document.getElementById('eval-final-progress-bar').style.width = `${Math.round((state.evalScore / state.evalQueue.length) * 100)}%`;
+                document.getElementById('eval-final-progress-bar').style.width = Math.round((state.evalScore / state.evalQueue.length) * 100) + '%';
 
-                // 결과 제출 함수 실행
                 sendDataToGoogleSheet();
             }
-        };
+        }
 
-        window.showEvalSelection = function() {
+        function showEvalSelection() {
             state.evalState = 'selecting_set';
             document.getElementById('eval-selecting-view').classList.remove('hidden');
             document.getElementById('eval-playing-view').classList.add('hidden');
             document.getElementById('eval-finished-view').classList.add('hidden');
-        };
+        }
 
-        window.retryEvaluation = function() {
-            startEvaluationQuiz();
-        };
-
-        // --- 9. 동적 렌더링 헬퍼 ---
+        // --- 동적 렌더링 헬퍼 ---
         function renderLearnContent() {
             const sidebar = document.getElementById('learn-sidebar');
-            sidebar.innerHTML = Object.keys(POS_DATA).map(func => {
+            sidebar.innerHTML = Object.keys(POS_DATA).map(function(func) {
                 const isSelected = state.selectedFunction === func;
                 return `
-                    <button onclick="selectFunction('${func}')" class="w-full text-left px-5 py-4 rounded-xl font-medium transition-all border ${isSelected ? 'bg-indigo-600 text-white shadow-md border-transparent' : 'bg-white text-slate-700 hover:bg-indigo-100 border-slate-200'}">
+                    <button class="learn-sidebar-btn w-full text-left px-5 py-4 rounded-xl font-medium transition-all border ${isSelected ? 'bg-indigo-600 text-white shadow-md border-transparent' : 'bg-white text-slate-700 hover:bg-indigo-100 border-slate-200'}" data-func="${func}">
                         <div class="flex justify-between items-center">
                             <span class="text-lg">${func}</span>
                             <span class="text-xs px-2 py-1 rounded-full ${isSelected ? 'bg-indigo-500 text-white' : 'bg-slate-100 text-slate-500'}">${POS_DATA[func].form}</span>
@@ -749,6 +752,14 @@
                     </button>
                 `;
             }).join('');
+
+            // 이벤트 바인딩
+            document.querySelectorAll('.learn-sidebar-btn').forEach(function(btn) {
+                btn.onclick = function() {
+                    const func = this.getAttribute('data-func');
+                    selectFunction(func);
+                };
+            });
 
             const mainContent = document.getElementById('learn-main-content');
             const data = POS_DATA[state.selectedFunction];
@@ -760,27 +771,31 @@
                     </div>
                 </div>
                 <p class="text-slate-600 text-base mb-6 leading-relaxed">${data.desc}</p>
-                ${data.items.map(item => `
-                    <div class="bg-indigo-50/30 rounded-2xl p-6 border border-indigo-100/50 mb-4 hover:shadow-sm transition-shadow">
-                        <h3 class="text-xl font-bold text-indigo-700 mb-2">${item.name}</h3>
-                        <p class="text-slate-700 text-sm mb-3">${item.desc}</p>
-                        <div class="flex flex-wrap gap-1.5">
-                            ${item.examples.map(ex => `<span class="bg-white text-indigo-900 border border-indigo-100 px-2.5 py-1 rounded-lg text-xs font-semibold">${ex}</span>`).join('')}
+                ${data.items.map(function(item) {
+                    return `
+                        <div class="bg-indigo-50/30 rounded-2xl p-6 border border-indigo-100/50 mb-4 hover:shadow-sm transition-shadow">
+                            <h3 class="text-xl font-bold text-indigo-700 mb-2">${item.name}</h3>
+                            <p class="text-slate-700 text-sm mb-3">${item.desc}</p>
+                            <div class="flex flex-wrap gap-1.5">
+                                ${item.examples.map(function(ex) {
+                                    return `<span class="bg-white text-indigo-900 border border-indigo-100 px-2.5 py-1 rounded-lg text-xs font-semibold">${ex}</span>`;
+                                }).join('')}
+                            </div>
                         </div>
-                    </div>
-                `).join('')}
+                    `;
+                }).join('')}
             `;
             lucide.createIcons();
         }
 
         function renderQuizQuestion() {
             const currentQ = state.quizQueue[state.currentQuizIndex];
-            document.getElementById('quiz-progress-text').innerText = `문제 ${state.currentQuizIndex + 1} / 10`;
-            document.getElementById('quiz-score-text').innerText = `점수: ${state.score}`;
-            document.getElementById('quiz-word-display').innerText = `"${currentQ.word}"`;
+            document.getElementById('quiz-progress-text').innerText = "문제 " + (state.currentQuizIndex + 1) + " / 10";
+            document.getElementById('quiz-score-text').innerText = "점수: " + state.score;
+            document.getElementById('quiz-word-display').innerText = '"' + currentQ.word + '"';
 
             const optionsGrid = document.getElementById('quiz-options-grid');
-            optionsGrid.innerHTML = ALL_9_POS.map(pos => {
+            optionsGrid.innerHTML = ALL_9_POS.map(function(pos) {
                 const isSelected = state.selectedAnswer === pos;
                 const isCorrect = currentQ.answer === pos;
                 
@@ -793,16 +808,24 @@
                 }
 
                 return `
-                    <button onclick="handleAnswer('${pos}')" ${state.quizState !== 'playing' ? 'disabled' : ''} class="py-4 rounded-xl border-2 font-bold text-base md:text-lg transition-all ${btnStyle}">
+                    <button class="quiz-option-btn py-4 rounded-xl border-2 font-bold text-base md:text-lg transition-all ${btnStyle}" data-pos="${pos}" ${state.quizState !== 'playing' ? 'disabled' : ''}>
                         ${pos}
                     </button>
                 `;
             }).join('');
 
+            // 이벤트 바인딩
+            document.querySelectorAll('.quiz-option-btn').forEach(function(btn) {
+                btn.onclick = function() {
+                    const pos = this.getAttribute('data-pos');
+                    handleAnswer(pos);
+                };
+            });
+
             const feedbackBox = document.getElementById('quiz-feedback-box');
             if (state.quizState !== 'playing') {
                 const isCorrect = state.quizState === 'correct';
-                feedbackBox.className = `p-6 rounded-xl flex items-center justify-between mt-6 ${isCorrect ? 'bg-green-50' : 'bg-red-50'}`;
+                feedbackBox.className = "p-6 rounded-xl flex items-center justify-between mt-6 " + (isCorrect ? 'bg-green-50' : 'bg-red-50');
                 feedbackBox.innerHTML = `
                     <div class="flex items-center">
                         <i data-lucide="${isCorrect ? 'check-circle-2' : 'x-circle'}" class="w-8 h-8 ${isCorrect ? 'text-green-500' : 'text-red-500'} mr-3"></i>
@@ -811,10 +834,11 @@
                             ${!isCorrect ? `<p class="text-slate-600 mt-1">정답은 <span class="font-bold text-red-600">${currentQ.answer}</span> 입니다.</p>` : ''}
                         </div>
                     </div>
-                    <button onclick="nextQuestion()" class="flex items-center px-6 py-3 rounded-xl font-bold text-white transition-colors ${isCorrect ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-700'}">
+                    <button id="btn-next-quiz-question" class="flex items-center px-6 py-3 rounded-xl font-bold text-white transition-colors ${isCorrect ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-700'}">
                         다음 문제 <i data-lucide="arrow-right" class="w-5 h-5 ml-2"></i>
                     </button>
                 `;
+                document.getElementById('btn-next-quiz-question').onclick = nextQuestion;
                 feedbackBox.classList.remove('hidden');
             } else {
                 feedbackBox.classList.add('hidden');
@@ -824,12 +848,12 @@
 
         function renderAdvQuestion() {
             const currentQ = state.advQueue[state.currentAdvIndex];
-            document.getElementById('adv-progress-text').innerText = `문제 ${state.currentAdvIndex + 1} / 10`;
-            document.getElementById('adv-score-text').innerText = `점수: ${state.advScore}`;
+            document.getElementById('adv-progress-text').innerText = "문제 " + (state.currentAdvIndex + 1) + " / 10";
+            document.getElementById('adv-score-text').innerText = "점수: " + state.advScore;
             document.getElementById('adv-question-text').innerHTML = currentQ.q;
 
             const optionsBox = document.getElementById('adv-options-box');
-            optionsBox.innerHTML = currentQ.options.map((opt, idx) => {
+            optionsBox.innerHTML = currentQ.options.map(function(opt, idx) {
                 const isSelected = state.advSelectedAnswer === idx;
                 const isCorrect = currentQ.answerIndex === idx;
 
@@ -841,16 +865,24 @@
                 }
 
                 return `
-                    <button onclick="handleAdvAnswer(${idx})" ${state.advState !== 'playing' ? 'disabled' : ''} class="w-full text-left p-4 rounded-xl border-2 transition-all ${btnStyle}">
+                    <button class="adv-option-btn w-full text-left p-4 rounded-xl border-2 transition-all ${btnStyle}" data-idx="${idx}" ${state.advState !== 'playing' ? 'disabled' : ''}>
                         <span class="mr-2 font-extrabold text-indigo-600">${idx + 1}.</span> ${opt}
                     </button>
                 `;
             }).join('');
 
+            // 이벤트 바인딩
+            document.querySelectorAll('.adv-option-btn').forEach(function(btn) {
+                btn.onclick = function() {
+                    const idx = parseInt(this.getAttribute('data-idx'), 10);
+                    handleAdvAnswer(idx);
+                };
+            });
+
             const feedbackBox = document.getElementById('adv-feedback-box');
             const feedbackStatus = document.getElementById('adv-feedback-status');
             if (state.advState !== 'playing') {
-                feedbackStatus.className = `font-extrabold text-lg ${state.advState === 'correct' ? 'text-green-700' : 'text-red-700'}`;
+                feedbackStatus.className = "font-extrabold text-lg " + (state.advState === 'correct' ? 'text-green-700' : 'text-red-700');
                 feedbackStatus.innerText = state.advState === 'correct' ? '정답입니다! 🎉' : '아쉽네요, 오답입니다.';
                 feedbackBox.classList.remove('hidden');
             } else {
@@ -861,14 +893,14 @@
 
         function renderEvalQuestion() {
             const currentQ = state.evalQueue[state.currentEvalIndex];
-            const infoStr = `${state.studentInfo.grade || '_'}학년 ${state.studentInfo.classNum || '_'}반 ${state.studentInfo.studentNum || '_'}번 ${state.studentInfo.name}`;
+            const infoStr = (state.studentInfo.grade || '_') + "학년 " + (state.studentInfo.classNum || '_') + "반 " + (state.studentInfo.studentNum || '_') + "번 " + state.studentInfo.name;
             
             document.getElementById('eval-student-badge').innerText = infoStr;
-            document.getElementById('eval-progress-text').innerText = `문항 ${state.currentEvalIndex + 1} / ${state.evalQueue.length}`;
+            document.getElementById('eval-progress-text').innerText = "문항 " + (state.currentEvalIndex + 1) + " / " + state.evalQueue.length;
             document.getElementById('eval-question-text').innerHTML = currentQ.q;
 
             const optionsBox = document.getElementById('eval-options-box');
-            optionsBox.innerHTML = currentQ.options.map((opt, idx) => {
+            optionsBox.innerHTML = currentQ.options.map(function(opt, idx) {
                 const isSelected = state.evalSelectedAnswer === idx;
                 const isCorrect = currentQ.answerIndex === idx;
 
@@ -880,18 +912,26 @@
                 }
 
                 return `
-                    <button onclick="handleEvalAnswer(${idx})" ${state.evalState !== 'playing' ? 'disabled' : ''} class="w-full text-left p-4 rounded-xl border-2 transition-all ${btnStyle}">
+                    <button class="eval-option-btn w-full text-left p-4 rounded-xl border-2 transition-all ${btnStyle}" data-idx="${idx}" ${state.evalState !== 'playing' ? 'disabled' : ''}>
                         <span class="mr-2 font-extrabold text-emerald-600">${idx + 1}.</span> ${opt}
                     </button>
                 `;
             }).join('');
+
+            // 이벤트 바인딩
+            document.querySelectorAll('.eval-option-btn').forEach(function(btn) {
+                btn.onclick = function() {
+                    const idx = parseInt(this.getAttribute('data-idx'), 10);
+                    handleEvalAnswer(idx);
+                };
+            });
 
             const feedbackBox = document.getElementById('eval-feedback-box');
             const feedbackStatus = document.getElementById('eval-feedback-status');
             const rationaleText = document.getElementById('eval-rationale-text');
 
             if (state.evalState !== 'playing') {
-                feedbackStatus.className = `font-extrabold text-sm ${state.evalState === 'correct' ? 'text-green-700' : 'text-red-700'}`;
+                feedbackStatus.className = "font-extrabold text-sm " + (state.evalState === 'correct' ? 'text-green-700' : 'text-red-700');
                 feedbackStatus.innerText = state.evalState === 'correct' ? '정답입니다! 🎉' : '틀렸습니다.';
                 rationaleText.innerText = currentQ.rationale;
                 feedbackBox.classList.remove('hidden');
@@ -909,15 +949,15 @@
                 if (state.isSubmitting) {
                     syncStatusBox.classList.remove('hidden');
                     syncStatusBox.className = "mt-4 p-3 bg-blue-50 text-blue-800 border border-blue-200 rounded-xl flex items-center justify-center gap-2";
-                    syncStatusText.innerHTML = `<div class="animate-spin rounded-full h-4 w-4 border-2 border-blue-800 border-t-transparent"></div> 성적을 스프레드시트 기록장으로 실시간 전송 중...`;
+                    syncStatusText.innerHTML = '<div class="animate-spin rounded-full h-4 w-4 border-2 border-blue-800 border-t-transparent"></div> 성적을 스프레드시트 기록장으로 실시간 전송 중...';
                 } else if (state.submitStatus === 'success') {
                     syncStatusBox.classList.remove('hidden');
                     syncStatusBox.className = "mt-4 p-3 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-xl flex items-center justify-center gap-2";
-                    syncStatusText.innerHTML = `<i data-lucide="check-circle" class="w-4 h-4 text-emerald-600"></i> 구글 스프레드시트 기록장 전송 완료! 채점이 저장되었습니다.`;
+                    syncStatusText.innerHTML = '<i data-lucide="check-circle" class="w-4 h-4 text-emerald-600"></i> 구글 스프레드시트 기록장 전송 완료! 채점이 저장되었습니다.';
                 } else if (state.submitStatus === 'fail') {
                     syncStatusBox.classList.remove('hidden');
                     syncStatusBox.className = "mt-4 p-3 bg-red-50 text-red-800 border border-red-200 rounded-xl flex items-center justify-center gap-2";
-                    syncStatusText.innerHTML = `<i data-lucide="alert-triangle" class="w-4 h-4 text-red-600"></i> 클라우드 전송 실패! 전송 환경을 점검해 주세요.`;
+                    syncStatusText.innerHTML = '<i data-lucide="alert-triangle" class="w-4 h-4 text-red-600"></i> 클라우드 전송 실패! 전송 환경을 점검해 주세요.';
                 } else {
                     syncStatusBox.classList.add('hidden');
                 }
@@ -925,11 +965,20 @@
             lucide.createIcons();
         }
 
-        // --- 초기 구동 시스템 탑재 ---
+        // --- 초기 구동 시스템 탑재 및 이벤트 수동 위임 ---
         window.onload = function() {
+            // 탭 버튼 바인딩
+            document.querySelectorAll('.tab-nav-btn').forEach(function(btn) {
+                btn.onclick = function() {
+                    const tab = this.getAttribute('data-tab');
+                    switchTab(tab);
+                };
+            });
+
+            // 1. 단어 퀴즈 세트 그리드 로드
             const quizGrid = document.getElementById('quiz-set-grid');
             quizGrid.innerHTML = Array.from({length: 10}, (_, i) => `
-                <button onclick="startQuiz(${i})" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-indigo-400 hover:shadow-md transition-all flex flex-col items-center justify-center group">
+                <button class="quiz-set-btn bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-indigo-400 hover:shadow-md transition-all flex flex-col items-center justify-center group" data-set="${i}">
                     <div class="bg-indigo-100 text-indigo-600 w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl mb-3 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
                         ${i + 1}
                     </div>
@@ -937,15 +986,46 @@
                 </button>
             `).join('');
 
+            // 이벤트 바인딩
+            document.querySelectorAll('.quiz-set-btn').forEach(function(btn) {
+                btn.onclick = function() {
+                    const setIndex = parseInt(this.getAttribute('data-set'), 10);
+                    startQuiz(setIndex);
+                };
+            });
+
+            // 2. 심화 학습 세트 그리드 로드
             const advGrid = document.getElementById('adv-set-grid');
             advGrid.innerHTML = Array.from({length: 5}, (_, i) => `
-                <button onclick="startAdvancedQuiz(${i})" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-purple-400 hover:shadow-md transition-all flex flex-col items-center justify-center group">
+                <button class="adv-set-btn bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-purple-400 hover:shadow-md transition-all flex flex-col items-center justify-center group" data-set="${i}">
                     <div class="bg-purple-100 text-purple-600 w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl mb-3 group-hover:bg-purple-600 group-hover:text-white transition-colors">
                         ${i + 1}
                     </div>
                     <span class="font-bold text-slate-700">심화 세트 ${i + 1}</span>
                 </button>
             `).join('');
+
+            // 이벤트 바인딩
+            document.querySelectorAll('.adv-set-btn').forEach(function(btn) {
+                btn.onclick = function() {
+                    const setIndex = parseInt(this.getAttribute('data-set'), 10);
+                    startAdvancedQuiz(setIndex);
+                };
+            });
+
+            // 수동 제어 버튼 바인딩들
+            document.getElementById('btn-quiz-to-list').onclick = showSetSelection;
+            document.getElementById('btn-retry-quiz').onclick = retryQuiz;
+            document.getElementById('btn-quiz-other-set').onclick = showSetSelection;
+
+            document.getElementById('btn-adv-to-list').onclick = showAdvSetSelection;
+            document.getElementById('btn-next-adv').onclick = nextAdvQuestion;
+            document.getElementById('btn-retry-adv').onclick = showAdvSetSelection;
+
+            document.getElementById('btn-start-eval').onclick = startEvaluationQuiz;
+            document.getElementById('btn-next-eval').onclick = nextEvalQuestion;
+            document.getElementById('btn-retry-eval').onclick = retryEvaluation;
+            document.getElementById('btn-eval-to-start').onclick = showEvalSelection;
 
             selectFunction('체언');
             lucide.createIcons();
