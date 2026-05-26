@@ -165,7 +165,8 @@
                         <div id="adv-final-progress-bar" class="bg-purple-500 h-4 rounded-full transition-all duration-1000" style="width: 0%"></div>
                     </div>
                     <div class="flex justify-center space-x-4">
-                        <button id="btn-retry-adv" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-bold transition-colors">세트 다시 선택하기</button>
+                        <button id="btn-retry-adv" class="bg-white border-2 border-purple-600 text-purple-600 hover:bg-purple-50 px-6 py-3 rounded-xl font-bold transition-colors">다시 풀기</button>
+                        <button id="btn-adv-other-set" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-bold transition-colors">다른 세트 선택</button>
                     </div>
                 </div>
             </div>
@@ -602,6 +603,10 @@
             document.getElementById('quiz-finished-view').classList.add('hidden');
         }
 
+        function retryQuiz() {
+            startQuiz(state.currentSet);
+        }
+
         // 심화 학습 제어부
         function startAdvancedQuiz(setIndex) {
             const shuffled = [].concat(ADVANCED_QUESTIONS).sort(function() { return 0.5 - Math.random(); }).slice(0, 10);
@@ -655,6 +660,10 @@
             document.getElementById('adv-selecting-view').classList.remove('hidden');
             document.getElementById('adv-playing-view').classList.add('hidden');
             document.getElementById('adv-finished-view').classList.add('hidden');
+        }
+
+        function retryAdvQuiz() {
+            startAdvancedQuiz(state.advCurrentSet);
         }
 
         // 형성 평가 제어부
@@ -736,6 +745,10 @@
             document.getElementById('eval-selecting-view').classList.remove('hidden');
             document.getElementById('eval-playing-view').classList.add('hidden');
             document.getElementById('eval-finished-view').classList.add('hidden');
+        }
+
+        function retryEvaluation() {
+            startEvaluationQuiz();
         }
 
         // --- 동적 렌더링 헬퍼 ---
@@ -1020,7 +1033,8 @@
 
             document.getElementById('btn-adv-to-list').onclick = showAdvSetSelection;
             document.getElementById('btn-next-adv').onclick = nextAdvQuestion;
-            document.getElementById('btn-retry-adv').onclick = showAdvSetSelection;
+            document.getElementById('btn-retry-adv').onclick = retryAdvQuiz;
+            document.getElementById('btn-adv-other-set').onclick = showAdvSetSelection;
 
             document.getElementById('btn-start-eval').onclick = startEvaluationQuiz;
             document.getElementById('btn-next-eval').onclick = nextEvalQuestion;
