@@ -397,4 +397,643 @@
                 answerIndex: 4 
             },
             {
-                q: '&lt;보기&gt;의 문장에 대한 설명으로 적절하지 않은 것은?<br/><br/><div class="bg-slate-100 p-3 rounded text-center font-bold text-slate-
+                q: '&lt;보기&gt;의 문장에 대한 설명으로 적절하지 않은 것은?<br/><br/><div class="bg-slate-100 p-3 rounded text-center font-bold text-slate-800">우리는 새 옷을 무척 좋아한다.</div>',
+                options: ['‘우리’는 대명사로, 문장에서 주어의 역할을 한다.', '‘새’는 뒤에 오는 ‘옷’을 꾸며 주는 말이다.', '‘무척’은 꾸며 주는 말 바로 앞에만 있을 수 있다.', '‘무척’은 뒤에 오는 ‘좋아한다’를 꾸며 주는 말이다.', '이 문장에서 형태가 변하는 말은 ‘좋아한다’뿐이다.'],
+                answerIndex: 2 
+            },
+            {
+                q: '다음 중 조사가 사용되지 않은 문장은?',
+                options: ['나는 과자만 먹어.', '우리가 너를 좋아해.', '내 동생은 운동도 잘한다.', '이 줄까지 입장할 수 있습니다.', '매우 빨리 달려서 잡았다.'],
+                answerIndex: 4 
+            },
+            {
+                q: '다음 빈칸에 들어갈 조사로 적절한 것은?<br/><br/><div class="bg-slate-100 p-3 rounded text-center font-bold text-slate-800">나는 우유는 다 싫어하지만 바나나 우유(   ) 좋아한다.</div>',
+                options: ['도', '가', '만', '까지', '부터'],
+                answerIndex: 2 
+            }
+        ];
+
+        // 3. 형성 평가 9개 문제 데이터 (밑줄 강조 정밀 보정 버전)
+        const EVALUATION_QUESTIONS = [
+            { id: 1, q: "1. 다음 중 품사를 바르게 분류한 것은?", options: ["독립언: 조사", "관계언: 감탄사", "용언: 관형사, 부사", "수식언: 동사, 형용사", "체언: 명사, 대명사, 수사"], answerIndex: 4, rationale: "명사, 대명사, 수사는 주어나 목적어 자리에 쓰이며 조사가 결합할 수 있는 '체언'에 해당합니다." },
+            { id: 2, q: "2. &lt;보기&gt;의 단어들을 문장에서 하는 역할(기능)이 같은 것끼리 적절하게 묶은 것은?<br/><br/><div class='bg-slate-100 p-3 rounded font-semibold text-slate-800 text-center'>&lt;보기&gt;<br/>어느, 꿈, 이것, 어머나, 예쁘다, 뜨겁다, 흐르다, 얼마나</div>", options: ["어느, 꿈, 이것", "어머나, 얼마나", "꿈, 이것, 어머나", "예쁘다, 뜨겁다, 흐르다", "어머나, 예쁘다, 뜨겁다"], answerIndex: 3, rationale: "'예쁘다', '뜨겁다'(형용사), '흐르다'(동사)는 모두 문장에서 서술어로 쓰이는 '용언'에 해당합니다." },
+            { id: 3, q: "3. 밑줄 친 단어 중 '체언(명사, 대명사, 수사)'이 아닌 것은?", options: ["할아버지, <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded'>이것</span>은 뭐예요?", "동생이 바닥에 <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded'>구슬</span>을 떨어뜨렸다.", "<span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded'>그</span> 사람은 형과 같은 학교를 졸업했다.", "요리를 할 때에는 <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded'>첫째</span>, 손을 깨끗이 씻어야 한다.", "<span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded'>우리</span> 허락 없이는 절대 이 마을을 통과할 수 없다."], answerIndex: 2, rationale: "3번 보기의 '그'는 뒤의 명사 '사람'을 꾸며 주는 지시 관형사(수식언)이므로 체언이 아닙니다." },
+            { id: 4, q: "4. &lt;보기&gt;의 문장에 사용된 단어에 대한 설명으로 가장 적절한 것은?<br/><br/><div class='bg-slate-100 p-3 rounded font-semibold text-slate-800 text-center'>&lt;보기&gt;<br/>네, 그는 친구를 두루 넓게 사귑니다.</div>", options: ["형태가 변하는 말은 1개이다.", "기능을 기준으로 4개의 품사가 쓰였다.", "의미를 기준으로 8개의 품사가 쓰였다.", "다른 말과의 관계를 나타내는 역할을 하는 품사는 3개이다.", "사용된 단어 중 1개는 생략해도 문장의 뜻이 달라지지 않는다."], answerIndex: 4, rationale: "감탄사 '네'는 독립언으로, 문장에서 생략해도 문장 전체의 기본적인 의미 전달에 큰 영향을 주지 않습니다." },
+            { id: 5, q: "5. &lt;보기&gt;의 밑줄 친 단어의 공통점으로 적절한 것은?<br/><br/><div class='bg-slate-100 p-3 rounded font-semibold text-slate-800 text-center'>&lt;보기&gt;<br/>산 정상에 <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded'>도착하니</span> 기분이 <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded'>상쾌했다</span>.</div>", options: ["다른 말과의 관계를 나타낸다.", "쓰임에 따라 문장에서 형태가 변한다.", "사람이나 사물의 상태나 성질만 나타낸다.", "사람이나 사물의 움직임이나 작용만 나타낸다.", "명령형 어미, 청유형 어미, 현재형 어미와 모두 결합할 수 있다."], answerIndex: 1, rationale: "'도착하다'(동사)와 '상쾌하다'(형용사)는 모두 가변어(용언)에 속하므로 쓰임에 따라 문장에서 형태가 어미 변화를 통해 유연하게 변합니다." },
+            { id: 6, q: "6. &lt;보기&gt;의 밑줄 친 단어와 품사가 같은 것은?<br/><br/><div class='bg-slate-100 p-3 rounded font-semibold text-slate-800 text-center'>&lt;보기&gt;<br/>우리는 <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded'>새</span> 옷을 무척 좋아한다.</div>", options: ["이 기차는 부산으로 간다.", "드디어 오늘이 내 생일이다.", "너는 어떤 음식을 가장 좋아하니?", "그들은 사진을 보면서 옛 추억에 잠겼다.", "나는 헌 신발을 신고도 운동장을 열심히 달렸다."], answerIndex: 3, rationale: "보기의 '새'는 명사 '옷'을 꾸며 주는 '관형사'입니다. 4번의 '옛'도 명사 '추억'을 꾸며 주는 '관형사'에 해당합니다." },
+            { id: 7, q: "7. 밑줄 친 단어가 감탄사가 아닌 것은?", options: ["<span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded'>어머</span>! 마법을 풀러 온 거야?", "<span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded'>에헴</span>, 이 문장에서 나를 찾아봐.", "<span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded'>그래</span>, 네가 원하는 대로 해 줄게.", "<span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded'>마법</span>, 그건 어떻게 풀어야 하는 거야?", "<span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded'>이봐</span>, 네가 문제를 풀 때마다 내가 감탄 조각을 줄게."], answerIndex: 3, rationale: "4번의 '마법'은 대상의 이름을 가리키는 일반 '명사'입니다. 문장 앞머리에서 화제로 강조되었을 뿐 감탄사가 아닙니다." },
+            { id: 8, q: "8. 밑줄 친 단어 중 문장에서 형태가 변하지 않는 단어(불변어)는?", options: ["이 기차는 부산으로 <span class='bg-indigo-100 text-indigo-950 font-extrabold px-1.5 rounded'>간다</span>.", "우리 강아지는 털이 <span class='bg-indigo-100 text-indigo-950 font-extrabold px-1.5 rounded'>하얗다</span>.", "동생이 방에서 깔깔대며 <span class='bg-indigo-100 text-indigo-950 font-extrabold px-1.5 rounded'>웃었다</span>.", "사람은 한 번쯤 <span class='bg-indigo-100 text-indigo-950 font-extrabold px-1.5 rounded'>실수</span>를 하기 마련이다.", "담장 아래에 <span class='bg-indigo-100 text-indigo-950 font-extrabold px-1.5 rounded'>핀</span> 꽃을 보았다."], answerIndex: 3, rationale: "'실수'는 명사(체언)에 속하므로 문장에서 형태가 절대 변하지 않는 불변어입니다." },
+            { id: 9, q: "9. 조사에 대한 설명으로 적절하지 않은 것은?", options: ["문장에서 단독으로 쓰일 수 없다.", "앞말과 쉽게 분리되는 성질이 있다.", "다른 말과의 관계를 나타내는 역할을 한다.", "모든 조사는 문장에서 쓰일 때 형태가 변하지 않는다.", "주로 체언 뒤에 붙어서 그 말과 다른 말과의 문법적 관계를 나타낸다."], answerIndex: 3, rationale: "서술격 조사 '이다'는 '이고', '이니', '이면'처럼 용언처럼 형태가 변하는 활용을 하기 때문에, 모든 조사의 형태가 변하지 않는다는 설명은 적절하지 않습니다." }
+        ];
+
+        const ALL_9_POS = ['명사', '대명사', '수사', '관형사', '부사', '감탄사', '조사', '동사', '형용사'];
+
+        // 4. 전역 애플리케이션 상태 제어부
+        let state = {
+            activeTab: 'learn', // learn, quiz, advanced, evaluation
+            selectedFunction: '체언',
+            studentInfo: { grade: '', classNum: '', studentNum: '', name: '' },
+            quizQueue: [], currentQuizIndex: 0, score: 0, quizState: 'selecting_set', selectedAnswer: '', currentSet: 0,
+            advQueue: [], currentAdvIndex: 0, advScore: 0, advState: 'selecting_set', advSelectedAnswer: null, advCurrentSet: 0,
+            evalQueue: [], currentEvalIndex: 0, evalScore: 0, evalState: 'selecting_set', evalSelectedAnswer: null,
+            evalAnswersRecord: [],
+            isSubmitting: false,
+            submitStatus: '' // 'success', 'fail'
+        };
+
+        // --- 구글 시트 웹페이지 배포 전용 서버 통신 연동 함수 ---
+        // Apps Script 배포 환경에서 실행되므로 외부 WEB_APP_URL 변수 없이
+        // google.script.run API를 통하여 구글 서버 측 스프레드시트 기록장 함수를 다이렉트로 호출합니다.
+        function sendDataToGoogleSheet() {
+            if (typeof google !== 'undefined' && google.script && google.script.run) {
+                state.isSubmitting = true;
+                state.submitStatus = 'sending';
+                render();
+
+                // 가공할 성적부 기록용 페이로드 바인딩
+                const payload = {
+                    timestamp: new Date().toLocaleString("ko-KR"),
+                    grade: state.studentInfo.grade,
+                    classNum: state.studentInfo.classNum,
+                    studentNum: state.studentInfo.studentNum,
+                    name: state.studentInfo.name,
+                    score: state.evalScore + " / " + state.evalQueue.length,
+                    percentage: Math.round((state.evalScore / state.evalQueue.length) * 100) + "%",
+                    
+                    q1_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 1; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 1; }).selectedOption : '',
+                    q1_result: state.evalAnswersRecord.find(function(r) { return r.questionId === 1; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 1; }).isCorrect : '',
+                    q2_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 2; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 2; }).selectedOption : '',
+                    q2_result: state.evalAnswersRecord.find(function(r) { return r.questionId === 2; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 2; }).isCorrect : '',
+                    q3_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 3; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 3; }).selectedOption : '',
+                    q3_result: state.evalAnswersRecord.find(function(r) { return r.questionId === 3; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 3; }).isCorrect : '',
+                    q4_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 4; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 4; }).selectedOption : '',
+                    q4_result: state.evalAnswersRecord.find(function(r) { return r.questionId === 4; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 4; }).isCorrect : '',
+                    q5_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 5; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 5; }).selectedOption : '',
+                    q5_result: state.evalAnswersRecord.find(function(r) { return r.questionId === 5; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 5; }).isCorrect : '',
+                    q6_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 6; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 6; }).selectedOption : '',
+                    q6_result: state.evalAnswersRecord.find(function(r) { return r.questionId === 6; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 6; }).isCorrect : '',
+                    q7_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 7; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 7; }).selectedOption : '',
+                    q7_result: state.evalAnswersRecord.find(function(r) { return r.questionId === 7; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 7; }).isCorrect : '',
+                    q8_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 8; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 8; }).selectedOption : '',
+                    q8_result: state.evalAnswersRecord.find(function(r) { return r.questionId === 8; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 8; }).isCorrect : '',
+                    q9_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 9; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 9; }).selectedOption : '',
+                    q9_result: state.evalAnswersRecord.find(function(r) { return r.questionId === 9; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 9; }).isCorrect : ''
+                };
+
+                // Apps Script 백엔드 함수 'recordEvaluationResult' 호출 연동 실행
+                google.script.run
+                    .withSuccessHandler(function() {
+                        state.isSubmitting = false;
+                        state.submitStatus = 'success';
+                        render();
+                    })
+                    .withFailureHandler(function(err) {
+                        console.error("서버 기록 전송 실패:", err);
+                        state.isSubmitting = false;
+                        state.submitStatus = 'fail';
+                        render();
+                    })
+                    .recordEvaluationResult(payload);
+            } else {
+                console.log("로컬 독립 실행 테스트 감지: 성적데이터가 가상 처리되었습니다.");
+                state.isSubmitting = false;
+                state.submitStatus = 'success';
+                render();
+            }
+        }
+
+        // --- 탭 및 이벤트 핸들러 바인딩 ---
+        window.switchTab = function(tab) {
+            state.activeTab = tab;
+            document.querySelectorAll('.tab-nav-btn').forEach(function(btn) {
+                btn.className = 'tab-nav-btn px-5 py-2.5 rounded-full font-semibold transition-all bg-white text-slate-600 hover:bg-indigo-50';
+            });
+            const activeBtn = document.getElementById('tab-btn-' + tab);
+            if (activeBtn) {
+                if (tab === 'evaluation') {
+                    activeBtn.className = 'tab-nav-btn flex items-center px-5 py-2.5 rounded-full font-bold border-2 bg-emerald-600 border-emerald-600 text-white shadow-md';
+                } else {
+                    activeBtn.className = 'tab-nav-btn px-5 py-2.5 rounded-full font-semibold transition-all bg-indigo-600 text-white shadow-md';
+                }
+            }
+            
+            document.querySelectorAll('.tab-content').forEach(function(content) {
+                content.classList.remove('active');
+            });
+            const activeContent = document.getElementById('tab-' + tab);
+            if (activeContent) activeContent.classList.add('active');
+
+            if (tab === 'quiz' && (state.quizState === 'finished' || state.quizQueue.length === 0)) state.quizState = 'selecting_set';
+            if (tab === 'advanced' && (state.advState === 'finished' || state.advQueue.length === 0)) state.advState = 'selecting_set';
+            if (tab === 'evaluation' && state.evalState === 'finished') state.evalState = 'selecting_set';
+
+            render();
+        };
+
+        window.selectFunction = function(func) {
+            state.selectedFunction = func;
+            renderLearnContent();
+        };
+
+        window.startQuiz = function(setIndex) {
+            const startIndex = setIndex * 10;
+            const setWords = ALL_QUIZ_WORDS.slice(startIndex, startIndex + 10);
+            state.quizQueue = [].concat(setWords).sort(function() { return 0.5 - Math.random(); });
+            state.currentSet = setIndex;
+            state.currentQuizIndex = 0;
+            state.score = 0;
+            state.quizState = 'playing';
+            state.selectedAnswer = '';
+            
+            document.getElementById('quiz-selecting-view').classList.add('hidden');
+            document.getElementById('quiz-playing-view').classList.remove('hidden');
+            document.getElementById('quiz-finished-view').classList.add('hidden');
+            
+            renderQuizQuestion();
+        };
+
+        window.handleAnswer = function(pos) {
+            if (state.quizState !== 'playing') return;
+            state.selectedAnswer = pos;
+            
+            const currentWord = state.quizQueue[state.currentQuizIndex];
+            const isCorrect = pos === currentWord.answer;
+            
+            if (isCorrect) {
+                state.score++;
+                state.quizState = 'correct';
+            } else {
+                state.quizState = 'incorrect';
+            }
+            renderQuizQuestion();
+        };
+
+        window.nextQuestion = function() {
+            if (state.currentQuizIndex < state.quizQueue.length - 1) {
+                state.currentQuizIndex++;
+                state.quizState = 'playing';
+                state.selectedAnswer = '';
+                renderQuizQuestion();
+            } else {
+                state.quizState = 'finished';
+                document.getElementById('quiz-playing-view').classList.add('hidden');
+                document.getElementById('quiz-finished-view').classList.remove('hidden');
+                document.getElementById('quiz-final-score').innerText = state.score;
+                document.getElementById('quiz-final-progress-bar').style.width = (state.score * 10) + '%';
+            }
+        };
+
+        window.showSetSelection = function() {
+            state.quizState = 'selecting_set';
+            document.getElementById('quiz-selecting-view').classList.remove('hidden');
+            document.getElementById('quiz-playing-view').classList.add('hidden');
+            document.getElementById('quiz-finished-view').classList.add('hidden');
+        };
+
+        window.retryQuiz = function() {
+            startQuiz(state.currentSet);
+        };
+
+        window.startAdvancedQuiz = function(setIndex) {
+            const shuffled = [].concat(ADVANCED_QUESTIONS).sort(function() { return 0.5 - Math.random(); }).slice(0, 10);
+            state.advQueue = shuffled;
+            state.advCurrentSet = setIndex;
+            state.currentAdvIndex = 0;
+            state.advScore = 0;
+            state.advState = 'playing';
+            state.advSelectedAnswer = null;
+
+            document.getElementById('adv-selecting-view').classList.add('hidden');
+            document.getElementById('adv-playing-view').classList.remove('hidden');
+            document.getElementById('adv-finished-view').classList.add('hidden');
+
+            renderAdvQuestion();
+        };
+
+        window.handleAdvAnswer = function(optionIndex) {
+            if (state.advState !== 'playing') return;
+            state.advSelectedAnswer = optionIndex;
+            
+            const currentQ = state.advQueue[state.currentAdvIndex];
+            const isCorrect = optionIndex === currentQ.answerIndex;
+            
+            if (isCorrect) {
+                state.advScore++;
+                state.advState = 'correct';
+            } else {
+                state.advState = 'incorrect';
+            }
+            renderAdvQuestion();
+        };
+
+        window.nextAdvQuestion = function() {
+            if (state.currentAdvIndex < state.advQueue.length - 1) {
+                state.currentAdvIndex++;
+                state.advState = 'playing';
+                state.advSelectedAnswer = null;
+                renderAdvQuestion();
+            } else {
+                state.advState = 'finished';
+                document.getElementById('adv-playing-view').classList.add('hidden');
+                document.getElementById('adv-finished-view').classList.remove('hidden');
+                document.getElementById('adv-final-score').innerText = state.advScore;
+                document.getElementById('adv-final-progress-bar').style.width = (state.advScore * 10) + '%';
+            }
+        };
+
+        window.showAdvSetSelection = function() {
+            state.advState = 'selecting_set';
+            document.getElementById('adv-selecting-view').classList.remove('hidden');
+            document.getElementById('adv-playing-view').classList.add('hidden');
+            document.getElementById('adv-finished-view').classList.add('hidden');
+        };
+
+        window.retryAdvQuiz = function() {
+            startAdvancedQuiz(state.advCurrentSet);
+        };
+
+        window.startEvaluationQuiz = function() {
+            const gradeInput = document.getElementById('info-grade');
+            const classInput = document.getElementById('info-class');
+            const numInput = document.getElementById('info-num');
+            const nameInput = document.getElementById('info-name');
+
+            state.studentInfo.grade = gradeInput ? gradeInput.value.trim() : '';
+            state.studentInfo.classNum = classInput ? classInput.value.trim() : '';
+            state.studentInfo.studentNum = numInput ? numInput.value.trim() : '';
+            state.studentInfo.name = nameInput ? nameInput.value.trim() : '';
+
+            if (!state.studentInfo.name) {
+                alert("성함/이름을 필수적으로 입력해 주세요!");
+                return;
+            }
+
+            const shuffled = [].concat(EVALUATION_QUESTIONS).sort(function(a, b) { return a.id - b.id; });
+            state.evalQueue = shuffled;
+            state.currentEvalIndex = 0;
+            state.evalScore = 0;
+            state.evalState = 'playing';
+            state.evalSelectedAnswer = null;
+            state.evalAnswersRecord = [];
+
+            document.getElementById('eval-selecting-view').classList.add('hidden');
+            document.getElementById('eval-playing-view').classList.remove('hidden');
+            document.getElementById('eval-finished-view').classList.add('hidden');
+
+            renderEvalQuestion();
+        };
+
+        window.handleEvalAnswer = function(optionIndex) {
+            if (state.evalState !== 'playing') return;
+            state.evalSelectedAnswer = optionIndex;
+            
+            const currentQ = state.evalQueue[state.currentEvalIndex];
+            const isCorrect = optionIndex === currentQ.answerIndex;
+
+            state.evalAnswersRecord.push({
+                questionId: currentQ.id,
+                selectedOption: currentQ.options[optionIndex],
+                isCorrect: isCorrect ? "O" : "X"
+            });
+
+            if (isCorrect) {
+                state.evalScore++;
+                state.evalState = 'correct';
+            } else {
+                state.evalState = 'incorrect';
+            }
+            renderEvalQuestion();
+        };
+
+        window.nextEvalQuestion = function() {
+            if (state.currentEvalIndex < state.evalQueue.length - 1) {
+                state.currentEvalIndex++;
+                state.evalState = 'playing';
+                state.evalSelectedAnswer = null;
+                renderEvalQuestion();
+            } else {
+                state.evalState = 'finished';
+                document.getElementById('eval-playing-view').classList.add('hidden');
+                document.getElementById('eval-finished-view').classList.remove('hidden');
+                
+                const infoStr = (state.studentInfo.grade || '_') + "학년 " + (state.studentInfo.classNum || '_') + "반 " + (state.studentInfo.studentNum || '_') + "번 [" + state.studentInfo.name + "] 학생";
+                document.getElementById('eval-student-final-badge').innerText = infoStr;
+                document.getElementById('eval-final-score').innerText = state.evalScore;
+                document.getElementById('eval-final-progress-bar').style.width = Math.round((state.evalScore / state.evalQueue.length) * 100) + '%';
+
+                sendDataToGoogleSheet();
+            }
+        };
+
+        window.showEvalSelection = function() {
+            state.evalState = 'selecting_set';
+            document.getElementById('eval-selecting-view').classList.remove('hidden');
+            document.getElementById('eval-playing-view').classList.add('hidden');
+            document.getElementById('eval-finished-view').classList.add('hidden');
+        };
+
+        window.retryEvaluation = function() {
+            startEvaluationQuiz();
+        };
+
+        // --- 동적 렌더링 헬퍼 ---
+        function renderLearnContent() {
+            const sidebar = document.getElementById('learn-sidebar');
+            sidebar.innerHTML = Object.keys(POS_DATA).map(function(func) {
+                const isSelected = state.selectedFunction === func;
+                return `
+                    <button class="learn-sidebar-btn w-full text-left px-5 py-4 rounded-xl font-medium transition-all border ${isSelected ? 'bg-indigo-600 text-white shadow-md border-transparent' : 'bg-white text-slate-700 hover:bg-indigo-100 border-slate-200'}" data-func="${func}">
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg">${func}</span>
+                            <span class="text-xs px-2 py-1 rounded-full ${isSelected ? 'bg-indigo-500 text-white' : 'bg-slate-100 text-slate-500'}">${POS_DATA[func].form}</span>
+                        </div>
+                    </button>
+                `;
+            }).join('');
+
+            // 이벤트 바인딩
+            document.querySelectorAll('.learn-sidebar-btn').forEach(function(btn) {
+                btn.onclick = function() {
+                    const func = this.getAttribute('data-func');
+                    selectFunction(func);
+                };
+            });
+
+            const mainContent = document.getElementById('learn-main-content');
+            const data = POS_DATA[state.selectedFunction];
+            mainContent.innerHTML = `
+                <div class="bg-indigo-50 p-4 rounded-xl mb-6 flex justify-between items-center border border-indigo-100">
+                    <div>
+                        <h2 class="text-2xl font-extrabold text-indigo-900">${state.selectedFunction}</h2>
+                        <p class="text-xs font-semibold text-indigo-500 mt-0.5">형태 분류: ${data.form}</p>
+                    </div>
+                </div>
+                <p class="text-slate-600 text-base mb-6 leading-relaxed">${data.desc}</p>
+                ${data.items.map(function(item) {
+                    return `
+                        <div class="bg-indigo-50/30 rounded-2xl p-6 border border-indigo-100/50 mb-4 hover:shadow-sm transition-shadow">
+                            <h3 class="text-xl font-bold text-indigo-700 mb-2">${item.name}</h3>
+                            <p class="text-slate-700 text-sm mb-3">${item.desc}</p>
+                            <div class="flex flex-wrap gap-1.5">
+                                ${item.examples.map(function(ex) {
+                                    return `<span class="bg-white text-indigo-900 border border-indigo-100 px-2.5 py-1 rounded-lg text-xs font-semibold">${ex}</span>`;
+                                }).join('')}
+                            </div>
+                        </div>
+                    `;
+                }).join('')}
+            `;
+            lucide.createIcons();
+        }
+
+        function renderQuizQuestion() {
+            const currentQ = state.quizQueue[state.currentQuizIndex];
+            document.getElementById('quiz-progress-text').innerText = "문제 " + (state.currentQuizIndex + 1) + " / 10";
+            document.getElementById('quiz-score-text').innerText = "점수: " + state.score;
+            document.getElementById('quiz-word-display').innerText = '"' + currentQ.word + '"';
+
+            const optionsGrid = document.getElementById('quiz-options-grid');
+            optionsGrid.innerHTML = ALL_9_POS.map(function(pos) {
+                const isSelected = state.selectedAnswer === pos;
+                const isCorrect = currentQ.answer === pos;
+                
+                let btnStyle = "bg-slate-50 text-slate-700 border-slate-200 hover:bg-indigo-50 hover:border-indigo-200";
+                
+                if (state.quizState !== 'playing') {
+                    if (isCorrect) btnStyle = "bg-green-100 text-green-800 border-green-300 shadow-inner";
+                    else if (isSelected) btnStyle = "bg-red-100 text-red-800 border-red-300";
+                    else btnStyle = "bg-slate-50 text-slate-400 border-slate-100 opacity-50 cursor-not-allowed";
+                }
+
+                return `
+                    <button class="quiz-option-btn py-4 rounded-xl border-2 font-bold text-base md:text-lg transition-all ${btnStyle}" data-pos="${pos}" ${state.quizState !== 'playing' ? 'disabled' : ''}>
+                        ${pos}
+                    </button>
+                `;
+            }).join('');
+
+            // 이벤트 바인딩
+            document.querySelectorAll('.quiz-option-btn').forEach(function(btn) {
+                btn.onclick = function() {
+                    const pos = this.getAttribute('data-pos');
+                    handleAnswer(pos);
+                };
+            });
+
+            const feedbackBox = document.getElementById('quiz-feedback-box');
+            if (state.quizState !== 'playing') {
+                const isCorrect = state.quizState === 'correct';
+                feedbackBox.className = "p-6 rounded-xl flex items-center justify-between mt-6 " + (isCorrect ? 'bg-green-50' : 'bg-red-50');
+                feedbackBox.innerHTML = `
+                    <div class="flex items-center">
+                        <i data-lucide="${isCorrect ? 'check-circle-2' : 'x-circle'}" class="w-8 h-8 ${isCorrect ? 'text-green-500' : 'text-red-500'} mr-3"></i>
+                        <div>
+                            <p class="font-bold text-lg ${isCorrect ? 'text-green-800' : 'text-red-800'}">${isCorrect ? '정답입니다!' : '틀렸습니다!'}</p>
+                            ${!isCorrect ? `<p class="text-slate-600 mt-1">정답은 <span class="font-bold text-red-600">${currentQ.answer}</span> 입니다.</p>` : ''}
+                        </div>
+                    </div>
+                    <button id="btn-next-quiz-question" class="flex items-center px-6 py-3 rounded-xl font-bold text-white transition-colors ${isCorrect ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-700'}">
+                        다음 문제 <i data-lucide="arrow-right" class="w-5 h-5 ml-2"></i>
+                    </button>
+                `;
+                document.getElementById('btn-next-quiz-question').onclick = nextQuestion;
+                feedbackBox.classList.remove('hidden');
+            } else {
+                feedbackBox.classList.add('hidden');
+            }
+            lucide.createIcons();
+        }
+
+        function renderAdvQuestion() {
+            const currentQ = state.advQueue[state.currentAdvIndex];
+            document.getElementById('adv-progress-text').innerText = "문제 " + (state.currentAdvIndex + 1) + " / 10";
+            document.getElementById('adv-score-text').innerText = "점수: " + state.advScore;
+            document.getElementById('adv-question-text').innerHTML = currentQ.q;
+
+            const optionsBox = document.getElementById('adv-options-box');
+            optionsBox.innerHTML = currentQ.options.map(function(opt, idx) {
+                const isSelected = state.advSelectedAnswer === idx;
+                const isCorrect = currentQ.answerIndex === idx;
+
+                let btnStyle = "bg-white text-slate-900 border-slate-300 hover:bg-purple-50 hover:border-purple-400 font-medium";
+                if (state.advState !== 'playing') {
+                    if (isCorrect) btnStyle = "bg-green-100 text-green-950 border-green-500 font-bold shadow-sm";
+                    else if (isSelected) btnStyle = "bg-red-100 text-red-800 border-red-400 font-bold";
+                    else btnStyle = "bg-slate-100 text-slate-500 border-slate-200 cursor-not-allowed";
+                }
+
+                return `
+                    <button class="adv-option-btn w-full text-left p-4 rounded-xl border-2 transition-all ${btnStyle}" data-idx="${idx}" ${state.advState !== 'playing' ? 'disabled' : ''}>
+                        <span class="mr-2 font-extrabold text-indigo-600">${idx + 1}.</span> ${opt}
+                    </button>
+                `;
+            }).join('');
+
+            // 이벤트 바인딩
+            document.querySelectorAll('.adv-option-btn').forEach(function(btn) {
+                btn.onclick = function() {
+                    const idx = parseInt(this.getAttribute('data-idx'), 10);
+                    handleAdvAnswer(idx);
+                };
+            });
+
+            const feedbackBox = document.getElementById('adv-feedback-box');
+            const feedbackStatus = document.getElementById('adv-feedback-status');
+            if (state.advState !== 'playing') {
+                feedbackStatus.className = "font-extrabold text-lg " + (state.advState === 'correct' ? 'text-green-700' : 'text-red-700');
+                feedbackStatus.innerText = state.advState === 'correct' ? '정답입니다! 🎉' : '아쉽네요, 오답입니다.';
+                feedbackBox.classList.remove('hidden');
+            } else {
+                feedbackBox.classList.add('hidden');
+            }
+            lucide.createIcons();
+        }
+
+        function renderEvalQuestion() {
+            const currentQ = state.evalQueue[state.currentEvalIndex];
+            const infoStr = (state.studentInfo.grade || '_') + "학년 " + (state.studentInfo.classNum || '_') + "반 " + (state.studentInfo.studentNum || '_') + "번 " + state.studentInfo.name;
+            
+            document.getElementById('eval-student-badge').innerText = infoStr;
+            document.getElementById('eval-progress-text').innerText = "문항 " + (state.currentEvalIndex + 1) + " / " + state.evalQueue.length;
+            document.getElementById('eval-question-text').innerHTML = currentQ.q;
+
+            const optionsBox = document.getElementById('eval-options-box');
+            optionsBox.innerHTML = currentQ.options.map(function(opt, idx) {
+                const isSelected = state.evalSelectedAnswer === idx;
+                const isCorrect = currentQ.answerIndex === idx;
+
+                let btnStyle = "bg-white text-slate-900 border-slate-300 hover:bg-emerald-50 font-medium";
+                if (state.evalState !== 'playing') {
+                    if (isCorrect) btnStyle = "bg-green-100 text-green-950 border-green-500 font-bold shadow-sm";
+                    else if (isSelected) btnStyle = "bg-red-100 text-red-800 border-red-400 font-bold";
+                    else btnStyle = "bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed";
+                }
+
+                return `
+                    <button class="eval-option-btn w-full text-left p-4 rounded-xl border-2 transition-all ${btnStyle}" data-idx="${idx}" ${state.evalState !== 'playing' ? 'disabled' : ''}>
+                        <span class="mr-2 font-extrabold text-emerald-600">${idx + 1}.</span> ${opt}
+                    </button>
+                `;
+            }).join('');
+
+            // 이벤트 바인딩
+            document.querySelectorAll('.eval-option-btn').forEach(function(btn) {
+                btn.onclick = function() {
+                    const idx = parseInt(this.getAttribute('data-idx'), 10);
+                    handleEvalAnswer(idx);
+                };
+            });
+
+            const feedbackBox = document.getElementById('eval-feedback-box');
+            const feedbackStatus = document.getElementById('eval-feedback-status');
+            const rationaleText = document.getElementById('eval-rationale-text');
+
+            if (state.evalState !== 'playing') {
+                feedbackStatus.className = "font-extrabold text-sm " + (state.evalState === 'correct' ? 'text-green-700' : 'text-red-700');
+                feedbackStatus.innerText = state.evalState === 'correct' ? '정답입니다! 🎉' : '틀렸습니다.';
+                rationaleText.innerText = currentQ.rationale;
+                feedbackBox.classList.remove('hidden');
+            } else {
+                feedbackBox.classList.add('hidden');
+            }
+            lucide.createIcons();
+        }
+
+        function render() {
+            const syncStatusBox = document.getElementById('eval-sync-status-box');
+            const syncStatusText = document.getElementById('eval-sync-status-text');
+
+            if (syncStatusBox) {
+                if (state.isSubmitting) {
+                    syncStatusBox.classList.remove('hidden');
+                    syncStatusBox.className = "mt-4 p-3 bg-blue-50 text-blue-800 border border-blue-200 rounded-xl flex items-center justify-center gap-2";
+                    syncStatusText.innerHTML = '<div class="animate-spin rounded-full h-4 w-4 border-2 border-blue-800 border-t-transparent"></div> 성적을 스프레드시트 기록장으로 실시간 전송 중...';
+                } else if (state.submitStatus === 'success') {
+                    syncStatusBox.classList.remove('hidden');
+                    syncStatusBox.className = "mt-4 p-3 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-xl flex items-center justify-center gap-2";
+                    syncStatusText.innerHTML = '<i data-lucide="check-circle" class="w-4 h-4 text-emerald-600"></i> 구글 스프레드시트 기록장 전송 완료! 채점이 저장되었습니다.';
+                } else if (state.submitStatus === 'fail') {
+                    syncStatusBox.classList.remove('hidden');
+                    syncStatusBox.className = "mt-4 p-3 bg-red-50 text-red-800 border border-red-200 rounded-xl flex items-center justify-center gap-2";
+                    syncStatusText.innerHTML = '<i data-lucide="alert-triangle" class="w-4 h-4 text-red-600"></i> 클라우드 전송 실패! 전송 환경을 점검해 주세요.';
+                } else {
+                    syncStatusBox.classList.add('hidden');
+                }
+            }
+            lucide.createIcons();
+        }
+
+        // --- 초기 구동 시스템 탑재 및 이벤트 수동 위임 ---
+        window.onload = function() {
+            // 탭 버튼 바인딩
+            document.querySelectorAll('.tab-nav-btn').forEach(function(btn) {
+                btn.onclick = function() {
+                    const tab = this.getAttribute('data-tab');
+                    switchTab(tab);
+                };
+            });
+
+            // 1. 단어 퀴즈 세트 그리드 로드
+            const quizGrid = document.getElementById('quiz-set-grid');
+            quizGrid.innerHTML = Array.from({length: 10}, (_, i) => `
+                <button class="quiz-set-btn bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-indigo-400 hover:shadow-md transition-all flex flex-col items-center justify-center group" data-set="${i}">
+                    <div class="bg-indigo-100 text-indigo-600 w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl mb-3 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                        ${i + 1}
+                    </div>
+                    <span class="font-bold text-slate-700">세트 ${i + 1}</span>
+                </button>
+            `).join('');
+
+            // 이벤트 바인딩
+            document.querySelectorAll('.quiz-set-btn').forEach(function(btn) {
+                btn.onclick = function() {
+                    const setIndex = parseInt(this.getAttribute('data-set'), 10);
+                    startQuiz(setIndex);
+                };
+            });
+
+            // 2. 심화 학습 세트 그리드 로드
+            const advGrid = document.getElementById('adv-set-grid');
+            advGrid.innerHTML = Array.from({length: 5}, (_, i) => `
+                <button class="adv-set-btn bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-purple-400 hover:shadow-md transition-all flex flex-col items-center justify-center group" data-set="${i}">
+                    <div class="bg-purple-100 text-purple-600 w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl mb-3 group-hover:bg-purple-600 group-hover:text-white transition-colors">
+                        ${i + 1}
+                    </div>
+                    <span class="font-bold text-slate-700">심화 세트 ${i + 1}</span>
+                </button>
+            `).join('');
+
+            // 이벤트 바인딩
+            document.querySelectorAll('.adv-set-btn').forEach(function(btn) {
+                btn.onclick = function() {
+                    const setIndex = parseInt(this.getAttribute('data-set'), 10);
+                    startAdvancedQuiz(setIndex);
+                };
+            });
+
+            // 수동 제어 버튼 바인딩들
+            document.getElementById('btn-quiz-to-list').onclick = showSetSelection;
+            document.getElementById('btn-retry-quiz').onclick = retryQuiz;
+            document.getElementById('btn-quiz-other-set').onclick = showSetSelection;
+
+            document.getElementById('btn-adv-to-list').onclick = showAdvSetSelection;
+            document.getElementById('btn-next-adv').onclick = nextAdvQuestion;
+            document.getElementById('btn-retry-adv').onclick = retryAdvQuiz;
+            
+            // "다른 세트 선택" 버튼이 존재하는지 확인 후 바인딩 (에러 방지)
+            const btnAdvOtherSet = document.getElementById('btn-adv-other-set');
+            if(btnAdvOtherSet) {
+                btnAdvOtherSet.onclick = showAdvSetSelection;
+            }
+
+            document.getElementById('btn-start-eval').onclick = startEvaluationQuiz;
+            document.getElementById('btn-next-eval').onclick = nextEvalQuestion;
+            document.getElementById('btn-retry-eval').onclick = retryEvaluation;
+            document.getElementById('btn-eval-to-start').onclick = showEvalSelection;
+
+            selectFunction('체언');
+            lucide.createIcons();
+        };
+    </script>
+</body>
+</html>
