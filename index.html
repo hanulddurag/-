@@ -4,21 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>국어 품사 마스터 - 형성 평가 및 성적 연동 시스템</title>
+    <!-- CDN 스크립트 비동기 로딩을 허용하여 화면 막힘 방지 -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        /* 부드러운 탭 전환 애니메이션 */
+        /* 초기 즉각 표출용 로딩 스크린 */
+        #splash-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: #f8fafc;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            z-index: 9999; font-family: sans-serif;
+            transition: opacity 0.5s ease;
+        }
+        .spinner {
+            border: 5px solid rgba(79, 70, 229, 0.15);
+            border-left-color: #4f46e5;
+            border-radius: 50%;
+            width: 48px; height: 48px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 24px;
+        }
+        @keyframes spin { 
+            0% { transform: rotate(0deg); } 
+            100% { transform: rotate(360deg); } 
+        }
+        
+        #app-container { display: none; }
+
         .tab-content {
             display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
         }
         .tab-content.active {
             display: block;
+            opacity: 1;
         }
     </style>
 </head>
 <body class="min-h-screen bg-slate-50 text-slate-800 font-sans p-4 md:p-8">
     
-    <div class="max-w-5xl mx-auto">
+    <!-- 로딩 스크린 -->
+    <div id="splash-screen">
+        <div class="spinner"></div>
+        <h2 style="color: #4338ca; font-weight: 800; font-size: 1.25rem; margin: 0;">품사 마스터를 준비하고 있어요!</h2>
+        <p style="color: #64748b; font-size: 0.875rem; margin-top: 8px;">구글 클라우드와 연결 중입니다...</p>
+    </div>
+
+    <div id="app-container" class="max-w-5xl mx-auto">
         <!-- 상단 헤더 -->
         <header class="text-center mb-8">
             <h1 class="text-3xl font-extrabold text-indigo-700 mb-1">국어 품사 마스터</h1>
@@ -48,13 +83,9 @@
                     <h2 class="text-lg font-bold text-slate-700 mb-4 flex items-center">
                         <i data-lucide="info" class="w-5 h-5 mr-2 text-indigo-500"></i>기능에 따른 분류
                     </h2>
-                    <div class="space-y-3" id="learn-sidebar">
-                        <!-- JS로 동적 생성 -->
-                    </div>
+                    <div class="space-y-3" id="learn-sidebar"></div>
                 </div>
-                <div class="md:w-2/3 p-6 md:p-8" id="learn-main-content">
-                    <!-- JS로 동적 생성 -->
-                </div>
+                <div class="md:w-2/3 p-6 md:p-8" id="learn-main-content"></div>
             </div>
         </div>
 
@@ -65,9 +96,7 @@
                     <h2 class="text-2xl font-bold text-indigo-900 mb-2">도전할 단어 문제 세트를 선택하세요!</h2>
                     <p class="text-slate-600">중학생 필수 어휘 100개가 10문제씩 10개의 세트로 준비되어 있습니다.</p>
                 </div>
-                <div class="grid grid-cols-2 md:grid-cols-5 gap-4" id="quiz-set-grid">
-                    <!-- 세트 버튼 동적 생성 -->
-                </div>
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-4" id="quiz-set-grid"></div>
             </div>
 
             <div id="quiz-playing-view" class="max-w-2xl mx-auto hidden">
@@ -78,24 +107,14 @@
                 </div>
                 <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
                     <div class="bg-indigo-600 p-6 text-white text-center relative">
-                        <div class="absolute top-4 left-6 text-indigo-200 font-medium" id="quiz-progress-text">
-                            문제 1 / 10
-                        </div>
-                        <div class="absolute top-4 right-6 text-indigo-200 font-medium" id="quiz-score-text">
-                            점수: 0
-                        </div>
+                        <div class="absolute top-4 left-6 text-indigo-200 font-medium" id="quiz-progress-text">문제 1 / 10</div>
+                        <div class="absolute top-4 right-6 text-indigo-200 font-medium" id="quiz-score-text">점수: 0</div>
                         <h2 class="text-xl font-medium text-indigo-100 mt-6 mb-2" id="quiz-title-set">다음 단어의 품사는 무엇일까요?</h2>
-                        <div class="text-5xl font-extrabold py-8 tracking-wider" id="quiz-word-display">
-                            "하늘"
-                        </div>
+                        <div class="text-5xl font-extrabold py-8 tracking-wider" id="quiz-word-display">"하늘"</div>
                     </div>
                     <div class="p-8">
-                        <div class="grid grid-cols-3 gap-3 md:gap-4 mb-8" id="quiz-options-grid">
-                            <!-- 9품사 버튼 -->
-                        </div>
-                        <div id="quiz-feedback-box" class="hidden p-6 rounded-xl flex items-center justify-between">
-                            <!-- 피드백 내용 -->
-                        </div>
+                        <div class="grid grid-cols-3 gap-3 md:gap-4 mb-8" id="quiz-options-grid"></div>
+                        <div id="quiz-feedback-box" class="hidden p-6 rounded-xl flex items-center justify-between"></div>
                     </div>
                 </div>
             </div>
@@ -124,9 +143,7 @@
                     <h2 class="text-2xl font-bold text-purple-900 mb-2">심화 문제 세트를 선택하세요!</h2>
                     <p class="text-slate-600">중학교 품사 핵심 기출문제가 무작위로 10개씩 섞여서 출제됩니다.</p>
                 </div>
-                <div class="grid grid-cols-2 md:grid-cols-5 gap-4" id="adv-set-grid">
-                    <!-- 심화 세트 버튼 동적 생성 -->
-                </div>
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-4" id="adv-set-grid"></div>
             </div>
 
             <div id="adv-playing-view" class="max-w-3xl mx-auto hidden">
@@ -143,9 +160,7 @@
                         </div>
                         <h2 class="text-xl font-bold leading-relaxed" id="adv-question-text">질문 내용</h2>
                     </div>
-                    <div class="p-6 md:p-8 space-y-3" id="adv-options-box">
-                        <!-- 객관식 보기 -->
-                    </div>
+                    <div class="p-6 md:p-8 space-y-3" id="adv-options-box"></div>
                     <div id="adv-feedback-box" class="hidden p-6 bg-slate-50 border-t border-slate-100 flex justify-between items-center">
                         <div class="font-extrabold text-lg" id="adv-feedback-status">결과</div>
                         <button id="btn-next-adv" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-bold flex items-center transition-colors">
@@ -165,7 +180,6 @@
                         <div id="adv-final-progress-bar" class="bg-purple-500 h-4 rounded-full transition-all duration-1000" style="width: 0%"></div>
                     </div>
                     <div class="flex justify-center space-x-4">
-                        <!-- 누락되었던 버튼들을 올바르게 추가 -->
                         <button id="btn-retry-adv" class="bg-white border-2 border-purple-600 text-purple-600 hover:bg-purple-50 px-6 py-3 rounded-xl font-bold transition-colors">다시 풀기</button>
                         <button id="btn-adv-other-set" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-bold transition-colors">다른 세트 선택</button>
                     </div>
@@ -173,7 +187,7 @@
             </div>
         </div>
 
-        <!-- 4. 형성 평가 탭 (구글 스프레드시트 실시간 기록 연동) -->
+        <!-- 4. 형성 평가 탭 -->
         <div id="tab-evaluation" class="tab-content">
             <div id="eval-selecting-view" class="max-w-3xl mx-auto">
                 <div class="bg-emerald-50 rounded-2xl p-8 text-center mb-8 border border-emerald-100 shadow-sm">
@@ -216,9 +230,7 @@
                         </div>
                         <h2 class="text-lg font-bold leading-relaxed" id="eval-question-text">형성 평가 문항 내용</h2>
                     </div>
-                    <div class="p-6 space-y-3" id="eval-options-box">
-                        <!-- 보기 버튼 동적 생성 -->
-                    </div>
+                    <div class="p-6 space-y-3" id="eval-options-box"></div>
                     <div id="eval-feedback-box" class="hidden p-6 bg-slate-50 border-t border-slate-100">
                         <div class="flex justify-between items-center mb-2">
                             <span class="font-bold text-sm" id="eval-feedback-status">정답 확인</span>
@@ -240,7 +252,7 @@
                         <div id="eval-final-progress-bar" class="bg-emerald-500 h-4 rounded-full" style="width: 0%"></div>
                     </div>
 
-                    <!-- 구글 시트 연동 전송 중/성공 오버레이 피드백 박스 (동적 표출) -->
+                    <!-- 구글 시트 연동 전송 피드백 박스 -->
                     <div id="eval-sync-status-box" class="mt-4 p-3 bg-blue-50 text-blue-800 border border-blue-200 rounded-xl flex items-center justify-center gap-2 hidden">
                         <div class="animate-spin rounded-full h-4 w-4 border-2 border-blue-800 border-t-transparent"></div>
                         <span class="text-xs font-bold" id="eval-sync-status-text">성적 데이터를 구글 스프레드시트 기록장으로 실시간 전송 중...</span>
@@ -257,7 +269,6 @@
     </div>
 
     <script>
-        // 1. 품사 기초 정보 정의
         const POS_DATA = {
             체언: {
                 form: '불변어',
@@ -300,41 +311,29 @@
             }
         };
 
-        // 2. 단어 퀴즈 100개 데이터베이스 (10개씩 10세트 분량)
         const ALL_QUIZ_WORDS = [
-            // Set 1
             { word: '우주', answer: '명사' }, { word: '너희', answer: '대명사' }, { word: '하나', answer: '수사' }, { word: '새', answer: '관형사' }, { word: '과연', answer: '부사' },
             { word: '앗', answer: '감탄사' }, { word: '에서', answer: '조사' }, { word: '달리다', answer: '동사' }, { word: '예쁘다', answer: '형용사' }, { word: '평화', answer: '명사' },
-            // Set 2
             { word: '사회', answer: '명사' }, { word: '누구', answer: '대명사' }, { word: '둘', answer: '수사' }, { word: '헌', answer: '관형사' }, { word: '매우', answer: '부사' },
             { word: '어머나', answer: '감탄사' }, { word: '까지', answer: '조사' }, { word: '먹다', answer: '동사' }, { word: '높다', answer: '형용사' }, { word: '역사', answer: '명사' },
-            // Set 3
             { word: '문화', answer: '명사' }, { word: '우리', answer: '대명사' }, { word: '셋', answer: '수사' }, { word: '첫', answer: '관형사' }, { word: '빨리', answer: '부사' },
             { word: '야호', answer: '감탄사' }, { word: '부터', answer: '조사' }, { word: '읽다', answer: '동사' }, { word: '차갑다', answer: '형용사' }, { word: '과학', answer: '명사' },
-            // Set 4
             { word: '환경', answer: '명사' }, { word: '자기', answer: '대명사' }, { word: '넷', answer: '수사' }, { word: '옛', answer: '관형사' }, { word: '가장', answer: '부사' },
             { word: '네', answer: '감탄사' }, { word: '마저', answer: '조사' }, { word: '쓰다', answer: '동사' }, { word: '조용하다', answer: '형용사' }, { word: '생명', answer: '명사' },
-            // Set 5
             { word: '경제', answer: '명사' }, { word: '무엇', answer: '대명사' }, { word: '다섯', answer: '수사' }, { word: '모든', answer: '관형사' }, { word: '살짝', answer: '부사' },
             { word: '아니오', answer: '감탄사' }, { word: '조차', answer: '조사' }, { word: '듣다', answer: '동사' }, { word: '아름답다', answer: '형용사' }, { word: '정보', answer: '명사' },
-            // Set 6
             { word: '정치', answer: '명사' }, { word: '어디', answer: '대명사' }, { word: '여섯', answer: '수사' }, { word: '온갖', answer: '관형사' }, { word: '무척', answer: '부사' },
-            { word: '자', answer: '감탄사' }, { word: '밖에', answer: '조사' }, { word: '보다', border: '조사' }, { word: '둥글다', answer: '형용사' }, { word: '인권', answer: '명사' },
-            // Set 7
+            { word: '자', answer: '감탄사' }, { word: '밖에', answer: '조사' }, { word: '보다', answer: '동사' }, { word: '둥글다', answer: '형용사' }, { word: '인권', answer: '명사' },
             { word: '예술', answer: '명사' }, { word: '거기', answer: '대명사' }, { word: '일곱', answer: '수사' }, { word: '이', answer: '관형사' }, { word: '일찍', answer: '부사' },
             { word: '참', answer: '감탄사' }, { word: '만', answer: '조사' }, { word: '걷다', answer: '동사' }, { word: '파랗다', answer: '형용사' }, { word: '미래', answer: '명사' },
-            // Set 8
             { word: '가치', answer: '명사' }, { word: '저기', answer: '대명사' }, { word: '여덟', answer: '수사' }, { word: '그', answer: '관형사' }, { word: '가득', answer: '부사' },
             { word: '허허', answer: '감탄사' }, { word: '는', answer: '조사' }, { word: '웃다', answer: '동사' }, { word: '맑다', answer: '형용사' }, { word: '갈등', answer: '명사' },
-            // Set 9
             { word: '책임', answer: '명사' }, { word: '여기', answer: '대명사' }, { word: '아홉', answer: '수사' }, { word: '저', answer: '관형사' }, { word: '안', answer: '부사' },
             { word: '아이구', answer: '감탄사' }, { word: '가', answer: '조사' }, { word: '울다', answer: '동사' }, { word: '깊다', answer: '형용사' }, { word: '윤리', answer: '명사' },
-            // Set 10
             { word: '자유', answer: '명사' }, { word: '당신', answer: '대명사' }, { word: '열', answer: '수사' }, { word: '무슨', answer: '관형사' }, { word: '못', answer: '부사' },
             { word: '에구', answer: '감탄사' }, { word: '를', answer: '조사' }, { word: '서다', answer: '동사' }, { word: '험난하다', answer: '형용사' }, { word: '평등', answer: '명사' }
         ];
 
-        // 3. 심화 학습 기출문제 15개 데이터베이스
         const ADVANCED_QUESTIONS = [
             {
                 q: '품사에 대한 설명으로 적절하지 않은 것은?',
@@ -372,7 +371,7 @@
                 answerIndex: 3 
             },
             {
-                q: '밑줄 친 단어의 품로 적절하지 않은 것은?',
+                q: '밑줄 친 단어의 품사로 적절하지 않은 것은?',
                 options: ['강아지가 꼬리를 <span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">살랑살랑</span> 흔든다. → 부사', '너는 <span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">어떤</span> 날씨를 가장 좋아하니? → 관형사', '우리는 밥을 아주 <span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">천천히</span> 먹고 돌아왔다. → 부사', '<span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">모든</span> 사람들이 집 밖에 나와서 눈을 치웠다. → 관형사', '천천히 호흡을 가다듬으면서 발표를 <span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">기다렸다</span>. → 관형사'],
                 answerIndex: 4 
             },
@@ -413,24 +412,22 @@
             }
         ];
 
-        // 3. 형성 평가 9개 문제 데이터 (밑줄 강조 정밀 보정 버전)
         const EVALUATION_QUESTIONS = [
-            { id: 1, q: "1. 다음 중 품사를 바르게 분류한 것은?", options: ["독립언: 조사", "관계언: 감탄사", "용언: 관형사, 부사", "수식언: 동사, 형용사", "체언: 명사, 대명사, 수사"], answerIndex: 4, rationale: "명사, 대명사, 수사는 주어나 목적어 자리에 쓰이며 조사가 결합할 수 있는 '체언'에 해당합니다." },
+            { id: 1, q: "1. 다음 중 품사를 바르게 분류한 것은?", options: ["독립언: 조사", "관계언: 감탄사", "용언: 관형사, 부사", "수식언: 동사, 형용사", "체언: 명사, 대명사, 수사"], answerIndex: 4, rationale: "명사, 대명사, 수사는 문장에서 몸통 역할을 하며 조사와 결합하는 '체언'의 종류가 맞습니다." },
             { id: 2, q: "2. &lt;보기&gt;의 단어들을 문장에서 하는 역할(기능)이 같은 것끼리 적절하게 묶은 것은?<br/><br/><div class='bg-slate-100 p-3 rounded font-semibold text-slate-800 text-center'>&lt;보기&gt;<br/>어느, 꿈, 이것, 어머나, 예쁘다, 뜨겁다, 흐르다, 얼마나</div>", options: ["어느, 꿈, 이것", "어머나, 얼마나", "꿈, 이것, 어머나", "예쁘다, 뜨겁다, 흐르다", "어머나, 예쁘다, 뜨겁다"], answerIndex: 3, rationale: "'예쁘다', '뜨겁다'(형용사), '흐르다'(동사)는 모두 문장에서 서술어로 쓰이는 '용언'에 해당합니다." },
-            { id: 3, q: "3. 밑줄 친 단어 중 '체언(명사, 대명사, 수사)'이 아닌 것은?", options: ["할아버지, <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded'>이것</span>은 뭐예요?", "동생이 바닥에 <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded'>구슬</span>을 떨어뜨렸다.", "<span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded'>그</span> 사람은 형과 같은 학교를 졸업했다.", "요리를 할 때에는 <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded'>첫째</span>, 손을 깨끗이 씻어야 한다.", "<span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded'>우리</span> 허락 없이는 절대 이 마을을 통과할 수 없다."], answerIndex: 2, rationale: "3번 보기의 '그'는 뒤의 명사 '사람'을 꾸며 주는 지시 관형사(수식언)이므로 체언이 아닙니다." },
+            { id: 3, q: "3. 밑줄 친 단어 중 '체언(명사, 대명사, 수사)'이 아닌 것은?", options: ["할아버지, <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>이것</span>은 뭐예요?", "동생이 바닥에 <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>구슬</span>을 떨어뜨렸다.", "<span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>그</span> 사람은 형과 같은 학교를 졸업했다.", "요리를 할 때에는 <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>첫째</span>, 손을 깨끗이 씻어야 한다.", "<span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>우리</span> 허락 없이는 절대 이 마을을 통과할 수 없다."], answerIndex: 2, rationale: "3번 보기의 '그'는 뒤의 명사 '사람'을 꾸며 주는 지시 관형사(수식언)이므로 체언이 아닙니다." },
             { id: 4, q: "4. &lt;보기&gt;의 문장에 사용된 단어에 대한 설명으로 가장 적절한 것은?<br/><br/><div class='bg-slate-100 p-3 rounded font-semibold text-slate-800 text-center'>&lt;보기&gt;<br/>네, 그는 친구를 두루 넓게 사귑니다.</div>", options: ["형태가 변하는 말은 1개이다.", "기능을 기준으로 4개의 품사가 쓰였다.", "의미를 기준으로 8개의 품사가 쓰였다.", "다른 말과의 관계를 나타내는 역할을 하는 품사는 3개이다.", "사용된 단어 중 1개는 생략해도 문장의 뜻이 달라지지 않는다."], answerIndex: 4, rationale: "감탄사 '네'는 독립언으로, 문장에서 생략해도 문장 전체의 기본적인 의미 전달에 큰 영향을 주지 않습니다." },
-            { id: 5, q: "5. &lt;보기&gt;의 밑줄 친 단어의 공통점으로 적절한 것은?<br/><br/><div class='bg-slate-100 p-3 rounded font-semibold text-slate-800 text-center'>&lt;보기&gt;<br/>산 정상에 <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded'>도착하니</span> 기분이 <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded'>상쾌했다</span>.</div>", options: ["다른 말과의 관계를 나타낸다.", "쓰임에 따라 문장에서 형태가 변한다.", "사람이나 사물의 상태나 성질만 나타낸다.", "사람이나 사물의 움직임이나 작용만 나타낸다.", "명령형 어미, 청유형 어미, 현재형 어미와 모두 결합할 수 있다."], answerIndex: 1, rationale: "'도착하다'(동사)와 '상쾌하다'(형용사)는 모두 가변어(용언)에 속하므로 쓰임에 따라 문장에서 형태가 어미 변화를 통해 유연하게 변합니다." },
-            { id: 6, q: "6. &lt;보기&gt;의 밑줄 친 단어와 품사가 같은 것은?<br/><br/><div class='bg-slate-100 p-3 rounded font-semibold text-slate-800 text-center'>&lt;보기&gt;<br/>우리는 <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded'>새</span> 옷을 무척 좋아한다.</div>", options: ["이 기차는 부산으로 간다.", "드디어 오늘이 내 생일이다.", "너는 어떤 음식을 가장 좋아하니?", "그들은 사진을 보면서 옛 추억에 잠겼다.", "나는 헌 신발을 신고도 운동장을 열심히 달렸다."], answerIndex: 3, rationale: "보기의 '새'는 명사 '옷'을 꾸며 주는 '관형사'입니다. 4번의 '옛'도 명사 '추억'을 꾸며 주는 '관형사'에 해당합니다." },
-            { id: 7, q: "7. 밑줄 친 단어가 감탄사가 아닌 것은?", options: ["<span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded'>어머</span>! 마법을 풀러 온 거야?", "<span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded'>에헴</span>, 이 문장에서 나를 찾아봐.", "<span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded'>그래</span>, 네가 원하는 대로 해 줄게.", "<span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded'>마법</span>, 그건 어떻게 풀어야 하는 거야?", "<span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded'>이봐</span>, 네가 문제를 풀 때마다 내가 감탄 조각을 줄게."], answerIndex: 3, rationale: "4번의 '마법'은 대상의 이름을 가리키는 일반 '명사'입니다. 문장 앞머리에서 화제로 강조되었을 뿐 감탄사가 아닙니다." },
-            { id: 8, q: "8. 밑줄 친 단어 중 문장에서 형태가 변하지 않는 단어(불변어)는?", options: ["이 기차는 부산으로 <span class='bg-indigo-100 text-indigo-950 font-extrabold px-1.5 rounded'>간다</span>.", "우리 강아지는 털이 <span class='bg-indigo-100 text-indigo-950 font-extrabold px-1.5 rounded'>하얗다</span>.", "동생이 방에서 깔깔대며 <span class='bg-indigo-100 text-indigo-950 font-extrabold px-1.5 rounded'>웃었다</span>.", "사람은 한 번쯤 <span class='bg-indigo-100 text-indigo-950 font-extrabold px-1.5 rounded'>실수</span>를 하기 마련이다.", "담장 아래에 <span class='bg-indigo-100 text-indigo-950 font-extrabold px-1.5 rounded'>핀</span> 꽃을 보았다."], answerIndex: 3, rationale: "'실수'는 명사(체언)에 속하므로 문장에서 형태가 절대 변하지 않는 불변어입니다." },
+            { id: 5, q: "5. &lt;보기&gt;의 밑줄 친 단어의 공통점으로 적절한 것은?<br/><br/>&lt;보기&gt;<br/>산 정상에 <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>도착하니</span> 기분이 <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>상쾌했다</span>.</div>", options: ["다른 말과의 관계를 나타낸다.", "쓰임에 따라 문장에서 형태가 변한다.", "사람이나 사물의 상태나 성질만 나타낸다.", "사람이나 사물의 움직임이나 작용만 나타낸다.", "명령형 어미, 청유형 어미, 현재형 어미와 모두 결합할 수 있다."], answerIndex: 1, rationale: "'도착하다'(동사)와 '상쾌하다'(형용사)는 모두 가변어(용언)에 속하므로 쓰임에 따라 문장에서 형태가 어미 변화를 통해 유연하게 변합니다." },
+            { id: 6, q: "6. &lt;보기&gt;의 밑줄 친 단어와 '품사(의미 기준)'가 같은 단어가 사용된 문장은 어느 것일까요?<br/><br/>&lt;보기&gt;<br/>우리는 <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>새</span> 옷을 무척 좋아한다.", options: ["이 기차는 부산으로 <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>간다</span>.", "<span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>드디어</span> 오늘이 내 생일이다.", "너는 어떤 음식을 <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>가장</span> 좋아하니?", "그들은 사진을 보면서 <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>옛</span> 추억에 잠겼다.", "나는 헌 신발을 신고도 운동장을 <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>열심히</span> 달렸다."], answerIndex: 3, rationale: "보기의 '새'와 4번의 '옛'은 모두 명사(체언)를 꾸며주는 '관형사'입니다. (1번 '간다'는 동사, 2번 '드디어', 3번 '가장', 5번 '열심히'는 부사입니다.)" },
+            { id: 7, q: "7. 밑줄 친 단어가 감탄사가 아닌 것은?", options: ["<span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>어머</span>! 마법을 풀러 온 거야?", "<span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>에헴</span>, 이 문장에서 나를 찾아봐.", "<span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>그래</span>, 네가 원하는 대로 해 줄게.", "<span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>마법</span>, 그건 어떻게 풀어야 하는 거야?", "<span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>이봐</span>, 네가 문제를 풀 때마다 내가 감탄 조각을 줄게."], answerIndex: 3, rationale: "4번의 '마법'은 대상의 이름을 가리키는 일반 '명사'입니다. 문장 앞머리에서 화제로 강조되었을 뿐 감탄사가 아닙니다." },
+            { id: 8, q: "8. 밑줄 친 단어 중 문장에서 형태가 변하지 않는 단어(불변어)는?", options: ["이 기차는 부산으로 <span class='bg-indigo-100 text-indigo-950 font-extrabold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>간다</span>.", "우리 강아지는 털이 <span class='bg-indigo-100 text-indigo-950 font-extrabold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>하얗다</span>.", "동생이 방에서 깔깔대며 <span class='bg-indigo-100 text-indigo-950 font-extrabold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>웃었다</span>.", "사람은 한 번쯤 <span class='bg-indigo-100 text-indigo-950 font-extrabold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>실수</span>를 하기 마련이다.", "담장 아래에 <span class='bg-indigo-100 text-indigo-950 font-extrabold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>핀</span> 꽃을 보았다."], answerIndex: 3, rationale: "'실수'는 명사(체언)에 속하므로 문장에서 형태가 절대 변하지 않는 불변어입니다." },
             { id: 9, q: "9. 조사에 대한 설명으로 적절하지 않은 것은?", options: ["문장에서 단독으로 쓰일 수 없다.", "앞말과 쉽게 분리되는 성질이 있다.", "다른 말과의 관계를 나타내는 역할을 한다.", "모든 조사는 문장에서 쓰일 때 형태가 변하지 않는다.", "주로 체언 뒤에 붙어서 그 말과 다른 말과의 문법적 관계를 나타낸다."], answerIndex: 3, rationale: "서술격 조사 '이다'는 '이고', '이니', '이면'처럼 용언처럼 형태가 변하는 활용을 하기 때문에, 모든 조사의 형태가 변하지 않는다는 설명은 적절하지 않습니다." }
         ];
 
         const ALL_9_POS = ['명사', '대명사', '수사', '관형사', '부사', '감탄사', '조사', '동사', '형용사'];
 
-        // 4. 전역 애플리케이션 상태 제어부
         let state = {
-            activeTab: 'learn', // learn, quiz, advanced, evaluation
+            activeTab: 'learn',
             selectedFunction: '체언',
             studentInfo: { grade: '', classNum: '', studentNum: '', name: '' },
             quizQueue: [], currentQuizIndex: 0, score: 0, quizState: 'selecting_set', selectedAnswer: '', currentSet: 0,
@@ -438,19 +435,16 @@
             evalQueue: [], currentEvalIndex: 0, evalScore: 0, evalState: 'selecting_set', evalSelectedAnswer: null,
             evalAnswersRecord: [],
             isSubmitting: false,
-            submitStatus: '' // 'success', 'fail'
+            submitStatus: ''
         };
 
-        // --- 구글 시트 웹페이지 배포 전용 서버 통신 연동 함수 ---
-        // Apps Script 배포 환경에서 실행되므로 외부 WEB_APP_URL 변수 없이
-        // google.script.run API를 통하여 구글 서버 측 스프레드시트 기록장 함수를 다이렉트로 호출합니다.
         function sendDataToGoogleSheet() {
             if (typeof google !== 'undefined' && google.script && google.script.run) {
                 state.isSubmitting = true;
                 state.submitStatus = 'sending';
                 render();
 
-                // 가공할 성적부 기록용 페이로드 바인딩
+                // 프론트엔드에서 학생이 선택한 버튼 번호(1~5번)를 추출하여 페이로드에 바인딩
                 const payload = {
                     timestamp: new Date().toLocaleString("ko-KR"),
                     grade: state.studentInfo.grade,
@@ -460,27 +454,34 @@
                     score: state.evalScore + " / " + state.evalQueue.length,
                     percentage: Math.round((state.evalScore / state.evalQueue.length) * 100) + "%",
                     
-                    q1_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 1; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 1; }).selectedOption : '',
+                    q1_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 1; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 1; }).selectedOptionIndex : '',
                     q1_result: state.evalAnswersRecord.find(function(r) { return r.questionId === 1; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 1; }).isCorrect : '',
-                    q2_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 2; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 2; }).selectedOption : '',
+                    
+                    q2_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 2; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 2; }).selectedOptionIndex : '',
                     q2_result: state.evalAnswersRecord.find(function(r) { return r.questionId === 2; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 2; }).isCorrect : '',
-                    q3_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 3; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 3; }).selectedOption : '',
+                    
+                    q3_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 3; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 3; }).selectedOptionIndex : '',
                     q3_result: state.evalAnswersRecord.find(function(r) { return r.questionId === 3; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 3; }).isCorrect : '',
-                    q4_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 4; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 4; }).selectedOption : '',
+                    
+                    q4_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 4; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 4; }).selectedOptionIndex : '',
                     q4_result: state.evalAnswersRecord.find(function(r) { return r.questionId === 4; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 4; }).isCorrect : '',
-                    q5_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 5; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 5; }).selectedOption : '',
+                    
+                    q5_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 5; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 5; }).selectedOptionIndex : '',
                     q5_result: state.evalAnswersRecord.find(function(r) { return r.questionId === 5; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 5; }).isCorrect : '',
-                    q6_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 6; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 6; }).selectedOption : '',
+                    
+                    q6_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 6; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 6; }).selectedOptionIndex : '',
                     q6_result: state.evalAnswersRecord.find(function(r) { return r.questionId === 6; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 6; }).isCorrect : '',
-                    q7_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 7; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 7; }).selectedOption : '',
+                    
+                    q7_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 7; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 7; }).selectedOptionIndex : '',
                     q7_result: state.evalAnswersRecord.find(function(r) { return r.questionId === 7; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 7; }).isCorrect : '',
-                    q8_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 8; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 8; }).selectedOption : '',
+                    
+                    q8_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 8; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 8; }).selectedOptionIndex : '',
                     q8_result: state.evalAnswersRecord.find(function(r) { return r.questionId === 8; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 8; }).isCorrect : '',
-                    q9_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 9; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 9; }).selectedOption : '',
+                    
+                    q9_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 9; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 9; }).selectedOptionIndex : '',
                     q9_result: state.evalAnswersRecord.find(function(r) { return r.questionId === 9; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 9; }).isCorrect : ''
                 };
 
-                // Apps Script 백엔드 함수 'recordEvaluationResult' 호출 연동 실행
                 google.script.run
                     .withSuccessHandler(function() {
                         state.isSubmitting = false;
@@ -502,8 +503,7 @@
             }
         }
 
-        // --- 탭 및 이벤트 핸들러 바인딩 ---
-        window.switchTab = function(tab) {
+        function switchTab(tab) {
             state.activeTab = tab;
             document.querySelectorAll('.tab-nav-btn').forEach(function(btn) {
                 btn.className = 'tab-nav-btn px-5 py-2.5 rounded-full font-semibold transition-all bg-white text-slate-600 hover:bg-indigo-50';
@@ -523,19 +523,25 @@
             const activeContent = document.getElementById('tab-' + tab);
             if (activeContent) activeContent.classList.add('active');
 
-            if (tab === 'quiz' && (state.quizState === 'finished' || state.quizQueue.length === 0)) state.quizState = 'selecting_set';
-            if (tab === 'advanced' && (state.advState === 'finished' || state.advQueue.length === 0)) state.advState = 'selecting_set';
-            if (tab === 'evaluation' && state.evalState === 'finished') state.evalState = 'selecting_set';
+            if (tab === 'quiz' && (state.quizState === 'finished' || state.quizQueue.length === 0)) {
+                showSetSelection();
+            }
+            if (tab === 'advanced' && (state.advState === 'finished' || state.advQueue.length === 0)) {
+                showAdvSetSelection();
+            }
+            if (tab === 'evaluation' && state.evalState === 'finished') {
+                showEvalSelection();
+            }
 
             render();
-        };
+        }
 
-        window.selectFunction = function(func) {
+        function selectFunction(func) {
             state.selectedFunction = func;
             renderLearnContent();
-        };
+        }
 
-        window.startQuiz = function(setIndex) {
+        function startQuiz(setIndex) {
             const startIndex = setIndex * 10;
             const setWords = ALL_QUIZ_WORDS.slice(startIndex, startIndex + 10);
             state.quizQueue = [].concat(setWords).sort(function() { return 0.5 - Math.random(); });
@@ -550,9 +556,9 @@
             document.getElementById('quiz-finished-view').classList.add('hidden');
             
             renderQuizQuestion();
-        };
+        }
 
-        window.handleAnswer = function(pos) {
+        function handleAnswer(pos) {
             if (state.quizState !== 'playing') return;
             state.selectedAnswer = pos;
             
@@ -566,9 +572,9 @@
                 state.quizState = 'incorrect';
             }
             renderQuizQuestion();
-        };
+        }
 
-        window.nextQuestion = function() {
+        function nextQuestion() {
             if (state.currentQuizIndex < state.quizQueue.length - 1) {
                 state.currentQuizIndex++;
                 state.quizState = 'playing';
@@ -581,20 +587,20 @@
                 document.getElementById('quiz-final-score').innerText = state.score;
                 document.getElementById('quiz-final-progress-bar').style.width = (state.score * 10) + '%';
             }
-        };
+        }
 
-        window.showSetSelection = function() {
+        function showSetSelection() {
             state.quizState = 'selecting_set';
             document.getElementById('quiz-selecting-view').classList.remove('hidden');
             document.getElementById('quiz-playing-view').classList.add('hidden');
             document.getElementById('quiz-finished-view').classList.add('hidden');
-        };
+        }
 
-        window.retryQuiz = function() {
+        function retryQuiz() {
             startQuiz(state.currentSet);
-        };
+        }
 
-        window.startAdvancedQuiz = function(setIndex) {
+        function startAdvancedQuiz(setIndex) {
             const shuffled = [].concat(ADVANCED_QUESTIONS).sort(function() { return 0.5 - Math.random(); }).slice(0, 10);
             state.advQueue = shuffled;
             state.advCurrentSet = setIndex;
@@ -608,9 +614,9 @@
             document.getElementById('adv-finished-view').classList.add('hidden');
 
             renderAdvQuestion();
-        };
+        }
 
-        window.handleAdvAnswer = function(optionIndex) {
+        function handleAdvAnswer(optionIndex) {
             if (state.advState !== 'playing') return;
             state.advSelectedAnswer = optionIndex;
             
@@ -624,9 +630,9 @@
                 state.advState = 'incorrect';
             }
             renderAdvQuestion();
-        };
+        }
 
-        window.nextAdvQuestion = function() {
+        function nextAdvQuestion() {
             if (state.currentAdvIndex < state.advQueue.length - 1) {
                 state.currentAdvIndex++;
                 state.advState = 'playing';
@@ -639,20 +645,20 @@
                 document.getElementById('adv-final-score').innerText = state.advScore;
                 document.getElementById('adv-final-progress-bar').style.width = (state.advScore * 10) + '%';
             }
-        };
+        }
 
-        window.showAdvSetSelection = function() {
+        function showAdvSetSelection() {
             state.advState = 'selecting_set';
             document.getElementById('adv-selecting-view').classList.remove('hidden');
             document.getElementById('adv-playing-view').classList.add('hidden');
             document.getElementById('adv-finished-view').classList.add('hidden');
-        };
+        }
 
-        window.retryAdvQuiz = function() {
+        function retryAdvQuiz() {
             startAdvancedQuiz(state.advCurrentSet);
-        };
+        }
 
-        window.startEvaluationQuiz = function() {
+        function startEvaluationQuiz() {
             const gradeInput = document.getElementById('info-grade');
             const classInput = document.getElementById('info-class');
             const numInput = document.getElementById('info-num');
@@ -681,9 +687,9 @@
             document.getElementById('eval-finished-view').classList.add('hidden');
 
             renderEvalQuestion();
-        };
+        }
 
-        window.handleEvalAnswer = function(optionIndex) {
+        function handleEvalAnswer(optionIndex) {
             if (state.evalState !== 'playing') return;
             state.evalSelectedAnswer = optionIndex;
             
@@ -693,6 +699,7 @@
             state.evalAnswersRecord.push({
                 questionId: currentQ.id,
                 selectedOption: currentQ.options[optionIndex],
+                selectedOptionIndex: optionIndex + 1, // 학생이 누른 버튼의 순서 번호(1~5) 저장
                 isCorrect: isCorrect ? "O" : "X"
             });
 
@@ -703,9 +710,9 @@
                 state.evalState = 'incorrect';
             }
             renderEvalQuestion();
-        };
+        }
 
-        window.nextEvalQuestion = function() {
+        function nextEvalQuestion() {
             if (state.currentEvalIndex < state.evalQueue.length - 1) {
                 state.currentEvalIndex++;
                 state.evalState = 'playing';
@@ -723,20 +730,19 @@
 
                 sendDataToGoogleSheet();
             }
-        };
+        }
 
-        window.showEvalSelection = function() {
+        function showEvalSelection() {
             state.evalState = 'selecting_set';
             document.getElementById('eval-selecting-view').classList.remove('hidden');
             document.getElementById('eval-playing-view').classList.add('hidden');
             document.getElementById('eval-finished-view').classList.add('hidden');
-        };
+        }
 
-        window.retryEvaluation = function() {
+        function retryEvaluation() {
             startEvaluationQuiz();
-        };
+        }
 
-        // --- 동적 렌더링 헬퍼 ---
         function renderLearnContent() {
             const sidebar = document.getElementById('learn-sidebar');
             sidebar.innerHTML = Object.keys(POS_DATA).map(function(func) {
@@ -751,7 +757,6 @@
                 `;
             }).join('');
 
-            // 이벤트 바인딩
             document.querySelectorAll('.learn-sidebar-btn').forEach(function(btn) {
                 btn.onclick = function() {
                     const func = this.getAttribute('data-func');
@@ -812,7 +817,6 @@
                 `;
             }).join('');
 
-            // 이벤트 바인딩
             document.querySelectorAll('.quiz-option-btn').forEach(function(btn) {
                 btn.onclick = function() {
                     const pos = this.getAttribute('data-pos');
@@ -869,7 +873,6 @@
                 `;
             }).join('');
 
-            // 이벤트 바인딩
             document.querySelectorAll('.adv-option-btn').forEach(function(btn) {
                 btn.onclick = function() {
                     const idx = parseInt(this.getAttribute('data-idx'), 10);
@@ -916,7 +919,6 @@
                 `;
             }).join('');
 
-            // 이벤트 바인딩
             document.querySelectorAll('.eval-option-btn').forEach(function(btn) {
                 btn.onclick = function() {
                     const idx = parseInt(this.getAttribute('data-idx'), 10);
@@ -963,9 +965,14 @@
             lucide.createIcons();
         }
 
-        // --- 초기 구동 시스템 탑재 및 이벤트 수동 위임 ---
         window.onload = function() {
-            // 탭 버튼 바인딩
+            setTimeout(function() {
+                const splash = document.getElementById('splash-screen');
+                splash.style.opacity = '0';
+                document.getElementById('app-container').style.display = 'block';
+                setTimeout(function() { splash.style.display = 'none'; }, 500);
+            }, 100);
+
             document.querySelectorAll('.tab-nav-btn').forEach(function(btn) {
                 btn.onclick = function() {
                     const tab = this.getAttribute('data-tab');
@@ -973,7 +980,6 @@
                 };
             });
 
-            // 1. 단어 퀴즈 세트 그리드 로드
             const quizGrid = document.getElementById('quiz-set-grid');
             quizGrid.innerHTML = Array.from({length: 10}, (_, i) => `
                 <button class="quiz-set-btn bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-indigo-400 hover:shadow-md transition-all flex flex-col items-center justify-center group" data-set="${i}">
@@ -984,7 +990,6 @@
                 </button>
             `).join('');
 
-            // 이벤트 바인딩
             document.querySelectorAll('.quiz-set-btn').forEach(function(btn) {
                 btn.onclick = function() {
                     const setIndex = parseInt(this.getAttribute('data-set'), 10);
@@ -992,7 +997,6 @@
                 };
             });
 
-            // 2. 심화 학습 세트 그리드 로드
             const advGrid = document.getElementById('adv-set-grid');
             advGrid.innerHTML = Array.from({length: 5}, (_, i) => `
                 <button class="adv-set-btn bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-purple-400 hover:shadow-md transition-all flex flex-col items-center justify-center group" data-set="${i}">
@@ -1003,7 +1007,6 @@
                 </button>
             `).join('');
 
-            // 이벤트 바인딩
             document.querySelectorAll('.adv-set-btn').forEach(function(btn) {
                 btn.onclick = function() {
                     const setIndex = parseInt(this.getAttribute('data-set'), 10);
@@ -1011,7 +1014,6 @@
                 };
             });
 
-            // 수동 제어 버튼 바인딩들
             document.getElementById('btn-quiz-to-list').onclick = showSetSelection;
             document.getElementById('btn-retry-quiz').onclick = retryQuiz;
             document.getElementById('btn-quiz-other-set').onclick = showSetSelection;
@@ -1020,7 +1022,6 @@
             document.getElementById('btn-next-adv').onclick = nextAdvQuestion;
             document.getElementById('btn-retry-adv').onclick = retryAdvQuiz;
             
-            // "다른 세트 선택" 버튼이 존재하는지 확인 후 바인딩 (에러 방지)
             const btnAdvOtherSet = document.getElementById('btn-adv-other-set');
             if(btnAdvOtherSet) {
                 btnAdvOtherSet.onclick = showAdvSetSelection;
