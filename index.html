@@ -42,9 +42,31 @@
             display: block;
             opacity: 1;
         }
+
+        /* 팝업 설명 박스 애니메이션 */
+        .fade-in {
+            animation: fadeIn 0.4s ease-in-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* 설명 텍스트 정렬을 위한 유틸리티 클래스 */
+        .desc-list-item {
+            display: flex;
+            margin-bottom: 0.5rem;
+        }
+        .desc-list-bullet {
+            margin-right: 0.5rem;
+            flex-shrink: 0;
+        }
+        .desc-list-text {
+            flex-grow: 1;
+        }
     </style>
 </head>
-<body class="min-h-screen bg-slate-50 text-slate-800 font-sans p-4 md:p-8">
+<body class="min-h-screen bg-slate-50 text-slate-800 font-sans p-4 md:p-8 font-medium">
     
     <!-- 로딩 스크린 -->
     <div id="splash-screen">
@@ -66,7 +88,7 @@
                 학습하기
             </button>
             <button id="tab-btn-quiz" data-tab="quiz" class="tab-nav-btn px-5 py-2.5 rounded-full font-semibold transition-all bg-white text-slate-600 hover:bg-indigo-50">
-                단어 퀴즈
+                단어 슈팅
             </button>
             <button id="tab-btn-advanced" data-tab="advanced" class="tab-nav-btn px-5 py-2.5 rounded-full font-semibold transition-all bg-white text-slate-600 hover:bg-indigo-50">
                 심화 학습
@@ -78,59 +100,227 @@
 
         <!-- 1. 학습하기 탭 -->
         <div id="tab-learn" class="tab-content active">
-            <div class="flex flex-col md:flex-row bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
-                <div class="md:w-1/3 bg-slate-50 p-6 border-r border-slate-100">
-                    <h2 class="text-lg font-bold text-slate-700 mb-4 flex items-center">
-                        <i data-lucide="info" class="w-5 h-5 mr-2 text-indigo-500"></i>기능에 따른 분류
+            
+            <!-- (1) 개념 섹션 -->
+            <div class="bg-white rounded-2xl shadow-xl p-8 border border-slate-100 mb-8 flex flex-col gap-8">
+                <!-- 품사의 뜻 -->
+                <div class="bg-indigo-50 p-6 rounded-xl border border-indigo-100 shadow-sm flex flex-col justify-center">
+                    <h2 class="text-2xl font-extrabold text-indigo-900 mb-4 flex items-center border-b pb-3 border-indigo-200">
+                        <span class="text-2xl mr-2">💡</span> 품사의 뜻
                     </h2>
-                    <div class="space-y-3" id="learn-sidebar"></div>
+                    <p class="text-slate-800 font-bold text-lg leading-relaxed">
+                        성질이 비슷한 단어들을 일정한 기준에 따라 갈래를 지어 놓은 것
+                    </p>
                 </div>
-                <div class="md:w-2/3 p-6 md:p-8" id="learn-main-content"></div>
+                
+                <!-- 품사 분류 기준 -->
+                <div>
+                    <h2 class="text-2xl font-extrabold text-slate-800 mb-4 flex items-center border-b pb-3 border-slate-100">
+                        <span class="text-2xl mr-2">💡</span> 품사 분류 기준
+                    </h2>
+                    <div class="flex flex-col gap-3">
+                        <div class="border border-slate-200 p-4 rounded-xl bg-slate-50 flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
+                            <div class="font-black text-lg text-blue-600 md:w-40 shrink-0 text-center flex flex-col">
+                                <span class="text-xl">형태</span>
+                                <span class="text-lg font-bold">(모양 변화 여부)</span>
+                            </div>
+                            <p class="text-base text-slate-700 font-semibold leading-relaxed">
+                                문장 속에서 단어가 쓰일 때 형태의 변함 여부에 따른 구획 방식 (가변어, 불변어)
+                            </p>
+                        </div>
+                        <div class="border border-slate-200 p-4 rounded-xl bg-slate-50 flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
+                            <div class="font-black text-lg text-emerald-600 md:w-40 shrink-0 text-center flex flex-col">
+                                <span class="text-xl">기능</span>
+                                <span class="text-lg font-bold">(문장 속 역할)</span>
+                            </div>
+                            <p class="text-base text-slate-700 font-semibold leading-relaxed">
+                                단어가 문장 안에서 다른 단어와 맺는 문법적 역할에 따른 구획 방식 (체언, 수식언, 독립언, 관계언, 용언)
+                            </p>
+                        </div>
+                        <div class="border border-slate-200 p-4 rounded-xl bg-slate-50 flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
+                            <div class="font-black text-lg text-amber-600 md:w-40 shrink-0 text-center flex flex-col">
+                                <span class="text-xl">의미</span>
+                                <span class="text-lg font-bold">(단어의 고유한 뜻)</span>
+                            </div>
+                            <p class="text-base text-slate-700 font-semibold leading-relaxed">
+                                단어의 묶음이 지니는 고유하고 공통적인 성질에 따른 구획 방식 (명사, 대명사 등 9품사)
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- (2) 수형도 섹션 -->
+            <div class="bg-white rounded-2xl shadow-xl p-8 border border-slate-100 overflow-x-auto">
+                <div class="flex justify-between items-center border-b pb-4 border-slate-100 mb-8">
+                    <h2 class="text-2xl font-extrabold text-indigo-900 flex items-center whitespace-nowrap">
+                        <i data-lucide="git-merge" class="w-6 h-6 mr-2 text-indigo-600"></i>
+                        품사 분류 체계도
+                    </h2>
+                    <span class="text-xs font-bold bg-indigo-100 text-indigo-700 px-3 py-1.5 rounded-full ml-4 whitespace-nowrap animate-pulse">👆 버튼을 눌러 교과서 요약 설명을 확인해 보세요!</span>
+                </div>
+
+                <!-- 1~4단 시각화 블록 구조 -->
+                <div class="min-w-[900px] flex flex-col pb-4">
+                    
+                    <!-- 1단: 기준 -->
+                    <div class="flex w-full mb-6 items-center">
+                        <div class="w-24 font-extrabold text-slate-400 text-center shrink-0 text-xl">기준</div>
+                        <div class="flex-1 flex justify-center relative">
+                            <button onclick="window.showPosDetail('단어')" class="w-64 bg-slate-800 hover:bg-slate-700 text-white rounded-full shadow-md py-3.5 font-black text-xl transition-transform hover:scale-105">
+                                단어
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 2단: 형태 -->
+                    <div class="flex w-full mb-6 items-center">
+                        <div class="w-24 font-extrabold text-blue-500 text-center shrink-0 text-xl">형태</div>
+                        <div class="flex-1 flex gap-4">
+                            <button onclick="window.showPosDetail('불변어')" class="flex-[4] bg-blue-500 hover:bg-blue-400 text-white rounded-xl shadow-sm py-3.5 font-bold text-xl transition-transform hover:scale-[1.02]">
+                                불변어
+                            </button>
+                            <button onclick="window.showPosDetail('가변어')" class="flex-[1] bg-red-500 hover:bg-red-400 text-white rounded-xl shadow-sm py-3.5 font-bold text-xl transition-transform hover:scale-[1.02]">
+                                가변어
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 3단: 기능 -->
+                    <div class="flex w-full mb-6 items-center">
+                        <div class="w-24 font-extrabold text-emerald-600 text-center shrink-0 text-xl">기능</div>
+                        <div class="flex-1 flex gap-4">
+                            <div class="flex-[4] flex gap-2">
+                                <button onclick="window.showPosDetail('체언')" class="flex-1 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 border border-emerald-300 rounded-lg shadow-sm py-4 font-bold text-xl transition-transform hover:scale-105">
+                                    체언
+                                </button>
+                                <button onclick="window.showPosDetail('수식언')" class="flex-1 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 border border-emerald-300 rounded-lg shadow-sm py-4 font-bold text-xl transition-transform hover:scale-105">
+                                    수식언
+                                </button>
+                                <button onclick="window.showPosDetail('독립언')" class="flex-1 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 border border-emerald-300 rounded-lg shadow-sm py-4 font-bold text-xl transition-transform hover:scale-105">
+                                    독립언
+                                </button>
+                                <button onclick="window.showPosDetail('관계언')" class="flex-1 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 border border-emerald-300 rounded-lg shadow-sm py-4 font-bold text-xl transition-transform hover:scale-105">
+                                    관계언
+                                </button>
+                            </div>
+                            <div class="flex-[1] flex">
+                                <button onclick="window.showPosDetail('용언')" class="flex-1 bg-amber-100 hover:bg-amber-200 text-amber-800 border border-amber-300 rounded-lg shadow-sm py-4 font-bold text-xl transition-transform hover:scale-105">
+                                    용언
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4단: 의미 -->
+                    <div class="flex w-full items-start">
+                        <div class="w-24 font-extrabold text-slate-700 text-center shrink-0 pt-2.5 text-xl">의미</div>
+                        <div class="flex-1 flex gap-4">
+                            <div class="flex-[4] flex gap-2">
+                                <!-- 체언 하위 -->
+                                <div class="flex-1 flex flex-col gap-2">
+                                    <button onclick="window.showPosDetail('명사')" class="bg-white hover:bg-emerald-50 border-2 border-emerald-500 rounded-lg shadow-sm text-slate-700 py-3 font-bold text-lg transition-transform hover:translate-x-1">명사</button>
+                                    <button onclick="window.showPosDetail('대명사')" class="bg-white hover:bg-emerald-50 border-2 border-emerald-500 rounded-lg shadow-sm text-slate-700 py-3 font-bold text-lg transition-transform hover:translate-x-1">대명사</button>
+                                    <button onclick="window.showPosDetail('수사')" class="bg-white hover:bg-emerald-50 border-2 border-emerald-500 rounded-lg shadow-sm text-slate-700 py-3 font-bold text-lg transition-transform hover:translate-x-1">수사</button>
+                                </div>
+                                <!-- 수식언 하위 -->
+                                <div class="flex-1 flex flex-col gap-2">
+                                    <button onclick="window.showPosDetail('관형사')" class="bg-white hover:bg-emerald-50 border-2 border-emerald-500 rounded-lg shadow-sm text-slate-700 py-3 font-bold text-lg transition-transform hover:translate-x-1">관형사</button>
+                                    <button onclick="window.showPosDetail('부사')" class="bg-white hover:bg-emerald-50 border-2 border-emerald-500 rounded-lg shadow-sm text-slate-700 py-3 font-bold text-lg transition-transform hover:translate-x-1">부사</button>
+                                </div>
+                                <!-- 독립언 하위 -->
+                                <div class="flex-1 flex flex-col gap-2">
+                                    <button onclick="window.showPosDetail('감탄사')" class="bg-white hover:bg-emerald-50 border-2 border-emerald-500 rounded-lg shadow-sm text-slate-700 py-3 font-bold text-lg transition-transform hover:translate-x-1">감탄사</button>
+                                </div>
+                                <!-- 관계언 하위 -->
+                                <div class="flex-1 flex flex-col gap-2">
+                                    <button onclick="window.showPosDetail('조사')" class="bg-white hover:bg-emerald-50 border-2 border-emerald-500 rounded-lg shadow-sm text-slate-700 py-3 font-bold text-lg transition-transform hover:translate-x-1">조사</button>
+                                </div>
+                            </div>
+                            <!-- 용언 하위 -->
+                            <div class="flex-[1] flex flex-col gap-2">
+                                <button onclick="window.showPosDetail('동사')" class="bg-white hover:bg-amber-50 border-2 border-amber-500 rounded-lg shadow-sm text-slate-700 py-3 font-bold text-lg transition-transform hover:translate-x-1">동사</button>
+                                <button onclick="window.showPosDetail('형용사')" class="bg-white hover:bg-amber-50 border-2 border-amber-500 rounded-lg shadow-sm text-slate-700 py-3 font-bold text-lg transition-transform hover:translate-x-1">형용사</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <!-- 상세 설명 출력 박스 (구분자 '•'를 도입한 명사형 종결 요약식 구조) -->
+                <div id="pos-detail-pane" class="mt-8 min-h-[120px]">
+                    <div class="bg-indigo-50 border border-indigo-200 border-dashed p-6 rounded-2xl flex items-center justify-center text-slate-500 h-full">
+                        <i data-lucide="mouse-pointer-click" class="w-5 h-5 mr-2"></i> 위 체계도에서 버튼을 클릭하시면 단어에 대한 상세한 설명이 나타납니다.
+                    </div>
+                </div>
+
             </div>
         </div>
 
-        <!-- 2. 단어 퀴즈 탭 -->
+        <!-- 2. 단어 퀴즈 탭 (슈팅 게임) -->
         <div id="tab-quiz" class="tab-content">
-            <div id="quiz-selecting-view" class="max-w-4xl mx-auto">
-                <div class="bg-indigo-50 rounded-2xl p-8 text-center mb-8 border border-indigo-100">
-                    <h2 class="text-2xl font-bold text-indigo-900 mb-2">도전할 단어 문제 세트를 선택하세요!</h2>
-                    <p class="text-slate-600">중학생 필수 어휘 100개가 10문제씩 10개의 세트로 준비되어 있습니다.</p>
-                </div>
-                <div class="grid grid-cols-2 md:grid-cols-5 gap-4" id="quiz-set-grid"></div>
-            </div>
-
-            <div id="quiz-playing-view" class="max-w-2xl mx-auto hidden">
-                <div class="mb-4">
-                    <button id="btn-quiz-to-list" class="text-slate-500 hover:text-indigo-600 flex items-center font-medium transition-colors">
-                        <i data-lucide="arrow-left" class="w-4 h-4 mr-1"></i> 세트 목록으로
+            <div id="quiz-selecting-view" class="max-w-3xl mx-auto">
+                <div class="bg-indigo-50 rounded-2xl p-10 text-center mb-8 border border-indigo-100 shadow-md">
+                    <div class="inline-block bg-indigo-100 p-4 rounded-full mb-4">
+                        <i data-lucide="plane" class="w-12 h-12 text-indigo-600"></i>
+                    </div>
+                    <h2 class="text-3xl font-black text-indigo-900 mb-4">품사 슈팅 대모험!</h2>
+                    <p class="text-slate-700 text-lg leading-relaxed mb-8">
+                        떨어지는 단어와 문장을 향해 알맞은 품사 미사일을 쏘세요!<br>
+                        <strong>단어 100개</strong>를 격추하며 정답률(진행률)이 90%를 넘으면,<br>
+                        강조된 품사를 맞히는 <strong>문장 15개</strong> 보스전이 시작됩니다.
+                    </p>
+                    <button onclick="startShootingGame()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-10 py-4 rounded-full font-black text-xl transition-transform hover:scale-105 shadow-lg shadow-indigo-200">
+                        비행기 탑승 & 게임 시작!
                     </button>
                 </div>
-                <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
-                    <div class="bg-indigo-600 p-6 text-white text-center relative">
-                        <div class="absolute top-4 left-6 text-indigo-200 font-medium" id="quiz-progress-text">문제 1 / 10</div>
-                        <div class="absolute top-4 right-6 text-indigo-200 font-medium" id="quiz-score-text">점수: 0</div>
-                        <h2 class="text-xl font-medium text-indigo-100 mt-6 mb-2" id="quiz-title-set">다음 단어의 품사는 무엇일까요?</h2>
-                        <div class="text-5xl font-extrabold py-8 tracking-wider" id="quiz-word-display">"하늘"</div>
+            </div>
+
+            <div id="quiz-playing-view" class="max-w-3xl mx-auto hidden">
+                <!-- 상태창 -->
+                <div class="bg-slate-800 rounded-t-2xl p-4 flex justify-between text-white font-bold text-sm md:text-base border-b-4 border-slate-900 shadow-inner">
+                    <div class="flex gap-4">
+                        <span class="text-indigo-300">SCORE <span id="game-score-display" class="text-white ml-1">0</span></span>
+                        <span class="text-emerald-300">PROGRESS <span id="game-progress-display" class="text-white ml-1">0%</span></span>
                     </div>
-                    <div class="p-8">
-                        <div class="grid grid-cols-3 gap-3 md:gap-4 mb-8" id="quiz-options-grid"></div>
-                        <div id="quiz-feedback-box" class="hidden p-6 rounded-xl flex items-center justify-between"></div>
+                    <div class="flex gap-4">
+                        <span class="text-amber-300">SPEED <span id="game-speed-display" class="text-white ml-1">Lv.1</span></span>
+                        <span><span id="game-lives-display">❤️❤️❤️❤️❤️</span></span>
+                    </div>
+                </div>
+                
+                <!-- 게임 캔버스 영역 -->
+                <div class="relative w-full h-[400px] md:h-[450px] bg-slate-900 overflow-hidden shadow-inner border-x border-slate-800" id="canvas-container">
+                    <canvas id="quiz-canvas" class="block w-full h-full"></canvas>
+                </div>
+
+                <!-- 컨트롤러 영역 -->
+                <div class="bg-white p-5 rounded-b-2xl shadow-xl border border-slate-100 border-t-0">
+                    <div class="grid grid-cols-3 gap-2 md:gap-3" id="game-controls-container">
+                        <!-- JS로 9개 품사 버튼 동적 생성 -->
                     </div>
                 </div>
             </div>
 
             <div id="quiz-finished-view" class="max-w-2xl mx-auto hidden">
                 <div class="bg-white rounded-2xl shadow-xl p-10 text-center border border-slate-100">
-                    <h2 class="text-3xl font-bold text-indigo-900 mb-4">세트 완료! 🎉</h2>
-                    <p class="text-xl text-slate-600 mb-8">
-                        10문제 중 <span id="quiz-final-score" class="font-extrabold text-indigo-600 text-2xl">0</span>문제를 맞혔습니다.
-                    </p>
-                    <div class="w-full bg-slate-100 rounded-full h-4 mb-8 overflow-hidden">
-                        <div id="quiz-final-progress-bar" class="bg-indigo-500 h-4 rounded-full transition-all duration-1000" style="width: 0%"></div>
+                    <div class="inline-block bg-slate-100 p-4 rounded-full mb-4">
+                        <i data-lucide="award" class="w-12 h-12 text-indigo-600"></i>
+                    </div>
+                    <h2 id="quiz-final-title" class="text-3xl font-black text-indigo-900 mb-4">임무 완수! 🎉</h2>
+                    <div class="flex justify-center gap-8 mb-8">
+                        <div>
+                            <p class="text-sm text-slate-500 font-bold mb-1">최종 점수</p>
+                            <p class="text-4xl font-black text-indigo-600"><span id="quiz-final-score">0</span><span class="text-xl">점</span></p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-slate-500 font-bold mb-1">도달 진행률</p>
+                            <p class="text-4xl font-black text-emerald-600" id="quiz-final-progress">0%</p>
+                        </div>
                     </div>
                     <div class="flex justify-center space-x-4">
-                        <button id="btn-retry-quiz" class="bg-white border-2 border-indigo-600 text-indigo-600 hover:bg-indigo-50 px-6 py-3 rounded-xl font-bold transition-colors">다시 풀기</button>
-                        <button id="btn-quiz-other-set" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-bold transition-colors">다른 세트 선택</button>
+                        <button onclick="startShootingGame()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-xl font-bold transition-colors">다시 플레이</button>
+                        <button onclick="switchTab('learn')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-8 py-3 rounded-xl font-bold transition-colors">학습하러 가기</button>
                     </div>
                 </div>
             </div>
@@ -269,48 +459,70 @@
     </div>
 
     <script>
-        const POS_DATA = {
-            체언: {
-                form: '불변어',
-                desc: '문장에서 주로 주어의 역할을 하며, 형태가 변하지 않는 단어들입니다.',
-                items: [
-                    { id: '명사', name: '명사', desc: '사람이나 사물, 장소, 보이지 않는 것의 이름을 나타냅니다.', examples: ['하늘', '바다', '사랑', '학교'] },
-                    { id: '대명사', name: '대명사', desc: '명사를 대신하여 사람, 사물, 장소를 가리킵니다.', examples: ['나', '너', '우리', '이것', '저기'] },
-                    { id: '수사', name: '수사', desc: '사물의 수량이나 순서를 나타냅니다.', examples: ['하나', '둘', '첫째', '둘째'] },
-                ]
-            },
-            수식언: {
-                form: '불변어',
-                desc: '다른 단어를 꾸며주는 역할을 하며, 형태가 변하지 않습니다.',
-                items: [
-                    { id: '관형사', name: '관형사', desc: '주로 체언(명사, 대명사, 수사) 앞에 놓여 그 뜻을 자세하게 꾸며줍니다.', examples: ['새', '헌', '모든', '온갖', '이', '그'] },
-                    { id: '부사', name: '부사', desc: '주로 용언(동사, 형용사)이나 다른 부사, 문장 전체를 꾸며줍니다.', examples: ['매우', '빨리', '가장', '살짝', '과연'] },
-                ]
-            },
-            독립언: {
-                form: '불변어',
-                desc: '문장의 다른 성분과 직접적인 관계를 맺지 않고 독립적으로 쓰입니다.',
-                items: [
-                    { id: '감탄사', name: '감탄사', desc: '말하는 이의 놀람, 느낌, 부름, 대답 등을 나타냅니다.', examples: ['앗', '어머나', '야호', '네', '아니오'] },
-                ]
-            },
-            관계언: {
-                form: '불변어 (예외: 서술격 조사 \'이다\')',
-                desc: '단어들의 문법적 관계를 나타내거나 특별한 뜻을 더해줍니다.',
-                items: [
-                    { id: '조사', name: '조사', desc: '주로 체언 뒤에 붙어서 문법적 관계를 나타내거나 의미를 더합니다.', examples: ['이/가', '은/는', '을/를', '의', '에서'] },
-                ]
-            },
-            용언: {
-                form: '가변어',
-                desc: '문장에서 주로 서술어 역할을 하며, 형태가 변하는(활용하는) 단어들입니다.',
-                items: [
-                    { id: '동사', name: '동사', desc: '사람이나 사물의 움직임이나 작용을 나타냅니다.', examples: ['먹다', '달리다', '만들다', '생각하다'] },
-                    { id: '형용사', name: '형용사', desc: '사람이나 사물의 상태나 성질을 나타냅니다.', examples: ['예쁘다', '높다', '차갑다', '조용하다'] },
-                ]
-            }
+        // 1. 품사 체계도 버튼 클릭 시 나타날 상세 설명 데이터
+        const POS_DETAILS = {
+            '단어': { title: '단어', desc: '<div class="desc-list-item"><span class="desc-list-bullet">•</span><div class="desc-list-text">뜻: <b>일정한 뜻</b>을 가지고 <b>홀로 쓰일 수 있는 말</b> (또는 이에 붙어 문법적 기능을 나타내는 말)</div></div><div class="desc-list-item"><span class="desc-list-bullet">•</span><div class="desc-list-text">특징: <b>자립</b>하여 쓰일 수 있는 <b>가장 작은 의미 단위</b> 및 <b>조사</b>를 포함함</div></div>' },
+            '불변어': { title: '불변어', desc: '<div class="desc-list-item"><span class="desc-list-bullet">•</span><div class="desc-list-text">뜻: 문장에서 쓰일 때 단어의 <b>형태가 변하지 않는 단어</b>의 묶음</div></div><div class="desc-list-item"><span class="desc-list-bullet">•</span><div class="desc-list-text">종류: <b>명사, 대명사, 수사, 관형사, 부사, 조사</b>(<b>서술격 조사 \'-이다\'는 예외적으로 가변어임</b>), <b>감탄사</b></div></div>' },
+            '가변어': { title: '가변어', desc: '<div class="desc-list-item"><span class="desc-list-bullet">•</span><div class="desc-list-text">뜻: 문장에서 쓰일 때 <b>형태가 변하는(활용하는) 단어</b>의 묶음</div></div><div class="desc-list-item"><span class="desc-list-bullet">•</span><div class="desc-list-text">종류: <b>동사, 형용사</b>, 서술격 조사(<b>\'-이다\'</b>)</div></div>' },
+            '체언': { title: '체언', desc: '<div class="desc-list-item"><span class="desc-list-bullet">•</span><div class="desc-list-text">뜻: 문장에서 주로 주어나 목적어와 같은 문장의 중요한 성분이 되는 단어의 무리</div></div><div class="desc-list-item"><span class="desc-list-bullet">•</span><div class="desc-list-text">특징: 형태가 고정되어 변하지 않으며 주로 조사가 뒤에 결합함</div></div>' },
+            '수식언': { title: '수식언', desc: '<div class="desc-list-item"><span class="desc-list-bullet">•</span><div class="desc-list-text">뜻: 문장에서 뒤에 오는 <b>다른 단어를 꾸며 주고 제한</b>하는 역할을 하는 단어의 무리</div></div><div class="desc-list-item"><span class="desc-list-bullet">•</span><div class="desc-list-text">특징: <b>수식 대상 앞에만</b> 놓이며 <b>형태가 고정되어 변하지 않는 불변어</b>임</div></div>' },
+            '독립언': { title: '독립언', desc: '<div class="desc-list-item"><span class="desc-list-bullet">•</span><div class="desc-list-text">뜻: 문장 속의 다른 단어들과 <b>직접적인 관계를 맺지 않고 독립적으로 쓰이는</b> 단어의 무리</div></div><div class="desc-list-item"><span class="desc-list-bullet">•</span><div class="desc-list-text">특징: 문장의 다른 성분들과 <b>비교적 독립적으로 위치를 바꿀 수 있으며 모양이 유지</b>됨</div></div>' },
+            '관계언': { title: '관계언', desc: '<div class="desc-list-item"><span class="desc-list-bullet">•</span><div class="desc-list-text">뜻: 주로 체언에 붙어서 그 체언이 문장 안의 다른 성분과 맺는 문법적 관계를 나타내거나 특별한 뜻을 더해 주는 단어의 무리</div></div><div class="desc-list-item"><span class="desc-list-bullet">•</span><div class="desc-list-text flex"><span class="mr-2 whitespace-nowrap">특징:</span><div class="flex-grow">단독으로 쓰일 수 없으나 쉽게 분리되는 <b>자립성으로 단어로 취급됨.</b><br>대부분 형태가 변하지 않는 <b>불변어임.</b><br><span class="text-red-600 font-bold block mt-1">단, 서술격 조사 \'-이다\'는 예외적으로 형태가 변하는 가변어임.</span></div></div></div>' },
+            '용언': { title: '용언', desc: '<div class="desc-list-item"><span class="desc-list-bullet">•</span><div class="desc-list-text">뜻: 문장에서 주체의 <b>움직임, 상태, 성질 등을 서술</b>하는 역할을 하며 <b>활용하는 단어</b>의 무리</div></div><div class="desc-list-item"><span class="desc-list-bullet">•</span><div class="desc-list-text w-full"><b>활용(活用)</b>: 문장에 따라 <b>단어의 형태를 다양하게 바꾸어 쓰는 현상</b><br><br><div class="flex flex-row gap-4 mt-2 bg-slate-50 p-4 rounded-xl border border-slate-200 justify-center"><div class="flex-1 flex flex-col items-start pl-8"><span class="font-bold text-indigo-700 mb-2">동사 (먹다)</span><div class="flex flex-col gap-1 items-start"><span class="bg-white border border-indigo-200 px-3 py-1 rounded-md text-base shadow-sm font-medium"><b>먹</b>고</span><span class="bg-white border border-indigo-200 px-3 py-1 rounded-md text-base shadow-sm font-medium"><b>먹</b>으니</span><span class="bg-white border border-indigo-200 px-3 py-1 rounded-md text-base shadow-sm font-medium"><b>먹</b>어서</span></div></div><div class="flex-1 flex flex-col items-start pl-8"><span class="font-bold text-amber-700 mb-2">형용사 (예쁘다)</span><div class="flex flex-col gap-1 items-start"><span class="bg-white border border-amber-200 px-3 py-1 rounded-md text-base shadow-sm font-medium"><b>예쁘</b>고</span><span class="bg-white border border-amber-200 px-3 py-1 rounded-md text-base shadow-sm font-medium"><b>예쁘</b>니</span><span class="bg-white border border-amber-200 px-3 py-1 rounded-md text-base shadow-sm font-medium"><b>예뻐</b>서</span></div></div></div></div></div><div class="desc-list-item mt-4"><span class="desc-list-bullet">•</span><div class="desc-list-text"><b>어간(語幹)</b>: <b>활용할 때, 형태가 변하지 않는 부분</b> (예: <b>먹-</b>, <b>예쁘-</b>)</div></div><div class="desc-list-item"><span class="desc-list-bullet">•</span><div class="desc-list-text"><b>어미(語尾)</b>: <b>활용할 때, 형태가 변하는 부분</b> (예: <b>-고</b>, <b>-니</b>, <b>-어서</b>)</div></div><div class="desc-list-item"><span class="desc-list-bullet">•</span><div class="desc-list-text"><b>기본형(基本型)</b>: 어간에 <b>어미 \'-다\'를 붙여 사전 등재나 기본 규칙 기준으로 삼는 단어의 원형</b></div></div>' },
+            '명사': { title: '명사', desc: '<div class="desc-list-item"><span class="desc-list-bullet">•</span><div class="desc-list-text">뜻: <b>사람, 사물, 장소</b> 또는 <b>보이지 않는 추상적인 개념의 이름</b>을 나타내는 단어</div></div><div class="desc-list-item"><span class="desc-list-bullet">•</span><div class="desc-list-text">종류 및 예시:<div class="mt-1 flex flex-col gap-1.5"><div class="flex items-start"><span class="mr-1.5">-</span><div class="flex flex-col"><span><b>보통 명사</b>: 공통된 성질의 대상에 <b>두루 쓰이는 이름</b></span><span class="text-indigo-700 mt-0.5">(예: 책상, 강, 우정)</span></div></div><div class="flex items-start"><span class="mr-1.5">-</span><div class="flex flex-col"><span><b>고유 명사</b>: 특정 대상에만 특별히 부여된 <b>고유한 이름</b></span><span class="text-indigo-700 mt-0.5">(예: 한강, 설악산, 대한민국)</span></div></div><div class="flex items-start"><span class="mr-1.5">-</span><div class="flex flex-col"><span><b>의존 명사</b>: 자립성 없이 <b>다른 말의 수식을 받아야만 쓰이는 명사</b></span><span class="text-indigo-700 mt-0.5">(예: 것, 수, 뿐)</span></div></div><div class="flex items-start"><span class="mr-1.5">-</span><div class="flex flex-col"><span><b>구체 명사</b>: 구체적인 형태가 있어 <b>감각으로 인지할 수 있는 대상의 이름</b></span><span class="text-indigo-700 mt-0.5">(예: 책상, 사과)</span></div></div><div class="flex items-start"><span class="mr-1.5">-</span><div class="flex flex-col"><span><b>추상 명사</b>: 구체적인 형태가 없는 <b>눈에 보이지 않는 추상적 개념의 이름</b></span><span class="text-indigo-700 mt-0.5">(예: 사랑, 평화, 우정)</span></div></div></div></div></div>' },
+            '대명사': { title: '대명사', desc: '<div class="desc-list-item"><span class="desc-list-bullet">•</span><div class="desc-list-text">뜻: 사람, 사물, 장소 등의 <b>이름을 직접 부르지 않고 이를 대신하여 가리키는 단어</b></div></div><div class="desc-list-item"><span class="desc-list-bullet">•</span><div class="desc-list-text">종류 및 예시:<div class="mt-1 flex flex-col gap-1.5"><div class="flex items-start"><span class="mr-1.5">-</span><div class="flex flex-col"><span><b>인칭 대명사</b>: <b>사람을 대신하여</b> 가리키는 단어</span><span class="text-indigo-700 mt-0.5">(예: 나, 너, 우리, 그분)</span></div></div><div class="flex items-start"><span class="mr-1.5">-</span><div class="flex flex-col"><span><b>지시 대명사</b>: <b>사물이나 장소를 대신하여</b> 가리키는 단어</span><span class="text-indigo-700 mt-0.5">(예: 이것, 그것, 여기, 저기)</span></div></div></div></div></div><div class="desc-list-item mt-3"><span class="desc-list-bullet text-indigo-600 font-bold">•</span><div class="desc-list-text text-indigo-900"><div class="flex flex-col"><div class="flex items-start"><span class="font-bold w-20 shrink-0">구별 팁:</span><div class="flex flex-col gap-1"><span>지시 대명사는 <b>뒤에 조사가 결합할 수 있지만</b>, 지시 관형사는 <b>조사가 결합할 수 없음</b>.</span><span class="bg-indigo-50 px-3 py-1.5 rounded-lg text-lg border border-indigo-100 w-fit">예) <b>이것</b><u>이</u> 사과다 (대명사) / <b>이</b> 사과가 맛있다 (관형사)</span></div></div></div></div></div>' },
+            '수사': { title: '수사', desc: '<div class="desc-list-item"><span class="desc-list-bullet">•</span><div class="desc-list-text">뜻: 사물의 <b>수량이나 순서</b>를 가리켜 나타내는 단어</div></div><div class="desc-list-item"><span class="desc-list-bullet">•</span><div class="desc-list-text">종류 및 예시:<div class="mt-1 flex flex-col gap-1.5"><div class="flex items-start"><span class="mr-1.5">-</span><div class="flex flex-col"><span><b>양수사</b>: <b>수량</b>을 나타내는 단어</span><span class="text-indigo-700 mt-0.5">(예: 하나, 둘, 셋, 일, 이)</span></div></div><div class="flex items-start"><span class="mr-1.5">-</span><div class="flex flex-col"><span><b>서수사</b>: <b>순서</b>를 나타내는 단어</span><span class="text-indigo-700 mt-0.5">(예: 첫째, 둘째, 제일, 제이)</span></div></div></div></div></div><div class="desc-list-item mt-3"><span class="desc-list-bullet text-indigo-600 font-bold">•</span><div class="desc-list-text text-indigo-900"><div class="flex flex-col"><div class="flex items-start"><span class="font-bold w-20 shrink-0">구별 팁:</span><div class="flex flex-col gap-1"><span>수사는 체언이므로 <b>뒤에 조사가 결합할 수 있지만</b>, 수 관형사는 <b>조사가 결합할 수 없고 뒤에 오는 명사를 꾸며줌</b>.</span><span class="bg-indigo-50 px-3 py-1.5 rounded-lg text-lg border border-indigo-100 w-fit">예) 사과 <b>하나</b><u>를</u> 먹었다 (수사) / <b>한</b> 사람만 오세요 (관형사)</span></div></div></div></div></div>' },
+            '관형사': { title: '관형사', desc: '<div class="desc-list-item"><span class="desc-list-bullet">•</span><div class="desc-list-text">뜻: <b>반드시 체언(명사, 대명사, 수사) 앞</b>에만 놓여 그 체언을 <b>꾸며 주는 단어</b></div></div><div class="desc-list-item"><span class="desc-list-bullet">•</span><div class="desc-list-text">특징: 모양이 변하지 않고 <b>격조사와 결합할 수 없음</b></div></div><div class="desc-list-item"><span class="desc-list-bullet">•</span><div class="desc-list-text">종류 및 예시:<div class="mt-1 flex flex-col gap-1.5"><div class="flex items-start"><span class="mr-1.5">-</span><div class="flex items-center flex-wrap"><span>체언의 <b>성질이나 상태</b>를 꾸밈</span><span class="text-indigo-700 ml-1">(예: 새, 헌, 옛)</span></div></div><div class="flex items-start"><span class="mr-1.5">-</span><div class="flex items-center flex-wrap"><span>특정한 대상을 <b>지시하며</b> 꾸밈</span><span class="text-indigo-700 ml-1">(예: 이, 그, 저, 다른)</span></div></div><div class="flex items-start"><span class="mr-1.5">-</span><div class="flex items-center flex-wrap"><span>사물의 <b>수량이나 순서</b>를 지시하며 꾸밈</span><span class="text-indigo-700 ml-1">(예: 한, 두, 세, 모든)</span></div></div></div></div></div><div class="desc-list-item mt-3"><span class="desc-list-bullet text-indigo-600 font-bold">•</span><div class="desc-list-text text-indigo-900"><div class="flex flex-col"><div class="flex items-start"><span class="font-bold w-20 shrink-0">구별 팁:</span><div class="flex flex-col gap-1"><span>관형사는 형태가 고정되어 있으며 <b>조사가 절대 붙을 수 없음</b>.</span><span class="bg-indigo-50 px-3 py-1.5 rounded-lg text-lg border border-indigo-100 w-fit">예) <b>그</b> 옷이 멋지다 (관형사) / <b>그것</b><u>이</u> 멋지다 (대명사)</span></div></div></div></div></div>' },
+            '부사': { title: '부사', desc: '<div class="desc-list-item"><span class="desc-list-bullet">•</span><div class="desc-list-text">뜻: 주로 문장에서 <b>용언(동사, 형용사)이나 다른 부사, 문장 전체를 꾸며 주는 단어</b></div></div><div class="desc-list-item"><span class="desc-list-bullet">•</span><div class="desc-list-text">특징: <b>위치 이동이 비교적 자유롭고</b> 간혹 조사와 결합함</div></div><div class="desc-list-item"><span class="desc-list-bullet">•</span><div class="desc-list-text">종류 및 예시:<div class="mt-1 flex flex-col gap-1.5"><div class="flex items-start"><span class="mr-1.5">-</span><div class="flex items-center flex-wrap"><span>상태나 모양을 묘사하며 꾸밈</span><span class="text-indigo-700 ml-1">(예: 매우, 빨리, 잘, 졸졸)</span></div></div><div class="flex items-start"><span class="mr-1.5">-</span><div class="flex items-center flex-wrap"><span>시공간이나 대상을 가리키며 꾸밈</span><span class="text-indigo-700 ml-1">(예: 이리, 저리, 그리, 일찍)</span></div></div><div class="flex items-start"><span class="mr-1.5">-</span><div class="flex items-center flex-wrap"><span>의미를 부정하며 꾸밈</span><span class="text-indigo-700 ml-1">(예: 안, 못)</span></div></div><div class="flex items-start"><span class="mr-1.5">-</span><div class="flex items-center flex-wrap"><span>말하는 이의 심리적 태도를 나타냄</span><span class="text-indigo-700 ml-1">(예: 과연, 제발, 설마)</span></div></div><div class="flex items-start"><span class="mr-1.5">-</span><div class="flex items-center flex-wrap"><span>단어나 문장을 이어 줌</span><span class="text-indigo-700 ml-1">(예: 그리고, 그러나, 즉)</span></div></div></div></div></div>' },
+            '감탄사': { title: '감탄사', desc: '<div class="desc-list-item"><span class="desc-list-bullet">•</span><div class="desc-list-text">뜻: 말하는 이의 <b>직관적인 놀람, 정서적 느낌, 부름이나 대답</b> 등을 나타내는 단어</div></div><div class="desc-list-item"><span class="desc-list-bullet">•</span><div class="desc-list-text">특징: 문장 속 <b>위치가 매우 자유롭고 형태 변화가 전혀 없음</b></div></div><div class="desc-list-item"><span class="desc-list-bullet">•</span><div class="desc-list-text">종류 및 예시:<div class="mt-1 flex flex-col gap-1.5"><div class="flex items-start"><span class="mr-1.5">-</span><div class="flex flex-col"><span>기쁨, 슬픔, 놀람 등을 나타냄</span><span class="text-indigo-700 mt-0.5">(예: 아, 앗, 어머나, 아이고)</span></div></div><div class="flex items-start"><span class="mr-1.5">-</span><div class="flex flex-col"><span>부름, 요구, 명령, 응답 등을 나타냄</span><span class="text-indigo-700 mt-0.5">(예: 야호, 이봐, 네, 아니오, 그래)</span></div></div></div></div></div>' },
+            '조사': { title: '조사', desc: '<div class="desc-list-item"><span class="desc-list-bullet">•</span><div class="desc-list-text">뜻: 주로 <b>체언 뒤에 붙어 자격을 부여하거나 뜻을 조력</b>하는 단어</div></div><div class="desc-list-item"><span class="desc-list-bullet">•</span><div class="desc-list-text flex"><span class="mr-2 whitespace-nowrap">특징:</span><div class="flex-grow">단독으로 쓰일 수 없으나 쉽게 분리되는 <b>자립성으로 단어로 취급됨.</b><br>대부분 형태가 변하지 않는 <b>불변어임.</b><br><span class="text-red-600 font-bold block mt-1">단, 서술격 조사 \'-이다\'는 예외적으로 형태가 변하는 가변어임.</span></div></div></div><div class="desc-list-item mt-2"><span class="desc-list-bullet">•</span><div class="desc-list-text">종류 및 예시:<div class="mt-1 flex flex-col gap-1.5"><div class="flex items-start"><span class="mr-1.5">-</span><div class="flex items-center flex-wrap"><span>문장 내에서의 자격을 표시함</span><span class="text-indigo-700 ml-1">(예: 이/가, 을/를, 의, 에, 에서)</span></div></div><div class="flex items-start"><span class="mr-1.5">-</span><div class="flex items-center flex-wrap"><span>두 단어를 동등하게 이어 줌</span><span class="text-indigo-700 ml-1">(예: 와/과, 하고, 랑)</span></div></div><div class="flex items-start"><span class="mr-1.5">-</span><div class="flex items-center flex-wrap"><span>특별한 문법적 의미를 더해 줌</span><span class="text-indigo-700 ml-1">(예: 은/는, 만, 도, 까지, 조차)</span></div></div></div></div></div>' },
+            '동사': { title: '동사', desc: '<div class="desc-list-item"><span class="desc-list-bullet">•</span><div class="desc-list-text">뜻: 사람이나 사물의 <b>구체적인 움직임이나 작용</b>을 서술형태로 나타내는 단어</div></div><div class="desc-list-item"><span class="desc-list-bullet">•</span><div class="desc-list-text">종류 및 예시:<div class="mt-1 flex flex-col gap-1.5"><div class="flex items-start"><span class="mr-1.5">-</span><div class="flex flex-col"><span>주어 자체의 움직임만 나타냄</span><span class="text-indigo-700 mt-0.5">(예: 가다, 오다, 앉다, 솟구치다)</span></div></div><div class="flex items-start"><span class="mr-1.5">-</span><div class="flex flex-col"><span>목적어를 필요로 하는 움직임을 나타냄</span><span class="text-indigo-700 mt-0.5">(예: 먹다, 잡다, 흔들다, 쓰다)</span></div></div></div></div></div><div class="desc-list-item mt-3"><span class="desc-list-bullet text-indigo-600 font-bold">•</span><div class="desc-list-text text-indigo-900"><div class="flex flex-col"><div class="flex items-start"><span class="font-bold w-20 shrink-0">구별 팁:</span><div class="flex flex-col gap-1"><span>동사는 현재형 시제 어미 <b>\'-ㄴ다/-는다\'</b>, 명령형 어미 <b>\'-아라/-어라\'</b>, 청유형 어미 <b>\'-자\'</b>와 모두 자유롭게 결합할 수 있습니다.</span><span class="bg-indigo-50 px-3 py-1.5 rounded-lg text-lg border border-indigo-100 w-fit">예) 먹는다 (O), 먹어라 (O), 먹자 (O)</span></div></div></div></div></div>' },
+            '형용사': { title: '형용사', desc: '<div class="desc-list-item"><span class="desc-list-bullet">•</span><div class="desc-list-text">뜻: 사람이나 사물의 <b>구체적인 성질이나 상태</b>를 서술형태로 나타내는 단어</div></div><div class="desc-list-item"><span class="desc-list-bullet">•</span><div class="desc-list-text">종류 및 예시:<div class="mt-1 flex flex-col gap-1.5"><div class="flex items-start"><span class="mr-1.5">-</span><div class="flex flex-col"><span>사물의 고유한 성질이나 상태를 나타냄</span><span class="text-indigo-700 mt-0.5">(예: 예쁘다, 높다, 차갑다, 상쾌하다)</span></div></div><div class="flex items-start"><span class="mr-1.5">-</span><div class="flex flex-col"><span>지시성을 담아 대상을 설명함</span><span class="text-indigo-700 mt-0.5">(예: 이러하다, 그러하다, 저러하다)</span></div></div></div></div></div><div class="desc-list-item mt-3"><span class="desc-list-bullet text-amber-600 font-bold">•</span><div class="desc-list-text text-amber-900"><div class="flex flex-col"><div class="flex items-start"><span class="font-bold w-20 shrink-0">구별 팁:</span><div class="flex flex-col gap-1"><span>형용사는 동사와 달리 현재형 시제 어미 <b>\'-ㄴ다/-는다\'</b>, 청유형 어미 <b>\'-자\'</b>와 <b>결합할 수 없습니다</b>.</span><span class="mt-1">단, 형용사에 <b>\'-아라/-어라\'</b>가 결합할 경우(예: \'알맞아라\', \'푸르러라\') 이는 명령이 아니라 단순한 느낌을 나타내는 <b>감탄형 어미로 바뀐 것</b>입니다.</span><span class="bg-amber-50 px-3 py-1.5 rounded-lg text-lg border border-amber-100 w-fit mt-1">예) 예쁜다 (X), 예뻐라 (X --&gt; 감탄형 어미), 예쁘자 (X)</span></div></div></div></div></div>' }
         };
 
+        // 전역 함수: 버튼 클릭 시 하단에 설명을 출력
+        window.showPosDetail = function(key) {
+            const pane = document.getElementById('pos-detail-pane');
+            const data = POS_DETAILS[key];
+            if (!data) return;
+
+            pane.innerHTML = `
+                <div class="bg-indigo-50 border border-indigo-200 p-8 rounded-2xl shadow-inner fade-in w-full text-slate-800">
+                    <div class="flex items-center mb-5 border-b border-indigo-200 pb-3">
+                        <div class="bg-indigo-600 text-white font-black px-4 py-1.5 rounded-lg mr-3 text-xl shadow-sm">💡 ${data.title}</div>
+                    </div>
+                    <div class="text-xl font-medium leading-relaxed">
+                        ${data.desc}
+                    </div>
+                </div>
+            `;
+            
+            // 모바일 등을 위해 설명 박스로 자연스럽게 스크롤
+            pane.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        };
+
+        // 2. 단어 슈팅 게임 관련 전역 변수
+        let quizCanvas, quizCtx, quizReqId;
+        let lastTime = 0;
+        let quizGame = {
+            state: 'ready', // ready, playing, gameover, clear
+            score: 0,
+            lives: 5,
+            progress: 0,
+            answered: 0,
+            total: 115, // 단어 100 + 문장 15
+            enemies: [],
+            missiles: [],
+            particles: [],
+            wordPool: [],
+            sentencePool: [],
+            lastSpawn: 0,
+            airplaneX: 0
+        };
+
+        const ALL_9_POS = ['명사', '대명사', '수사', '관형사', '부사', '감탄사', '조사', '동사', '형용사'];
+
+        // 100개 단어
         const ALL_QUIZ_WORDS = [
             { word: '우주', answer: '명사' }, { word: '너희', answer: '대명사' }, { word: '하나', answer: '수사' }, { word: '새', answer: '관형사' }, { word: '과연', answer: '부사' },
             { word: '앗', answer: '감탄사' }, { word: '에서', answer: '조사' }, { word: '달리다', answer: '동사' }, { word: '예쁘다', answer: '형용사' }, { word: '평화', answer: '명사' },
@@ -334,6 +546,26 @@
             { word: '에구', answer: '감탄사' }, { word: '를', answer: '조사' }, { word: '서다', answer: '동사' }, { word: '험난하다', answer: '형용사' }, { word: '평등', answer: '명사' }
         ];
 
+        // 15개 문장 (보스전)
+        const SENTENCE_ENEMIES = [
+            { word: "하늘이 [매우] 푸르다.", answer: "부사" },
+            { word: "[저] 산을 보아라.", answer: "관형사" },
+            { word: "아기가 [새근새근] 잔다.", answer: "부사" },
+            { word: "우리는 [학생]이다.", answer: "명사" },
+            { word: "[어머나], 깜짝 놀랐네!", answer: "감탄사" },
+            { word: "[너희]는 누구니?", answer: "대명사" },
+            { word: "사과 [하나]를 먹었다.", answer: "수사" },
+            { word: "학교[에서] 만나자.", answer: "조사" },
+            { word: "바람이 시원하게 [분다].", answer: "동사" },
+            { word: "꽃이 참 [예쁘다].", answer: "형용사" },
+            { word: "[모든] 사람이 기뻐했다.", answer: "관형사" },
+            { word: "[이것]이 내 가방이다.", answer: "대명사" },
+            { word: "올해로 [열] 살이 되었다.", answer: "수사" },
+            { word: "강물이 맑게 [흐른다].", answer: "동사" },
+            { word: "산이 매우 [높다].", answer: "형용사" }
+        ];
+
+        // 3. 심화 학습 기출문제 15개 데이터베이스
         const ADVANCED_QUESTIONS = [
             {
                 q: '품사에 대한 설명으로 적절하지 않은 것은?',
@@ -347,7 +579,7 @@
             },
             {
                 q: '다음 단어들의 공통점으로 적절하지 않은 것은?<br/><br/><div class="bg-slate-100 p-3 rounded text-center font-bold text-slate-800">뛰다, 작다, 당기다, 맑다</div>',
-                options: ['어간과 어미로 구분할 수 있다.', '문장에서 서술어의 역할을 한다.', '쓰임에 따라 문장에서 형태가 변한다.', '사람이나 사물의 움직임이나 작용을 나타낸다.', '국어사전에서 찾을 때 기본형으로 검색해야 한다.'],
+                options: ['어간과 어미로 구분할 수 있다.', '문장에서 서술어의 역할을 한다.', '쓰임에 따라 문장에서 형태가 변한다.', '사람이나 사물의 움직임이나 작용을 나타낸다.', '국어사전에서 찾을 때 기본형으로 검색해야 강한다.'],
                 answerIndex: 3 
             },
             {
@@ -371,7 +603,7 @@
                 answerIndex: 3 
             },
             {
-                q: '밑줄 친 단어의 품사로 적절하지 않은 것은?',
+                q: '밑줄 친 단어의 품로 적절하지 않은 것은?',
                 options: ['강아지가 꼬리를 <span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">살랑살랑</span> 흔든다. → 부사', '너는 <span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">어떤</span> 날씨를 가장 좋아하니? → 관형사', '우리는 밥을 아주 <span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">천천히</span> 먹고 돌아왔다. → 부사', '<span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">모든</span> 사람들이 집 밖에 나와서 눈을 치웠다. → 관형사', '천천히 호흡을 가다듬으면서 발표를 <span class="bg-indigo-100 text-indigo-950 font-extrabold px-1.5 py-0.5 rounded">기다렸다</span>. → 관형사'],
                 answerIndex: 4 
             },
@@ -417,20 +649,16 @@
             { id: 2, q: "2. &lt;보기&gt;의 단어들을 문장에서 하는 역할(기능)이 같은 것끼리 적절하게 묶은 것은?<br/><br/><div class='bg-slate-100 p-3 rounded font-semibold text-slate-800 text-center'>&lt;보기&gt;<br/>어느, 꿈, 이것, 어머나, 예쁘다, 뜨겁다, 흐르다, 얼마나</div>", options: ["어느, 꿈, 이것", "어머나, 얼마나", "꿈, 이것, 어머나", "예쁘다, 뜨겁다, 흐르다", "어머나, 예쁘다, 뜨겁다"], answerIndex: 3, rationale: "'예쁘다', '뜨겁다'(형용사), '흐르다'(동사)는 모두 문장에서 서술어로 쓰이는 '용언'에 해당합니다." },
             { id: 3, q: "3. 밑줄 친 단어 중 '체언(명사, 대명사, 수사)'이 아닌 것은?", options: ["할아버지, <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>이것</span>은 뭐예요?", "동생이 바닥에 <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>구슬</span>을 떨어뜨렸다.", "<span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>그</span> 사람은 형과 같은 학교를 졸업했다.", "요리를 할 때에는 <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>첫째</span>, 손을 깨끗이 씻어야 한다.", "<span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>우리</span> 허락 없이는 절대 이 마을을 통과할 수 없다."], answerIndex: 2, rationale: "3번 보기의 '그'는 뒤의 명사 '사람'을 꾸며 주는 지시 관형사(수식언)이므로 체언이 아닙니다." },
             { id: 4, q: "4. &lt;보기&gt;의 문장에 사용된 단어에 대한 설명으로 가장 적절한 것은?<br/><br/><div class='bg-slate-100 p-3 rounded font-semibold text-slate-800 text-center'>&lt;보기&gt;<br/>네, 그는 친구를 두루 넓게 사귑니다.</div>", options: ["형태가 변하는 말은 1개이다.", "기능을 기준으로 4개의 품사가 쓰였다.", "의미를 기준으로 8개의 품사가 쓰였다.", "다른 말과의 관계를 나타내는 역할을 하는 품사는 3개이다.", "사용된 단어 중 1개는 생략해도 문장의 뜻이 달라지지 않는다."], answerIndex: 4, rationale: "감탄사 '네'는 독립언으로, 문장에서 생략해도 문장 전체의 기본적인 의미 전달에 큰 영향을 주지 않습니다." },
-            { id: 5, q: "5. &lt;보기&gt;의 밑줄 친 단어의 공통점으로 적절한 것은?<br/><br/>&lt;보기&gt;<br/>산 정상에 <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>도착하니</span> 기분이 <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>상쾌했다</span>.</div>", options: ["다른 말과의 관계를 나타낸다.", "쓰임에 따라 문장에서 형태가 변한다.", "사람이나 사물의 상태나 성질만 나타낸다.", "사람이나 사물의 움직임이나 작용만 나타낸다.", "명령형 어미, 청유형 어미, 현재형 어미와 모두 결합할 수 있다."], answerIndex: 1, rationale: "'도착하다'(동사)와 '상쾌하다'(형용사)는 모두 가변어(용언)에 속하므로 쓰임에 따라 문장에서 형태가 어미 변화를 통해 유연하게 변합니다." },
-            { id: 6, q: "6. &lt;보기&gt;의 밑줄 친 단어와 '품사(의미 기준)'가 같은 단어가 사용된 문장은 어느 것일까요?<br/><br/>&lt;보기&gt;<br/>우리는 <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>새</span> 옷을 무척 좋아한다.", options: ["이 기차는 부산으로 <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>간다</span>.", "<span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>드디어</span> 오늘이 내 생일이다.", "너는 어떤 음식을 <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>가장</span> 좋아하니?", "그들은 사진을 보면서 <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>옛</span> 추억에 잠겼다.", "나는 헌 신발을 신고도 운동장을 <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>열심히</span> 달렸다."], answerIndex: 3, rationale: "보기의 '새'와 4번의 '옛'은 모두 명사(체언)를 꾸며주는 '관형사'입니다. (1번 '간다'는 동사, 2번 '드디어', 3번 '가장', 5번 '열심히'는 부사입니다.)" },
+            { id: 5, q: "5. &lt;보기&gt;의 밑줄 친 단어의 공통점으로 적절한 것은?<br/><br/><div class='bg-slate-100 p-3 rounded font-semibold text-slate-800 text-center'>&lt;보기&gt;<br/>산 정상에 <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>도착하니</span> 기분이 <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>상쾌했다</span>.</div>", options: ["다른 말과의 관계를 나타낸다.", "쓰임에 따라 문장에서 형태가 변한다.", "사람이나 사물의 상태나 성질만 나타낸다.", "사람이나 사물의 움직임이나 작용만 나타낸다.", "명령형 어미, 청유형 어미, 현재형 어미와 모두 결합할 수 있다."], answerIndex: 1, rationale: "'도착하다'(동사)와 '상쾌하다'(형용사)는 모두 가변어(용언)에 속하므로 쓰임에 따라 문장에서 형태가 어미 변화를 통해 유연하게 변합니다." },
+            { id: 6, q: "6. &lt;보기&gt;의 밑줄 친 단어와 '품사(의미 기준)'가 같은 단어가 사용된 문장은 어느 것일까요?<br/><br/><div class='bg-slate-100 p-3 rounded font-semibold text-slate-800 text-center'>&lt;보기&gt;<br/>우리는 <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>새</span> 옷을 무척 좋아한다.</div>", options: ["이 기차는 부산으로 <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>간다</span>.", "<span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>드디어</span> 오늘이 내 생일이다.", "너는 어떤 음식을 <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>가장</span> 좋아하니?", "그들은 사진을 보면서 <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>옛</span> 추억에 잠겼다.", "나는 헌 신발을 신고도 운동장을 <span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>열심히</span> 달렸다."], answerIndex: 3, rationale: "보기의 '새'와 4번의 '옛'은 모두 명사(체언)를 꾸며주는 '관형사'입니다. (1번 '간다'는 동사, 2번 '드디어', 3번 '가장', 5번 '열심히'는 부사입니다.)" },
             { id: 7, q: "7. 밑줄 친 단어가 감탄사가 아닌 것은?", options: ["<span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>어머</span>! 마법을 풀러 온 거야?", "<span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>에헴</span>, 이 문장에서 나를 찾아봐.", "<span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>그래</span>, 네가 원하는 대로 해 줄게.", "<span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>마법</span>, 그건 어떻게 풀어야 하는 거야?", "<span class='bg-indigo-100 text-indigo-950 font-bold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>이봐</span>, 네가 문제를 풀 때마다 내가 감탄 조각을 줄게."], answerIndex: 3, rationale: "4번의 '마법'은 대상의 이름을 가리키는 일반 '명사'입니다. 문장 앞머리에서 화제로 강조되었을 뿐 감탄사가 아닙니다." },
-            { id: 8, q: "8. 밑줄 친 단어 중 문장에서 형태가 변하지 않는 단어(불변어)는?", options: ["이 기차는 부산으로 <span class='bg-indigo-100 text-indigo-950 font-extrabold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>간다</span>.", "우리 강아지는 털이 <span class='bg-indigo-100 text-indigo-950 font-extrabold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>하얗다</span>.", "동생이 방에서 깔깔대며 <span class='bg-indigo-100 text-indigo-950 font-extrabold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>웃었다</span>.", "사람은 한 번쯤 <span class='bg-indigo-100 text-indigo-950 font-extrabold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>실수</span>를 하기 마련이다.", "담장 아래에 <span class='bg-indigo-100 text-indigo-950 font-extrabold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>핀</span> 꽃을 보았다."], answerIndex: 3, rationale: "'실수'는 명사(체언)에 속하므로 문장에서 형태가 절대 변하지 않는 불변어입니다." },
+            { id: 8, q: "8. 밑줄 친 단어 중 문장에서 형태가 변하지 단어(불변어)는?", options: ["이 기차는 부산으로 <span class='bg-indigo-100 text-indigo-950 font-extrabold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>간다</span>.", "우리 강아지는 털이 <span class='bg-indigo-100 text-indigo-950 font-extrabold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>하얗다</span>.", "동생이 방에서 깔깔대며 <span class='bg-indigo-100 text-indigo-950 font-extrabold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>웃었다</span>.", "사람은 한 번쯤 <span class='bg-indigo-100 text-indigo-950 font-extrabold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>실수</span>를 하기 마련이다.", "담장 아래에 <span class='bg-indigo-100 text-indigo-950 font-extrabold px-1.5 rounded underline decoration-indigo-500 decoration-2 underline-offset-2'>핀</span> 꽃을 보았다."], answerIndex: 3, rationale: "'실수'는 명사(체언)에 속하므로 문장에서 쓰일 때 형태가 결코 변하지 않는 불변어입니다." },
             { id: 9, q: "9. 조사에 대한 설명으로 적절하지 않은 것은?", options: ["문장에서 단독으로 쓰일 수 없다.", "앞말과 쉽게 분리되는 성질이 있다.", "다른 말과의 관계를 나타내는 역할을 한다.", "모든 조사는 문장에서 쓰일 때 형태가 변하지 않는다.", "주로 체언 뒤에 붙어서 그 말과 다른 말과의 문법적 관계를 나타낸다."], answerIndex: 3, rationale: "서술격 조사 '이다'는 '이고', '이니', '이면'처럼 용언처럼 형태가 변하는 활용을 하기 때문에, 모든 조사의 형태가 변하지 않는다는 설명은 적절하지 않습니다." }
         ];
 
-        const ALL_9_POS = ['명사', '대명사', '수사', '관형사', '부사', '감탄사', '조사', '동사', '형용사'];
-
         let state = {
             activeTab: 'learn',
-            selectedFunction: '체언',
             studentInfo: { grade: '', classNum: '', studentNum: '', name: '' },
-            quizQueue: [], currentQuizIndex: 0, score: 0, quizState: 'selecting_set', selectedAnswer: '', currentSet: 0,
             advQueue: [], currentAdvIndex: 0, advScore: 0, advState: 'selecting_set', advSelectedAnswer: null, advCurrentSet: 0,
             evalQueue: [], currentEvalIndex: 0, evalScore: 0, evalState: 'selecting_set', evalSelectedAnswer: null,
             evalAnswersRecord: [],
@@ -438,13 +666,13 @@
             submitStatus: ''
         };
 
+        // --- 서버 통신 연동 함수 ---
         function sendDataToGoogleSheet() {
             if (typeof google !== 'undefined' && google.script && google.script.run) {
                 state.isSubmitting = true;
                 state.submitStatus = 'sending';
                 render();
 
-                // 프론트엔드에서 학생이 선택한 버튼 번호(1~5번)를 추출하여 페이로드에 바인딩
                 const payload = {
                     timestamp: new Date().toLocaleString("ko-KR"),
                     grade: state.studentInfo.grade,
@@ -456,28 +684,20 @@
                     
                     q1_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 1; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 1; }).selectedOptionIndex : '',
                     q1_result: state.evalAnswersRecord.find(function(r) { return r.questionId === 1; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 1; }).isCorrect : '',
-                    
                     q2_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 2; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 2; }).selectedOptionIndex : '',
                     q2_result: state.evalAnswersRecord.find(function(r) { return r.questionId === 2; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 2; }).isCorrect : '',
-                    
                     q3_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 3; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 3; }).selectedOptionIndex : '',
                     q3_result: state.evalAnswersRecord.find(function(r) { return r.questionId === 3; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 3; }).isCorrect : '',
-                    
                     q4_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 4; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 4; }).selectedOptionIndex : '',
                     q4_result: state.evalAnswersRecord.find(function(r) { return r.questionId === 4; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 4; }).isCorrect : '',
-                    
                     q5_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 5; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 5; }).selectedOptionIndex : '',
                     q5_result: state.evalAnswersRecord.find(function(r) { return r.questionId === 5; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 5; }).isCorrect : '',
-                    
                     q6_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 6; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 6; }).selectedOptionIndex : '',
                     q6_result: state.evalAnswersRecord.find(function(r) { return r.questionId === 6; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 6; }).isCorrect : '',
-                    
                     q7_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 7; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 7; }).selectedOptionIndex : '',
                     q7_result: state.evalAnswersRecord.find(function(r) { return r.questionId === 7; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 7; }).isCorrect : '',
-                    
                     q8_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 8; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 8; }).selectedOptionIndex : '',
                     q8_result: state.evalAnswersRecord.find(function(r) { return r.questionId === 8; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 8; }).isCorrect : '',
-                    
                     q9_resp: state.evalAnswersRecord.find(function(r) { return r.questionId === 9; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 9; }).selectedOptionIndex : '',
                     q9_result: state.evalAnswersRecord.find(function(r) { return r.questionId === 9; }) ? state.evalAnswersRecord.find(function(r) { return r.questionId === 9; }).isCorrect : ''
                 };
@@ -503,7 +723,294 @@
             }
         }
 
+        // --- 단어 슈팅 게임 제어부 ---
+        function startShootingGame() {
+            quizGame.state = 'playing';
+            quizGame.score = 0;
+            quizGame.lives = 5;
+            quizGame.answered = 0;
+            quizGame.progress = 0;
+            quizGame.enemies = [];
+            quizGame.missiles = [];
+            quizGame.particles = [];
+            
+            // 100단어와 15문장을 무작위로 섞어서 준비
+            quizGame.wordPool = [...ALL_QUIZ_WORDS].sort(() => 0.5 - Math.random());
+            quizGame.sentencePool = [...SENTENCE_ENEMIES].sort(() => 0.5 - Math.random());
+            quizGame.lastSpawn = 0;
+            
+            document.getElementById('quiz-selecting-view').classList.add('hidden');
+            document.getElementById('quiz-playing-view').classList.remove('hidden');
+            document.getElementById('quiz-finished-view').classList.add('hidden');
+            
+            quizCanvas = document.getElementById('quiz-canvas');
+            quizCtx = quizCanvas.getContext('2d');
+            resizeCanvas();
+            
+            // 품사 버튼 동적 렌더링
+            const controlsContainer = document.getElementById('game-controls-container');
+            controlsContainer.innerHTML = ALL_9_POS.map(pos => 
+                `<button onclick="window.fireMissile('${pos}')" class="bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-800 text-white rounded-xl py-3 font-bold text-sm md:text-lg transition-colors shadow-md active:scale-95 touch-manipulation">
+                    ${pos}
+                </button>`
+            ).join('');
+            
+            if(quizReqId) cancelAnimationFrame(quizReqId);
+            lastTime = performance.now();
+            quizReqId = requestAnimationFrame(gameLoop);
+        }
+
+        function resizeCanvas() {
+            if(!quizCanvas) return;
+            const container = document.getElementById('canvas-container');
+            quizCanvas.width = container.clientWidth;
+            quizCanvas.height = container.clientHeight;
+            quizGame.airplaneX = quizCanvas.width / 2;
+        }
+
+        window.fireMissile = function(pos) {
+            if(quizGame.state !== 'playing') return;
+            
+            // 가장 아래에 있는 적(y가 가장 큰 값)을 자동 타겟팅
+            let target = null;
+            let maxY = -9999;
+            for(let i=0; i<quizGame.enemies.length; i++) {
+                if(quizGame.enemies[i].y > maxY) {
+                    maxY = quizGame.enemies[i].y;
+                    target = quizGame.enemies[i];
+                }
+            }
+            
+            quizGame.missiles.push({
+                x: quizGame.airplaneX,
+                y: quizCanvas.height - 40,
+                pos: pos,
+                target: target,
+                speed: 15
+            });
+        };
+
+        function createParticles(x, y, color) {
+            for(let i=0; i<20; i++) {
+                quizGame.particles.push({
+                    x: x, y: y,
+                    vx: (Math.random() - 0.5) * 8,
+                    vy: (Math.random() - 0.5) * 8,
+                    life: 500 + Math.random() * 300,
+                    color: color,
+                    size: Math.random() * 5 + 2
+                });
+            }
+        }
+
+        function endShootingGame(isClear) {
+            quizGame.state = isClear ? 'clear' : 'gameover';
+            document.getElementById('quiz-playing-view').classList.add('hidden');
+            document.getElementById('quiz-finished-view').classList.remove('hidden');
+            
+            document.getElementById('quiz-final-title').innerText = isClear ? "임무 완수! 🎉" : "게임 오버 💥";
+            document.getElementById('quiz-final-score').innerText = quizGame.score;
+            document.getElementById('quiz-final-progress').innerText = quizGame.progress + "%";
+        }
+
+        function gameLoop(time) {
+            if(quizGame.state !== 'playing') return;
+            let dt = time - lastTime;
+            lastTime = time;
+            
+            let canvas = quizCanvas;
+            let ctx = quizCtx;
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // 진행률 및 속도 계산
+            quizGame.progress = Math.min(100, Math.floor((quizGame.answered / quizGame.total) * 100));
+            // 10% 단위로 속도 15%씩 증가
+            let speedMultiplier = 1 + Math.floor(quizGame.progress / 10) * 0.15; 
+            
+            // 적 스폰 로직 (진행률 90% 이상이면 문장 출제)
+            let spawnInterval = Math.max(1500, 3500 - (Math.floor(quizGame.progress / 10) * 200)); // 기본 3500ms
+            
+            if(time - quizGame.lastSpawn > spawnInterval) {
+                let isSentencePhase = quizGame.progress >= 90 || quizGame.wordPool.length === 0;
+                let item = isSentencePhase ? quizGame.sentencePool.pop() : quizGame.wordPool.pop();
+                
+                if(item) {
+                    quizGame.enemies.push({
+                        id: Math.random(),
+                        word: item.word || item.text,
+                        answer: item.answer,
+                        isSentence: isSentencePhase,
+                        // 문장이면 캔버스 중앙에서 시작, 단어면 랜덤 위치
+                        x: isSentencePhase ? canvas.width/2 : 60 + Math.random() * (canvas.width - 120),
+                        y: -30,
+                        flashTime: 0
+                    });
+                }
+                quizGame.lastSpawn = time;
+            }
+            
+            // 적 이동 및 렌더링
+            for(let i = quizGame.enemies.length - 1; i >= 0; i--) {
+                let e = quizGame.enemies[i];
+                e.y += 0.8 * speedMultiplier; // 기본 속도 0.8로 하향 조정
+                
+                if(e.flashTime > 0) e.flashTime -= dt;
+                
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.font = e.isSentence ? "bold 16px sans-serif" : "bold 22px sans-serif";
+                
+                let textWidth = ctx.measureText(e.word).width;
+                let paddingX = e.isSentence ? 20 : 16;
+                let paddingY = e.isSentence ? 14 : 12;
+                
+                // 배경 알약 박스
+                ctx.fillStyle = e.flashTime > 0 ? "rgba(239, 68, 68, 0.9)" : "rgba(30, 41, 59, 0.9)";
+                ctx.beginPath();
+                if(ctx.roundRect) {
+                    ctx.roundRect(e.x - textWidth/2 - paddingX, e.y - paddingY, textWidth + paddingX*2, paddingY*2, paddingY);
+                } else {
+                    ctx.rect(e.x - textWidth/2 - paddingX, e.y - paddingY, textWidth + paddingX*2, paddingY*2);
+                }
+                ctx.fill();
+                
+                // 글씨 그리기 (강조 표시는 노란색으로)
+                if(e.isSentence) {
+                    // 문장 내 [단어] 부분을 파싱해서 렌더링
+                    let parts = e.word.split(/\[|\]/);
+                    if(parts.length === 3) {
+                        let w1 = ctx.measureText(parts[0]).width;
+                        let w2 = ctx.measureText(parts[1]).width;
+                        let w3 = ctx.measureText(parts[2]).width;
+                        let totalW = w1 + w2 + w3;
+                        let startX = e.x - totalW/2;
+                        
+                        ctx.fillStyle = "white";
+                        ctx.textAlign = "left";
+                        ctx.fillText(parts[0], startX, e.y);
+                        ctx.fillStyle = "#fde047"; // yellow-300
+                        ctx.fillText(parts[1], startX + w1, e.y);
+                        ctx.fillStyle = "white";
+                        ctx.fillText(parts[2], startX + w1 + w2, e.y);
+                    } else {
+                        ctx.fillStyle = "white";
+                        ctx.fillText(e.word, e.x, e.y);
+                    }
+                } else {
+                    ctx.fillStyle = "white";
+                    ctx.fillText(e.word, e.x, e.y);
+                }
+                
+                // 바닥 충돌 판정
+                if(e.y > canvas.height + 30) {
+                    quizGame.lives--;
+                    quizGame.answered++; // 놓쳐도 진행률은 올라가도록 처리
+                    quizGame.enemies.splice(i, 1);
+                    createParticles(e.x, canvas.height, "#ef4444"); // Red particles
+                    if(quizGame.lives <= 0) {
+                        endShootingGame(false);
+                        return;
+                    }
+                }
+            }
+            
+            // 미사일 이동 및 충돌 판정
+            for(let i = quizGame.missiles.length - 1; i >= 0; i--) {
+                let m = quizGame.missiles[i];
+                
+                if(m.target && quizGame.enemies.includes(m.target)) {
+                    let dx = m.target.x - m.x;
+                    let dy = m.target.y - m.y;
+                    let dist = Math.hypot(dx, dy);
+                    
+                    if(dist > 0) {
+                        m.x += (dx / dist) * m.speed;
+                        m.y += (dy / dist) * m.speed;
+                    }
+                    
+                    // 명중
+                    if(dist < 35) { // 타격 판정 범위
+                        if(m.pos === m.target.answer) {
+                            quizGame.score += 10;
+                            quizGame.answered++;
+                            createParticles(m.target.x, m.target.y, "#4ade80"); // Green
+                            quizGame.enemies.splice(quizGame.enemies.indexOf(m.target), 1);
+                        } else {
+                            m.target.flashTime = 300; // 빨간색 깜빡임
+                            createParticles(m.target.x, m.target.y, "#fbbf24"); // Yellow bounce
+                        }
+                        quizGame.missiles.splice(i, 1);
+                        continue;
+                    }
+                } else {
+                    // 타겟이 없으면 위로 그냥 날아감
+                    m.y -= m.speed;
+                    if(m.y < -20) quizGame.missiles.splice(i, 1);
+                }
+                
+                // 미사일 그리기
+                if(quizGame.missiles[i]) {
+                    ctx.fillStyle = "#6366f1"; // Indigo-500
+                    ctx.beginPath();
+                    ctx.arc(m.x, m.y, 14, 0, Math.PI*2);
+                    ctx.fill();
+                    ctx.fillStyle = "white";
+                    ctx.font = "bold 11px sans-serif";
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = "middle";
+                    ctx.fillText(m.pos, m.x, m.y);
+                }
+            }
+            
+            // 파티클 업데이트 및 렌더링
+            for(let i = quizGame.particles.length - 1; i >= 0; i--) {
+                let p = quizGame.particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.life -= dt;
+                ctx.fillStyle = p.color;
+                ctx.globalAlpha = Math.max(0, p.life / 800);
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+                ctx.fill();
+                ctx.globalAlpha = 1.0;
+                
+                if(p.life <= 0) quizGame.particles.splice(i, 1);
+            }
+            
+            // 비행기(플레이어) 그리기 (-45도 회전하여 수직으로 세움)
+            ctx.save();
+            ctx.translate(quizGame.airplaneX, canvas.height - 25);
+            ctx.rotate(-Math.PI / 4); // 반시계 방향으로 45도 회전
+            ctx.font = "40px sans-serif";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText("✈️", 0, 0);
+            ctx.restore();
+            
+            // UI 업데이트
+            document.getElementById('game-score-display').innerText = quizGame.score;
+            document.getElementById('game-progress-display').innerText = quizGame.progress + "%";
+            document.getElementById('game-lives-display').innerText = "❤️".repeat(Math.max(0, quizGame.lives));
+            document.getElementById('game-speed-display').innerText = "Lv." + (1 + Math.floor(quizGame.progress / 10));
+            
+            // 승리 조건
+            if(quizGame.answered >= quizGame.total && quizGame.enemies.length === 0) {
+                endShootingGame(true);
+                return;
+            }
+            
+            quizReqId = requestAnimationFrame(gameLoop);
+        }
+
         function switchTab(tab) {
+            // 탭 전환 시 게임 루프 정지
+            if (tab !== 'quiz' && quizGame.state === 'playing') {
+                quizGame.state = 'paused';
+                if(quizReqId) cancelAnimationFrame(quizReqId);
+            }
+
             state.activeTab = tab;
             document.querySelectorAll('.tab-nav-btn').forEach(function(btn) {
                 btn.className = 'tab-nav-btn px-5 py-2.5 rounded-full font-semibold transition-all bg-white text-slate-600 hover:bg-indigo-50';
@@ -523,9 +1030,6 @@
             const activeContent = document.getElementById('tab-' + tab);
             if (activeContent) activeContent.classList.add('active');
 
-            if (tab === 'quiz' && (state.quizState === 'finished' || state.quizQueue.length === 0)) {
-                showSetSelection();
-            }
             if (tab === 'advanced' && (state.advState === 'finished' || state.advQueue.length === 0)) {
                 showAdvSetSelection();
             }
@@ -536,72 +1040,14 @@
             render();
         }
 
-        function selectFunction(func) {
-            state.selectedFunction = func;
-            renderLearnContent();
-        }
+        window.addEventListener('resize', () => {
+            if(quizGame.state === 'playing') resizeCanvas();
+        });
 
-        function startQuiz(setIndex) {
-            const startIndex = setIndex * 10;
-            const setWords = ALL_QUIZ_WORDS.slice(startIndex, startIndex + 10);
-            state.quizQueue = [].concat(setWords).sort(function() { return 0.5 - Math.random(); });
-            state.currentSet = setIndex;
-            state.currentQuizIndex = 0;
-            state.score = 0;
-            state.quizState = 'playing';
-            state.selectedAnswer = '';
-            
-            document.getElementById('quiz-selecting-view').classList.add('hidden');
-            document.getElementById('quiz-playing-view').classList.remove('hidden');
-            document.getElementById('quiz-finished-view').classList.add('hidden');
-            
-            renderQuizQuestion();
-        }
 
-        function handleAnswer(pos) {
-            if (state.quizState !== 'playing') return;
-            state.selectedAnswer = pos;
-            
-            const currentWord = state.quizQueue[state.currentQuizIndex];
-            const isCorrect = pos === currentWord.answer;
-            
-            if (isCorrect) {
-                state.score++;
-                state.quizState = 'correct';
-            } else {
-                state.quizState = 'incorrect';
-            }
-            renderQuizQuestion();
-        }
-
-        function nextQuestion() {
-            if (state.currentQuizIndex < state.quizQueue.length - 1) {
-                state.currentQuizIndex++;
-                state.quizState = 'playing';
-                state.selectedAnswer = '';
-                renderQuizQuestion();
-            } else {
-                state.quizState = 'finished';
-                document.getElementById('quiz-playing-view').classList.add('hidden');
-                document.getElementById('quiz-finished-view').classList.remove('hidden');
-                document.getElementById('quiz-final-score').innerText = state.score;
-                document.getElementById('quiz-final-progress-bar').style.width = (state.score * 10) + '%';
-            }
-        }
-
-        function showSetSelection() {
-            state.quizState = 'selecting_set';
-            document.getElementById('quiz-selecting-view').classList.remove('hidden');
-            document.getElementById('quiz-playing-view').classList.add('hidden');
-            document.getElementById('quiz-finished-view').classList.add('hidden');
-        }
-
-        function retryQuiz() {
-            startQuiz(state.currentSet);
-        }
-
+        // --- 심화 학습 제어부 ---
         function startAdvancedQuiz(setIndex) {
-            const shuffled = [].concat(ADVANCED_QUESTIONS).sort(function() { return 0.5 - Math.random(); }).slice(0, 10);
+            const shuffled = [...ADVANCED_QUESTIONS].sort(() => 0.5 - Math.random()).slice(0, 10);
             state.advQueue = shuffled;
             state.advCurrentSet = setIndex;
             state.currentAdvIndex = 0;
@@ -658,6 +1104,7 @@
             startAdvancedQuiz(state.advCurrentSet);
         }
 
+        // --- 형성 평가 제어부 ---
         function startEvaluationQuiz() {
             const gradeInput = document.getElementById('info-grade');
             const classInput = document.getElementById('info-class');
@@ -674,7 +1121,7 @@
                 return;
             }
 
-            const shuffled = [].concat(EVALUATION_QUESTIONS).sort(function(a, b) { return a.id - b.id; });
+            const shuffled = [...EVALUATION_QUESTIONS].sort((a, b) => a.id - b.id);
             state.evalQueue = shuffled;
             state.currentEvalIndex = 0;
             state.evalScore = 0;
@@ -699,7 +1146,7 @@
             state.evalAnswersRecord.push({
                 questionId: currentQ.id,
                 selectedOption: currentQ.options[optionIndex],
-                selectedOptionIndex: optionIndex + 1, // 학생이 누른 버튼의 순서 번호(1~5) 저장
+                selectedOptionIndex: optionIndex + 1,
                 isCorrect: isCorrect ? "O" : "X"
             });
 
@@ -743,111 +1190,7 @@
             startEvaluationQuiz();
         }
 
-        function renderLearnContent() {
-            const sidebar = document.getElementById('learn-sidebar');
-            sidebar.innerHTML = Object.keys(POS_DATA).map(function(func) {
-                const isSelected = state.selectedFunction === func;
-                return `
-                    <button class="learn-sidebar-btn w-full text-left px-5 py-4 rounded-xl font-medium transition-all border ${isSelected ? 'bg-indigo-600 text-white shadow-md border-transparent' : 'bg-white text-slate-700 hover:bg-indigo-100 border-slate-200'}" data-func="${func}">
-                        <div class="flex justify-between items-center">
-                            <span class="text-lg">${func}</span>
-                            <span class="text-xs px-2 py-1 rounded-full ${isSelected ? 'bg-indigo-500 text-white' : 'bg-slate-100 text-slate-500'}">${POS_DATA[func].form}</span>
-                        </div>
-                    </button>
-                `;
-            }).join('');
-
-            document.querySelectorAll('.learn-sidebar-btn').forEach(function(btn) {
-                btn.onclick = function() {
-                    const func = this.getAttribute('data-func');
-                    selectFunction(func);
-                };
-            });
-
-            const mainContent = document.getElementById('learn-main-content');
-            const data = POS_DATA[state.selectedFunction];
-            mainContent.innerHTML = `
-                <div class="bg-indigo-50 p-4 rounded-xl mb-6 flex justify-between items-center border border-indigo-100">
-                    <div>
-                        <h2 class="text-2xl font-extrabold text-indigo-900">${state.selectedFunction}</h2>
-                        <p class="text-xs font-semibold text-indigo-500 mt-0.5">형태 분류: ${data.form}</p>
-                    </div>
-                </div>
-                <p class="text-slate-600 text-base mb-6 leading-relaxed">${data.desc}</p>
-                ${data.items.map(function(item) {
-                    return `
-                        <div class="bg-indigo-50/30 rounded-2xl p-6 border border-indigo-100/50 mb-4 hover:shadow-sm transition-shadow">
-                            <h3 class="text-xl font-bold text-indigo-700 mb-2">${item.name}</h3>
-                            <p class="text-slate-700 text-sm mb-3">${item.desc}</p>
-                            <div class="flex flex-wrap gap-1.5">
-                                ${item.examples.map(function(ex) {
-                                    return `<span class="bg-white text-indigo-900 border border-indigo-100 px-2.5 py-1 rounded-lg text-xs font-semibold">${ex}</span>`;
-                                }).join('')}
-                            </div>
-                        </div>
-                    `;
-                }).join('')}
-            `;
-            lucide.createIcons();
-        }
-
-        function renderQuizQuestion() {
-            const currentQ = state.quizQueue[state.currentQuizIndex];
-            document.getElementById('quiz-progress-text').innerText = "문제 " + (state.currentQuizIndex + 1) + " / 10";
-            document.getElementById('quiz-score-text').innerText = "점수: " + state.score;
-            document.getElementById('quiz-word-display').innerText = '"' + currentQ.word + '"';
-
-            const optionsGrid = document.getElementById('quiz-options-grid');
-            optionsGrid.innerHTML = ALL_9_POS.map(function(pos) {
-                const isSelected = state.selectedAnswer === pos;
-                const isCorrect = currentQ.answer === pos;
-                
-                let btnStyle = "bg-slate-50 text-slate-700 border-slate-200 hover:bg-indigo-50 hover:border-indigo-200";
-                
-                if (state.quizState !== 'playing') {
-                    if (isCorrect) btnStyle = "bg-green-100 text-green-800 border-green-300 shadow-inner";
-                    else if (isSelected) btnStyle = "bg-red-100 text-red-800 border-red-300";
-                    else btnStyle = "bg-slate-50 text-slate-400 border-slate-100 opacity-50 cursor-not-allowed";
-                }
-
-                return `
-                    <button class="quiz-option-btn py-4 rounded-xl border-2 font-bold text-base md:text-lg transition-all ${btnStyle}" data-pos="${pos}" ${state.quizState !== 'playing' ? 'disabled' : ''}>
-                        ${pos}
-                    </button>
-                `;
-            }).join('');
-
-            document.querySelectorAll('.quiz-option-btn').forEach(function(btn) {
-                btn.onclick = function() {
-                    const pos = this.getAttribute('data-pos');
-                    handleAnswer(pos);
-                };
-            });
-
-            const feedbackBox = document.getElementById('quiz-feedback-box');
-            if (state.quizState !== 'playing') {
-                const isCorrect = state.quizState === 'correct';
-                feedbackBox.className = "p-6 rounded-xl flex items-center justify-between mt-6 " + (isCorrect ? 'bg-green-50' : 'bg-red-50');
-                feedbackBox.innerHTML = `
-                    <div class="flex items-center">
-                        <i data-lucide="${isCorrect ? 'check-circle-2' : 'x-circle'}" class="w-8 h-8 ${isCorrect ? 'text-green-500' : 'text-red-500'} mr-3"></i>
-                        <div>
-                            <p class="font-bold text-lg ${isCorrect ? 'text-green-800' : 'text-red-800'}">${isCorrect ? '정답입니다!' : '틀렸습니다!'}</p>
-                            ${!isCorrect ? `<p class="text-slate-600 mt-1">정답은 <span class="font-bold text-red-600">${currentQ.answer}</span> 입니다.</p>` : ''}
-                        </div>
-                    </div>
-                    <button id="btn-next-quiz-question" class="flex items-center px-6 py-3 rounded-xl font-bold text-white transition-colors ${isCorrect ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-700'}">
-                        다음 문제 <i data-lucide="arrow-right" class="w-5 h-5 ml-2"></i>
-                    </button>
-                `;
-                document.getElementById('btn-next-quiz-question').onclick = nextQuestion;
-                feedbackBox.classList.remove('hidden');
-            } else {
-                feedbackBox.classList.add('hidden');
-            }
-            lucide.createIcons();
-        }
-
+        // --- 렌더링 헬퍼 ---
         function renderAdvQuestion() {
             const currentQ = state.advQueue[state.currentAdvIndex];
             document.getElementById('adv-progress-text').innerText = "문제 " + (state.currentAdvIndex + 1) + " / 10";
@@ -855,9 +1198,12 @@
             document.getElementById('adv-question-text').innerHTML = currentQ.q;
 
             const optionsBox = document.getElementById('adv-options-box');
-            optionsBox.innerHTML = currentQ.options.map(function(opt, idx) {
-                const isSelected = state.advSelectedAnswer === idx;
-                const isCorrect = currentQ.answerIndex === idx;
+            let optionsHtml = '';
+            
+            for (let i = 0; i < currentQ.options.length; i++) {
+                const opt = currentQ.options[i];
+                const isSelected = state.advSelectedAnswer === i;
+                const isCorrect = currentQ.answerIndex === i;
 
                 let btnStyle = "bg-white text-slate-900 border-slate-300 hover:bg-purple-50 hover:border-purple-400 font-medium";
                 if (state.advState !== 'playing') {
@@ -866,12 +1212,10 @@
                     else btnStyle = "bg-slate-100 text-slate-500 border-slate-200 cursor-not-allowed";
                 }
 
-                return `
-                    <button class="adv-option-btn w-full text-left p-4 rounded-xl border-2 transition-all ${btnStyle}" data-idx="${idx}" ${state.advState !== 'playing' ? 'disabled' : ''}>
-                        <span class="mr-2 font-extrabold text-indigo-600">${idx + 1}.</span> ${opt}
-                    </button>
-                `;
-            }).join('');
+                optionsHtml += '<button class="adv-option-btn w-full text-left p-4 rounded-xl border-2 transition-all ' + btnStyle + '" data-idx="' + i + '" ' + (state.advState !== 'playing' ? 'disabled' : '') + '>';
+                optionsHtml += '<span class="mr-2 font-extrabold text-indigo-600">' + (i + 1) + '.</span> ' + opt + '</button>';
+            }
+            optionsBox.innerHTML = optionsHtml;
 
             document.querySelectorAll('.adv-option-btn').forEach(function(btn) {
                 btn.onclick = function() {
@@ -901,9 +1245,12 @@
             document.getElementById('eval-question-text').innerHTML = currentQ.q;
 
             const optionsBox = document.getElementById('eval-options-box');
-            optionsBox.innerHTML = currentQ.options.map(function(opt, idx) {
-                const isSelected = state.evalSelectedAnswer === idx;
-                const isCorrect = currentQ.answerIndex === idx;
+            let optionsHtml = '';
+            
+            for (let i = 0; i < currentQ.options.length; i++) {
+                const opt = currentQ.options[i];
+                const isSelected = state.evalSelectedAnswer === i;
+                const isCorrect = currentQ.answerIndex === i;
 
                 let btnStyle = "bg-white text-slate-900 border-slate-300 hover:bg-emerald-50 font-medium";
                 if (state.evalState !== 'playing') {
@@ -912,12 +1259,10 @@
                     else btnStyle = "bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed";
                 }
 
-                return `
-                    <button class="eval-option-btn w-full text-left p-4 rounded-xl border-2 transition-all ${btnStyle}" data-idx="${idx}" ${state.evalState !== 'playing' ? 'disabled' : ''}>
-                        <span class="mr-2 font-extrabold text-emerald-600">${idx + 1}.</span> ${opt}
-                    </button>
-                `;
-            }).join('');
+                optionsHtml += '<button class="eval-option-btn w-full text-left p-4 rounded-xl border-2 transition-all ' + btnStyle + '" data-idx="' + i + '" ' + (state.evalState !== 'playing' ? 'disabled' : '') + '>';
+                optionsHtml += '<span class="mr-2 font-extrabold text-emerald-600">' + (i + 1) + '.</span> ' + opt + '</button>';
+            }
+            optionsBox.innerHTML = optionsHtml;
 
             document.querySelectorAll('.eval-option-btn').forEach(function(btn) {
                 btn.onclick = function() {
@@ -980,32 +1325,14 @@
                 };
             });
 
-            const quizGrid = document.getElementById('quiz-set-grid');
-            quizGrid.innerHTML = Array.from({length: 10}, (_, i) => `
-                <button class="quiz-set-btn bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-indigo-400 hover:shadow-md transition-all flex flex-col items-center justify-center group" data-set="${i}">
-                    <div class="bg-indigo-100 text-indigo-600 w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl mb-3 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
-                        ${i + 1}
-                    </div>
-                    <span class="font-bold text-slate-700">세트 ${i + 1}</span>
-                </button>
-            `).join('');
-
-            document.querySelectorAll('.quiz-set-btn').forEach(function(btn) {
-                btn.onclick = function() {
-                    const setIndex = parseInt(this.getAttribute('data-set'), 10);
-                    startQuiz(setIndex);
-                };
-            });
-
             const advGrid = document.getElementById('adv-set-grid');
-            advGrid.innerHTML = Array.from({length: 5}, (_, i) => `
-                <button class="adv-set-btn bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-purple-400 hover:shadow-md transition-all flex flex-col items-center justify-center group" data-set="${i}">
-                    <div class="bg-purple-100 text-purple-600 w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl mb-3 group-hover:bg-purple-600 group-hover:text-white transition-colors">
-                        ${i + 1}
-                    </div>
-                    <span class="font-bold text-slate-700">심화 세트 ${i + 1}</span>
-                </button>
-            `).join('');
+            let advGridHtml = '';
+            for (let i = 0; i < 5; i++) {
+                advGridHtml += '<button class="adv-set-btn bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-purple-400 hover:shadow-md transition-all flex flex-col items-center justify-center group" data-set="' + i + '">';
+                advGridHtml += '<div class="bg-purple-100 text-purple-600 w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl mb-3 group-hover:bg-purple-600 group-hover:text-white transition-colors">' + (i + 1) + '</div>';
+                advGridHtml += '<span class="font-bold text-slate-700">심화 세트 ' + (i + 1) + '</span></button>';
+            }
+            advGrid.innerHTML = advGridHtml;
 
             document.querySelectorAll('.adv-set-btn').forEach(function(btn) {
                 btn.onclick = function() {
@@ -1013,10 +1340,6 @@
                     startAdvancedQuiz(setIndex);
                 };
             });
-
-            document.getElementById('btn-quiz-to-list').onclick = showSetSelection;
-            document.getElementById('btn-retry-quiz').onclick = retryQuiz;
-            document.getElementById('btn-quiz-other-set').onclick = showSetSelection;
 
             document.getElementById('btn-adv-to-list').onclick = showAdvSetSelection;
             document.getElementById('btn-next-adv').onclick = nextAdvQuestion;
@@ -1032,7 +1355,6 @@
             document.getElementById('btn-retry-eval').onclick = retryEvaluation;
             document.getElementById('btn-eval-to-start').onclick = showEvalSelection;
 
-            selectFunction('체언');
             lucide.createIcons();
         };
     </script>
